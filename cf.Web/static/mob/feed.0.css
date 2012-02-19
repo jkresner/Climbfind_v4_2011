@@ -1,0 +1,20 @@
+body { font:12px/170% 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;color:#777;margin:0;padding:0 }
+hr { border:none;width:0px;clear:both }
+strong { font-weight:bold }
+
+ol, ul { list-style:none outside none;padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;margin-top:0px;margin-bottom:0px;margin-right:0px;margin-left:0px;display:block }
+
+label { color:#777777;font-size:9px;font-weight:normal }
+p { color:black;font-size:10px;font-weight:normal;padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px }
+
+.comments { background:#FFFCE6;clear:both;margin:0px 20px 0px 50px }
+.comments div { width:134px }
+.comments i { font-size:9px }
+.comments p { font-size:10px }
+
+.v1post-ci .media { padding-bottom:5px }
+.v1post-ci .media li { float:left;border:solid 1px #F1F1F1!important;max-width:76px;clear:none!important;padding:3px 3px 0px 1px;margin-right:5px }
+.v1post-ci .climbs { clear:both;padding-bottom:5px  }
+.v1post-ci .climbs li { border:none!important;padding-bottom:5px;float:left;clear:left }
+.v1post-ci .climbs li img { float:left;margin-right:4px }
+.v1post-ci .climbs li b { display:block;float:left;margin:4px 0px 0px 5px;font-size:10px }

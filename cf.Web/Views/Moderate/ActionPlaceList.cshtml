@@ -1,0 +1,44 @@
+﻿@{  Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   ISearchable place = ViewBag.Place;
+   IList<ModAction> modActions = ViewBag.ModActions;
+   ObjectModMeta modPlace = ViewBag.ModPlace;
+   }
+
+<style type="text/css"> 
+    .dashSetA { float:left;width:420px;margin-right:10px }
+    .dashSetB { float:left;width:570px }
+    table {margin:5px 0px 0px 0px} table td { padding:2px }  table th { padding:2px } 
+    #placesIModerate td { line-height:14px }
+</style>
+
+<div style="margin:20px">
+
+<div class="dashSetA">
+
+<fieldset style="padding:4px"><legend>@place.Name</legend>
+    <p>Open <a href="@place.SlugUrl" target="_blank">current @place.Name page</a></p>
+    <p>Summary view of this places history / edits coming soon, for now you will have to deal with the detail on the right</p>
+</fieldset>
+
+</div>
+
+<div class="dashSetB">
+
+    <fieldset><legend>Content history</legend>
+    
+        <ul style="padding:0;margin:0;font-size:10px">
+            @foreach (var p in modActions)
+            { <li>
+                <b>+ @p.Points</b>
+                @p.Utc.GetAgoString() 
+                @Html.ModProfileLink(p.UserID)
+                @((ModActionType)p.TypeID)
+                @(Html.ActionLink<ModerateController>(c=>c.ActionDetail(p.ID), "details"))
+                </li> }
+        </ul>
+
+    </fieldset>
+
+</div>
+
+</div>

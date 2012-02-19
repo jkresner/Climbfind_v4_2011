@@ -1,0 +1,49 @@
+﻿@model cf.Web.Views.CheckIns.UpdateCommentViewModel
+
+@using (Html.BeginForm("UpdateComment", "Visits", FormMethod.Post, new { id = "updCommentForm", style="display:none" }))
+{
+    @Html.HiddenFor(m=>m.ID)
+
+    @Html.ValidationMessageFor(m => m.Comment)
+    @Html.TextAreaFor(m => m.Comment, new { style="width:560px;height:60px" }) 
+
+    @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "javascript:cancelCommentEdit()" })
+}
+
+<script type="text/javascript">
+
+    function cancelCommentEdit() {
+        $("#updCommentForm").hide();
+        $("#current-comment").show();
+    }
+
+    /* Climbfind functions */
+    jQuery(document).ready(function () {
+
+        $(".upd-comment").click(function (e) {
+            $("#current-comment").hide();
+            $("#updCommentForm").show();
+            resetFormButtonOptions();
+        });
+
+        $("#updCommentForm").submit(function () {
+            var formValid = $("#updCommentForm").valid();
+
+            if (formValid) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateComment","Visits")',
+                    data: $("#updCommentForm").serialize(),
+                    success: function () {
+                        $("#updCommentForm").hide();
+                        $("#current-comment").html("<blockquote>" + $("#Comment").val() + "</blockquote>");
+                        $("#current-comment").show();
+                    }
+                });
+            }
+
+            return false;
+        });
+    });
+
+</script>

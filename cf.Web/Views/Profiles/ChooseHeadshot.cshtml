@@ -1,0 +1,183 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage
+@{ 
+    ViewBag.BoxMaxWidth = 720;
+    ViewBag.BoxMaxHeight = 720;
+    ViewBag.MinWidth = 240;
+    ViewBag.MinHeight = 100;
+    ViewBag.Title = "My climber headshot"; }
+
+<script type="text/javascript" src="@Stgs.StaticRt/js/jquery.Jcrop.min.js"></script>
+
+<div>
+<form action="/Profiles/SaveHeadshot" method="post" style="min-height:350px">
+
+<h1>Change your @(Html.ActionLink<ProfilesController>(c => c.Personality(CfIdentity.UserID), "Personality")) Headshot</h1>
+
+<div id="browseNupload">
+
+    <p style="margin:5px 0px 15px 0px">The <b>Headshot</b> image is used by other climbers to recognize you so that meeting in real life is easy. 
+    Make sure you make your face clear and easy to see in the photo you provide.</p>
+
+    @Html.Partial("Partials/SilverlightClientResizedAzureBlogSingleFileUpload")
+</div>
+
+        <div id="resizingImage" style="display:none">
+            <p>Resizing resized image</p>
+            <div class="loading" style="width:50px;height:50px"></div>
+        </div>
+
+        <div id="dimensionsFailed" style="display:none">
+            <h4 style="margin:5px 0px 15px 0px">We can't use the supplied image</h4>
+
+            <p>The image you supplied is not big enough. Please supply an image at lead @ViewBag.MinWidth pixels wide &  @ViewBag.MinHeight high.</p>
+
+            @(Html.ActionCssLink<ProfilesController>(c => c.ChooseAvatar(), "Start again", "CancelBtn"))
+        </div>
+
+        <div id="cropAndSaveImage" style="display:none">
+ 
+            <h4 style="margin:5px 0px 15px 0px">Crop & save the image</h4>
+    
+            <div id="imgloader" class="loading" style="padding:2px;float:left"></div>
+            
+            <div style="float:left;width:200px;margin-left:20px">
+                <fieldset style="padding:20px;margin:-5px 0px 0px 0px"><legend>Thumb</legend>
+                    <div style="width:40px;height:40px;overflow:hidden">
+                        <img id="preview" src="@Stgs.ImgsRt/users/main/gravatar.jpg" alt="Thumbnail preview" />	
+                    </div>
+                </fieldset>
+            
+                <hr />
+                <p>
+                    <input type="submit" value="Save" class="SubmitBtn" style="width:80px" />
+                    @(Html.ActionLink<ProfilesController>(c => c.ChooseAvatar(), "Start again", new { @class = "CancelBtn", style = "width:80px" }))
+                </p>
+            </div>
+
+            <input type="hidden" name="imgObjID" id="objID" value="@user.ID"/>
+	        <input type="hidden" name="x" id="x"/>
+	        <input type="hidden" name="y" id="y"/>
+	        <input type="hidden" name="w" id="w"/>
+	        <input type="hidden" name="h" id="h"/>
+            <input type="hidden" name="originalImgUrl" id="originalImgUrl"/>
+
+            <hr />
+        </div>
+
+       <script type="text/javascript">
+        //Fires when files are selected to stop the upload being brought up multiple times
+        var allowBrowse = true;       
+        function CuteWebUI_AjaxUploader_OnBrowse() { if (allowBrowse) { allowBrowse = false; setTimeout('allowBrowse=true;', 1500); return true; } return false; }
+
+        function UploadFinished(fileUrl) {
+            processUploadedImage(fileUrl);
+        }
+            
+        function processUploadedImage(imageUrl)
+        {
+            //-- Todo, test & catch upload problems
+            if (imageUrl == '') { alert('Upload failed'); }
+            else 
+            {
+                $("#resizingImage").show();
+                loadImageForThumbselection('imgloader', 'imgToCrop', imageUrl); 
+            }
+
+            $("#browseNupload").hide();        
+        }
+        
+            function loadImageForThumbselection(divID, suppliedImgID, url) {      
+                var imgLoad = new Image();
+
+                $(imgLoad).load(function () 
+                {
+                    $(this).hide();
+                    $(this).attr("id", suppliedImgID);
+                    $("#"+divID).removeClass('loading').append(this);
+                    $(this).fadeIn();
+                    
+                    $("#resizingImage").hide();
+                    $("#cropAndSaveImage").show();
+
+                    checkImageDimensions(suppliedImgID);
+        
+                    var displayWidth = @ViewBag.BoxMaxWidth;
+                    var imageWidth = document.getElementById(suppliedImgID).clientWidth;
+                    var displayHeight = @ViewBag.BoxMaxHeight;
+                    var imageHeight = document.getElementById(suppliedImgID).clientHeight;
+                                                            
+                    if (imageWidth < displayWidth) { displayWidth = imageWidth; }
+                    if (imageHeight < displayHeight) { displayHeight = imageHeight; }
+
+                    $(this).parent().width(displayWidth);
+                    $(this).parent().height(displayHeight);
+                    $(this).parent().append("<hr />");
+                })
+                .error(function () { alert('Failed to load image from url ' + url); })
+
+                // *finally*, set the src attribute of the new image to our image
+                .attr('src', url);
+
+                $("#originalImgUrl").val(url);
+                $("#preview").attr('src', url);
+            }
+
+        function setDimensionsFailed()
+        {
+            $("#dimensionsFailed").show();
+            $("#browseNupload").hide();
+        }
+
+        var suppliedImgWith;
+        var suppliedImgHeight;
+    
+        function checkImageDimensions(suppliedImgID)
+        {
+            var suppliedImg = document.getElementById(suppliedImgID);
+            
+            suppliedImgWidth = suppliedImg.clientWidth;
+            suppliedImgHeight = suppliedImg.clientHeight;
+                    
+            if (suppliedImgWidth < @ViewBag.MinWidth) { setDimensionsFailed(); alert("The image you provided is under the minimum width of @ViewBag.MinWidth pixels (your image is " + suppliedImgWidth + " pixels). Please start again and supply a higher resolution image."); }
+            else if (suppliedImgHeight < @ViewBag.MinHeight) { setDimensionsFailed(); alert("The image you provided is under the minimum height of @ViewBag.MinHeight pixels (your image is " + suppliedImgHeight + " pixels). Please start again and supply a higher resolution image."); }
+            else { setThumbnailViewer(suppliedImgWidth, suppliedImgHeight); }            
+        }
+
+        function setThumbnailViewer(suppliedImgWidth, suppliedImgHeight)
+        {
+            var startX = suppliedImgWidth / 5;
+            var startY = suppliedImgHeight / 5;
+            var thumbWidth = startX * 3.5;
+            var thumbHeight = startY * 3.5;
+            
+            $('#imgToCrop').Jcrop({ onChange: showPreview, onSelect: showPreview, aspectRatio: 1, 
+                setSelect: [ startX, startY, thumbWidth, thumbHeight ],
+                allowSelect: false,
+                minSize: [100, 100] });
+        }
+
+        function showPreview(coords)
+        {
+		    if (parseInt(coords.w) > 0)
+		    {
+			    var rx = 40 / coords.w;
+			    var ry = 40 / coords.h;
+
+                $("#x").val(coords.x);
+                $("#y").val(coords.y);
+                $("#w").val(coords.w);
+                $("#h").val(coords.h);
+            
+			    $('#preview').css({ width: Math.round(rx * parseInt(suppliedImgWith)) + 'px',
+				    height: Math.round(ry * parseInt(suppliedImgHeight)) + 'px',
+				    marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+				    marginTop: '-' + Math.round(ry * coords.y) + 'px' });
+		    }   
+        };
+        
+        </script>
+   
+    </form> 
+    
+
+</div>

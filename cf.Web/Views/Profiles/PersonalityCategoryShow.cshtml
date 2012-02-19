@@ -1,0 +1,58 @@
+﻿@inherits  cf.Web.Views.Profiles.ProfileWebViewPage<UserPersonalityMedia> 
+@{ bool hasDescription = !string.IsNullOrWhiteSpace(Model.Media.Description); }
+
+<div id="cat-@Model.Category" class="pMedia">
+    <div class="meta">
+
+        <h2>@Model.Media.Title</h2>
+        @if (Model.Media.RatingCount > 0 ) { <p>@Html.StarImage(Model.Media.Rating) rated by @Model.Media.RatingCount</p> }
+                                                                                                                    
+        @if (hasDescription) { <p>@Model.Media.Description</p> }
+
+@*        @if (Model.Media.RatingCount == 0)
+        {
+            <p class="no-comments">No opinions on <i>@Model.Media.Title</i> yet.</p>            
+        }
+        else
+        {
+            <ul class="opinions">
+            @foreach (var c in Model.Media.MediaOpinions)
+            {
+                <li>@Html.UserPicThumb(c.UserID) 
+                    <div>@Html.UserProfileLink(c.UserID)  @Html.StarImage(c.Rating) <p>@c.Comment</p></div>             
+                </li>
+            }
+            </ul>
+            <hr />
+            <div style="height:10px"></div>
+        }
+        <hr />
+        @(Html.ActionCssLink<ProfilesController>(c=>c.PersonalityMediaDetail(Model.ID), "Share, rate & comment", "jBtn"))
+       *@
+    </div>
+    <div class="content">
+        @if (Model.UserID == CfIdentity.UserID) { 
+        <div style="float:right;padding-top:2px">
+            @(Html.ActionLink<MediaController>(c => c.Edit(Model.Media.ID), "Edit detail"))
+            - @(Html.ActionCssLink<ProfilesController>(c => c.ChoosePersonalityMedia(Model.Category), "Change media", "edit"))
+            - @(Html.DeleteLink<MediaController>(c => c.Delete(Model.Media.ID, this.Request.RawUrl), "Delete"))
+        </div>
+            }
+            
+        <h4>@Model.Category
+            <a class="show" href="#">What's this?</a></h4>
+        
+            <div class="wToggle">@Html.Partial("PersonalityCategoryExplanation", Model.Category)   
+                <a class="hide" href="#">hide</a></div>
+            @if (Model != null)
+            { 
+                @Html.Raw(Model.Media.RenderMediaHtml()) 
+            }
+            else
+            { <p>You don't have any media for @Model.Category</p> }
+            <hr />
+    </div>
+    
+</div>
+
+<hr />

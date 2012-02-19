@@ -1,0 +1,42 @@
+﻿@model TalkViewModel
+
+@using (Html.BeginForm("NewTalk", "Posts", FormMethod.Post, new { id = "talkForm" })) {
+  
+    <div class="where">
+        <label>Where @Html.ValidationMessageFor(m => m.TalkPlaceID) @Html.ValidationMessageFor(m => m.TalkComment, "Comment required")</label>
+        <div style="height:30px"><input class="tbox jq_watermark long" id="tAsearch" type="text" name="asearch" title="Name of area, city, climbing gym, outdoor rock wall or boulder" />
+        @Html.HiddenFor(m => m.TalkPlaceID, new { id = "TalkPlaceID" })</div>
+        @Html.TextAreaFor(m => m.TalkComment, new { @class = "jq_watermark", title = "Comment, question, news or rant related to the place you chose" })
+    </div>
+    
+    <div class="go"><a id="talkSubmit" href="#" class="jBtn" style="vertical-align:baseline">Post</a></div>
+    
+    <hr />
+}
+
+<script type="text/javascript">
+
+    /* Climbfind functions */
+    jQuery(document).ready(function () {
+        var tForm = $("#talkForm");
+
+        $("#TalkPlaceID").val("");
+
+        $("#talkSubmit").click(function (e) {
+            var formValid = tForm.valid();
+            if (formValid) { tForm.submit(); }
+            else {
+                if ($("#TalkPlaceID").val() == "") {
+                    $("#tAsearch").addClass("input-validation-error");
+                    $("#tAsearch").change(function (e) { $("#tAsearch").removeClass("input-validation-error"); });
+                }
+            }
+        });
+
+        placeAllTypesAutocomplete("#tAsearch", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { $("#@Html.IdFor(m => m.TalkPlaceID)").val(item.id); }
+        });
+    });
+
+</script>

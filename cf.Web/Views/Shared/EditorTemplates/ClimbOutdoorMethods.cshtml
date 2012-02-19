@@ -1,0 +1,27 @@
+﻿@model List<int>
+@{ ILocation parent = ViewBag.Location;
+   ViewBag.CategoryIDs = Model; }           
+@functions{
+    protected string IsChecked(ClimbTagCategory type) { int id = (int)type; return Model.Contains(id) ? "checked='checked' " : ""; }
+    protected MvcHtmlString CatCheckbox(ClimbTagCategory type) { return new MvcHtmlString(string.Format(@"<span><input id=""Cat{0}"" type=""checkbox"" name=""Categories"" value=""{1}"" {2}/> {0}</span>", type, (int)type, IsChecked(type))); }
+    protected MvcHtmlString CatCheckbox(ClimbTagCategory type, string label) { return new MvcHtmlString(string.Format(@"<span><input id=""Cat{0}"" type=""checkbox"" name=""Categories"" value=""{1}"" {2}/> {3}</span>", type, (int)type, IsChecked(type), label)); }
+}
+
+<div><label>Method</label> <i>check all that apply</i></div>
+<div id="method">
+    @CatCheckbox(ClimbTagCategory.Sport, "Sport (bolted)")
+    @CatCheckbox(ClimbTagCategory.Trad)
+    @CatCheckbox(ClimbTagCategory.Aid)
+    @CatCheckbox(ClimbTagCategory.DryTool, "Dry tool")
+    <br style="clear:both" />
+    @CatCheckbox(ClimbTagCategory.Multipitch, "Multi-pitch")
+    @CatCheckbox(ClimbTagCategory.Solo)
+    @CatCheckbox(ClimbTagCategory.HighballSolo, "Highball solo")
+    @CatCheckbox(ClimbTagCategory.WaterSolo, "Deep Water solo")    
+</div> 
+
+<hr />
+
+<style type="text/css">
+    #method span { display:block;padding:6px;float:left }
+</style> 

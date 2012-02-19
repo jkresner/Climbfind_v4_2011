@@ -1,0 +1,71 @@
+﻿@{ Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   ModProfile modProfile = ViewBag.ModeratorProfile;
+   IList<PlaceWithModDetails> modPlaces = ViewBag.ModeratorPlaces;
+   IList<ModAction> modActions = ViewBag.ModeratorActions;
+   IList<ModAction> latestActions = ViewBag.LastHundredActions;
+   }
+
+<style type="text/css"> 
+    .dashSetA { float:left;width:440px;margin-right:10px }
+    .dashSetB { float:left;width:612px }
+    table {margin:5px 0px 0px 0px} table td { padding:2px }  table th { padding:2px } 
+    #placesIModerate td { line-height:14px }
+</style>
+
+<div class="dashSetA">
+
+@Html.Partial("ProfileWidgets/ModDetails", modProfile)        
+
+<fieldset style="padding:4px"><legend>Recent edits on my places</legend>
+        
+@if (modPlaces.Count == 0) { <p class="no-claims">You don't have any places claimed, so we can't show you edits made of places you're responsible for...
+<br /><br />If you would like to get involved with helping to improve and maintain content on Climbfind, start claiming places by
+browsing to the page of place you want to monitor and then click the link in the right hand column that says "Claim page".
+<br /><br />Hint, you can also use the search bar in the top right to type the name of the place and go straight to it.
+<br /><br />Lastly, don't hesitate to check out the <a href="/moderators-project">Moderators Project page</a> and drop us a line!</p> }
+else {
+<table id="placesIModerate">
+    <tr><th style="width:310px"><i>Activity</i></th><th><i>Verified</i></th></tr>
+    @foreach (var p in modPlaces)
+    {
+        <tr><td style="font-size:10px">
+        @Html.PlaceLinkWithFlag(p.ID)  @p.LastChangedUtc.GetAgoStringUtc() 
+        <br />@(Html.ActionLink<ModerateController>(c => c.ActionDetail(p.LastChangedActionID), p.LastChangeType))
+         by
+          @Html.UserProfileLink(p.LastChangedModUserID)</td>
+          
+          <td>@p.Verified
+            <a href="javascript:alert('verify coming in a future version')">verify now</a>
+
+            @*@if (!p.Verified) { <br />@(Html.ActionLink<ModerateController>(c=>c.AreaVerify(p.ID), "verify now")) }*@
+          
+          </td></tr>
+    }
+</table>
+}
+
+</fieldset>
+
+
+</div>
+
+
+<div class="dashSetB">
+
+    <fieldset><legend>Recent moderator activity</legend>
+    
+        <ul style="padding:0;margin:0;font-size:10px">
+            @foreach (var p in latestActions) { <li>
+                + @p.Points
+                @Html.ModProfileLink(p.UserID)
+                @((ModActionType)p.TypeID)
+                @Html.PlaceLinkWithBlank(p.OnObjectID)
+                @p.Utc.GetAgoStringUtc() 
+
+                @(Html.ActionLink<ModerateController>(c=>c.ActionDetail(p.ID), "details"))
+                </li> }
+        </ul>
+
+    </fieldset>
+
+</div>

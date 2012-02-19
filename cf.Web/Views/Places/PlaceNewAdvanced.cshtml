@@ -1,0 +1,36 @@
+﻿@model AreaNewViewModel
+
+@using (Html.BeginForm("PlaceNew", "Places", FormMethod.Get))
+{
+    <div id="selectPlaceTypeDIV"> 
+       <h1>Add climbing</h1>    
+          
+        <ul>
+
+        @if (current.Type == PlaceType.Country || current.Type == PlaceType.Province) {
+            <li>@(Html.ActionLink<PlacesController>(c => c.AreaNew(country.NameUrlPart, "city"), "Add a city with climbing to " + country.Name))</li> }
+
+        @if (parentProvince != null) {
+            <li>@(Html.ActionLink<PlacesController>(c => c.LocationIndoorNew(country.NameUrlPart, parentProvince.NameUrlPart), "Add indoor climbing to " + parentProvince.Name))</li>
+        } else if (intersectingProvinces.Count > 1 && current.Type.ToPlaceCateogry() == PlaceCategory.Area) {
+            <li>@(Html.ActionLink<PlacesController>(c => c.LocationIndoorNew(country.NameUrlPart, current.NameUrlPart), "Add indoor climbing to " + current.Name))</li>
+        }
+
+        @if (current.Type.ToPlaceCateogry() == PlaceCategory.Area) {
+            <li>@(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, current.NameUrlPart), "Add an area to " + current.Name))</li>
+        } else if (parentProvince != null) { 
+            <li>@(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, parentProvince.NameUrlPart), "Add a climbing area " + parentProvince.Name))</li>    
+        } else {
+            <li>@(Html.ActionLink<PlacesController>(c => c.AreaNew(country.NameUrlPart, "climbing"), "Add a climbing area"))</li>
+        }
+        
+        @if (current.Type == PlaceType.ClimbingArea || current.Type == PlaceType.City)
+        {
+            <li>@(Html.ActionLink<PlacesController>(c => c.LocationOutdoorNew(country.NameUrlPart, current.NameUrlPart), "Add an outdoor climbing spot"))</li>  
+        }
+
+        </ul>
+
+    </div>
+    
+}

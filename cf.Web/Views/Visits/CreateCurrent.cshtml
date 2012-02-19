@@ -1,0 +1,20 @@
+﻿@model cf.Entities.CheckIn
+@{ Location current = ViewBag.Location;
+    
+    ViewBag.Title = "CreateCurrent"; }
+
+@using (Html.BeginForm()){
+
+<h1>Check-in to @current.Name</h1>
+
+<div class="editor-label"><label>Time</label></div>
+<div class="editor-field">@DateTime.UtcNow (Universal Standard Time)</div>
+<div class="editor-label"><label>Comment (up to 256 characters)</label></div>
+<div class="editor-field">@Html.TextArea("comment", "", 8, 40, null)</div>
+    
+    <p><input type="submit" value="Check-in" class="SubmitBtn" style="width:100px" /></p>
+
+    <hr />
+    }
+
+

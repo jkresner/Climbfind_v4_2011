@@ -1,0 +1,32 @@
+﻿@{ ViewBag.Title = "Rock Climbing Search Engine";
+}
+
+<div id="col1">
+
+<div id="col1-content">
+
+<h1>Rock Climbing Search Engine</h1>
+
+
+<p>Combined with the most sophisticated <a href="/world-rock-climbing-database" target="_blank">world rock climbing database</a>
+Climbfind offers a quick and easy way to navigate through climbing destinations and climbs on the site using our outdoor climbing 
+and indoor climbing search engine.</p>
+
+<p>Simple type a few character of any city, indoor climbing gym, famous climbing area or climb and within milliseconds the climbing
+search will returns pages you can click through to read detailed blahh</p>
+
+<hr />
+<img src="@Stgs.StaticRt/screenshots/help/SearchYosemiteClimbing.png" style="border:solid 1px #d3d3d3;padding:2px;float:left;margin-right:20px" />
+
+<img src="@Stgs.StaticRt/screenshots/help/SearchSanFanciscoClimbing.png" style="border:solid 1px #d3d3d3;padding:2px;float:left" />
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <hr />
+<div style="height:228px;height:60px;margin:80px 0px 0px 255px">
+    <div id="login"><a href="/login" class="jBtn" style="padding:20px 44px 20px 44px;font-size:34px">Sign in</a></div>
+</div>
+}
+
+</div>
+</div>

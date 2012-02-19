@@ -1,0 +1,55 @@
+﻿@{ CfCacheIndexEntry place = ViewBag.Place;
+   List<Opinion> opinions = ViewBag.Opinions;
+   ViewBag.Title = "Opinions on " + place.Name;
+   bool notGivenOpinion = opinions.Where(o => o.UserID == CfIdentity.UserID).Count() == 0; 
+}
+
+@if (notGivenOpinion) { 
+    <div class="takeaction">
+        <p>Had an experience with @place.Name?
+         <a href="/opinions" target="_blank">Make Climbfind better</a>... 
+         <a class="opinion jBtn" href="#@place.ID">Share your opinion</a> </p>
+    </div>    
+}
+
+<div id="col2-left" style="min-height:400px">
+
+<h1>Opinions on <a href="@place.SlugUrl">@place.Name</a></h1>
+
+@if (opinions.Count > 0) {
+   var avg = opinions.Average(o => o.Rating);
+   <p style="margin-left:10px">Showing @Html.StarImage(avg) average from @opinions.Count opinions</p> }
+
+
+
+
+@if (opinions.Count == 0)
+{ 
+    <p>No seems to have given their 2 cents about @place.Name...</p>
+}
+else
+{
+    <ul class="opinions">
+    @foreach (var o in opinions)
+    {     
+        <li>
+            @Html.UserPicThumb(o.UserID)
+            <div>
+                <b>@Html.UserProfileLink(o.UserID)</b>
+                <span>@o.Utc.ToString("dd MMM yyy") @Html.StarImage(o.Rating) </span>
+                <p>@o.Comment</p>
+            </div>
+            <hr />
+        </li>               
+    }  
+    </ul>
+}
+
+</div>
+<div id="col2-right">
+
+    @Html.Partial("Ads/SideMenu200x200")
+
+</div>
+
+

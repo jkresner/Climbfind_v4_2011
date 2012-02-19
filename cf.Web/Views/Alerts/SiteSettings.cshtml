@@ -1,0 +1,62 @@
+﻿@{ Profile user = ViewBag.User;
+   UserSiteSettings settings = ViewBag.AlertSettings;
+   CfPageTitleMaster.Set("Alters"); }
+
+<div id="col2-left">
+
+<h1>Site usage alerts</h1>
+
+<table style="margin:20px 0 40px -5px;width:735px"><tbody><tr><th style="width:125px;margin:20px 0px 50px 0px"><b>Type</b></th>
+    <th><b>Description</b></th><th style="width:70px"><b>Alert feed</b></th><th style="width:58px"><b>Email</b></th>
+        <th style="width:58px"><b>Phone</b></th></tr>
+        <tr>
+            <td>Messages</td>
+            <td>Someone directly messages you</td>
+            <td>@settings.MessagesAlertFeed.ToYesNo()</td>
+            <td>@settings.MessagesEmailRealTime.ToYesNo()</td>
+            <td>@settings.MessagesMobileRealTime.ToYesNo()</td>
+        </tr>
+        <tr>
+            <td>Comments on posts</td>
+            <td>Someone comments on your post or a post you commented on</td>
+            <td>@settings.CommentsOnPostsAlertFeed.ToYesNo()</td>
+            <td>@settings.CommentsOnPostsEmailRealTime.ToYesNo()</td>
+            <td>@settings.CommentsOnPostsMobileRealTime.ToYesNo()</td>
+        </tr>
+        <tr>
+            <td>Comments on media</td>
+            <td>Someone rates one of your photos or movies</td>
+            <td>@settings.CommentsOnMediaAlertFeed.ToYesNo()</td>
+            <td>@settings.CommentsOnMediaEmailRealTime.ToYesNo()</td>
+            <td>@settings.CommentsOnMediaMobileRealTime.ToYesNo()</td>
+        </tr>
+    </tbody>
+    </table>
+
+</div>
+
+<div id="col2-right">
+
+<div class="sidemenu navOptions">
+    <h3>Options</h3>
+    <ul>
+        <li><b>@(Html.ActionLink<AlertsController>(c => c.SiteSettingsEdit(), "Edit site usage alerts"))</b><br />Update messaging, comments & media alerts</li> 
+        <li><b>@(Html.ActionLink<PartnerCallsController>(c => c.Subscriptions(), "Edit PartnerCall alerts"))</b><br />Choose places to where you want partners</li> 
+    </ul>
+</div>
+
+<div style="padding:0px 5px 0px 5px">
+<div class="info">
+<hr />
+    <h2>About alerts</h2>
+    <hr />
+    <p>Climbfind gives you the power to keep up with what's going on around you in your climbing community through
+       <i>alerts</i>.</p>
+    <hr />
+    <p>Your <a href="/alerts" target="_blank"><b>Alert feed</b></a> is one way to receive and view activity relevant to you. You can also get alerts by Email, directly to your phone via <a href="/mobile" target="_blank">Climbfind Mobile</a> or simply turn them off.</p>
+</div>
+</div>
+<hr />
+
+
+</div>

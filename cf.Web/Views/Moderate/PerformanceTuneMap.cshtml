@@ -1,0 +1,74 @@
+﻿@{ ViewBag.Title = "Performance tune map";
+    Layout = "~/Views/Moderate/_LayoutModerate.cshtml"; }
+<script src="@Stgs.StaticRt/js/jquery-stopwatch.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    // A Stopwatch instance that displays its raw time in milliseconds.
+    var t = new Stopwatch(function (runtime) {
+        // display time in milliseconds
+        $("#time1").val("" + runtime);
+    });
+
+    function GetGeoJson() {
+        $("#JsonResponseSize").val("");
+        $("#JsonText").val("");
+        $("#time1").val("");
+
+        var t = new Stopwatch(function (runtime) { $("#time1").val("" + runtime); });
+
+        t.startStop();
+
+        var request = $.ajax({
+            type: "Post",
+            url: "/Utility/RequestProxy?url=" + $("#UrlText").val(),
+            dataType: "json",
+            success: function (json) {
+                parseGeoJson(json);
+                t.startStop();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                t.startStop();
+                alert('error');
+            }
+        });
+    }
+
+    function parseGeoJson(e) {
+        var responseText = JSON.stringify(e);
+        $("#JsonText").val(responseText);
+        $("#JsonResponseSize").val(responseText.length / 1024);
+    }
+       
+
+</script>
+
+<div>
+
+<form action="#">
+
+<h1>Performance tune map</h1>
+
+<span>Examples</span>
+<div>http://climbing-partners.com/geo/country/russian-federation</div>
+<div>http://climbing-partners.com/geo/province/8e468752-bcb4-42ff-996c-9ba99593d129</div>
+ <input id="UrlText" type="text" value="" style="width:600px;float:left" /><a href="javascript:GetGeoJson()" style="float:left;height:16px;margin:4px 0px 0px 4px">Get map data</a>
+ <hr />
+
+ <label>Response Size (in KB)</label>
+ <input id="JsonResponseSize" type="text" class="short" disabled="disabled" />
+
+ <label>Time lapse</label>
+ <input id="time1" type="text" class="short" disabled="disabled" />
+
+
+
+
+
+ <hr />
+  <textarea id="JsonText" rows='40' cols='100'></textarea>
+
+    <hr />
+</form>
+
+
+</div>

@@ -1,0 +1,86 @@
+﻿@inherits  cf.Web.Views.Profiles.ProfileWebViewPage
+@{ UsersPersonalityMediaCollection personality = ViewBag.Personality;
+   ViewBag.Title =  "My climber personality photos"; }
+
+<style type="text/css">
+    #categories { border-top:1px solid #D3D3D3;clear:both;margin:15px 0 0px 0;padding:7px 0 5px 5px }
+    #categories i { margin-right:20px }
+    #categories a { margin:0px 20px 0 0 }
+    #categories p { height:16px  }
+    .pMedia { padding:20px 0;margin:5px 0 0 0!important;border-top:solid 1px #d3d3d3;clear:both }
+    .pMedia b { color:darkorange }
+    .pMedia h2 { margin:0px 0px 10px 0px;font-size:16px }
+    .pMedia h2 a { font-size:11px;font-weight:normal }
+    .pMedia h4 { margin-top:0px }
+    .pMedia .meta { float:left;width:350px;padding-right:40px }
+    .pMedia .no-comments { margin:10px 0px 10px 0px }    
+    .pMedia .content { float:left;width:640px }
+    .pMedia img { max-width:640px }
+    .pMedia .show { font-size:11px;font-weight:normal }
+    .ratingForm label { display:block;margin-bottom:6px }
+    .stars-wrapper { display:block;height:20px }
+    .wToggle { margin-bottom:10px }
+    .meta .jBtn { padding:15px 25px;font-size:20px }
+    .no-comments { padding:10px 0 25px 0 } 
+    .adddesc { padding:10px 0px }
+    .pMedia .delete { color:#CB4721!important }
+    .opinions { border-top:solid 1px #d3d3d3;margin-top:10px }
+    .opinions li { clear:both;padding-top:10px }
+    .opinions img.usr { float:left;padding-top:4px }
+    .opinions div { float:left;margin-left:5px }
+    .opinions div img { display:block }
+</style>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $(".pMedia div.wToggle").hide();
+
+        $(".show").click(function () {
+            var contentDiv = $(this).parent().parent();
+            contentDiv.find("div.wToggle").show();
+            contentDiv.find(".show").hide();
+            return false;
+        });
+
+        $(".hide").click(function () {
+            $(this).parent().parent().find("div.wToggle").hide();
+            $(this).parent().parent().parent().find(".show").show();
+            return false;
+        });
+
+        //$(".stars-wrapper").stars({ inputType: "select", captionEl: $(".stars-cap") });
+    });
+</script>
+
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4df9436f251af994"></script>
+
+<div class="profile-page">
+
+<h1 style="float:left">Climbing personality of <a href="/@cf.Content.CfUrlProvider.ClimberUrlPrefix/@user.ID">@user.FullName</a></h1>
+<hr />
+
+<div id="categories">
+
+<p><i>Categories:</i>
+
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasAvatar) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-Avatar">Avatar</a>
+    @*<img src="@Stgs.StaticRt/ui/@if (personality.HasHeadshot) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-Headshot">Headshot</a>*@
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasDaredevil) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-Daredevil">Daredevil</a>
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasScenic) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-Scenic">Scenic</a>
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasReady2Rock) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-Ready2Rock">Ready2Rock</a>
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasFunny) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-Funny">Funny</a>
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasBestShot) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-BestShot">BestShot</a>
+    <img src="@Stgs.StaticRt/ui/@if (personality.HasPartnerShot) {<text>yes</text>}else{<text>warning</text>}.gif" /> <a href="#cat-PartnerShot">PartnerShot</a>
+</p>
+</div>
+
+@if (personality.HasAvatar) { @Html.Partial("PersonalityCategoryShow", personality.Avatar) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.Avatar)  }
+@*@if (personality.HasHeadshot) { @Html.Partial("PersonalityCategoryShow", personality.Headshot) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.Headshot)  }*@
+@if (personality.HasDaredevil) { @Html.Partial("PersonalityCategoryShow", personality.Daredevil) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.Daredevil)  }
+@if (personality.HasScenic) { @Html.Partial("PersonalityCategoryShow", personality.Scenic) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.Scenic)  }
+@if (personality.HasReady2Rock) { @Html.Partial("PersonalityCategoryShow", personality.Ready2Rock) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.Ready2Rock)  }
+@if (personality.HasFunny) { @Html.Partial("PersonalityCategoryShow", personality.Funny) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.Funny)  }
+@if (personality.HasBestShot) { @Html.Partial("PersonalityCategoryShow", personality.BestShot) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.BestShot)  }
+@if (personality.HasPartnerShot) { @Html.Partial("PersonalityCategoryShow", personality.PartnerShot) } else {  @Html.Partial("PersonalityCategoryAdd", PersonalityCategory.PartnerShot)  }
+
+</div>

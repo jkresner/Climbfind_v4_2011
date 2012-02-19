@@ -1,0 +1,26 @@
+﻿@{ Profile user = ViewBag.User;
+   CfPageTitleMaster.Set("Message");
+   List<Conversation> conversations = ViewBag.Conversations;
+   }
+
+
+<div id="col1-messages">
+    <div id="conversations">
+        <h5>Conversations</h5>
+        <ul>
+            <li>None</li>
+        </ul>
+    </div>
+            
+</div>
+
+<div id="col2-messages">
+    <h1 style="font-size:24px;margin:12px 0 6px 0">Messages</h1>
+    
+    <p>You got no conversations going at the moment.</p><hr /><p>Browse some folk and send them a message!</p>
+</div>
+
+<div id="col3-messages">
+
+     @Html.Partial("Ads/SideMenu200x200")
+</div>     

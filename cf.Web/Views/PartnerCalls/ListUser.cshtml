@@ -1,0 +1,71 @@
+﻿@{ Profile user = ViewBag.User;
+   List<PartnerCall> calls = ViewBag.PartnerCalls;
+   ViewBag.Title = user.DisplayName +"'s partner calls";
+   List<CfCacheIndexEntry> places = ViewBag.Places;
+}
+
+<div id="col2-left">
+    
+
+<div style="min-height:450px">
+
+<h1>Partner Calls by <a href="@user.SlugUrl">@user.DisplayName</a></h1>
+
+@if (calls.Count == 0)
+{ 
+    <p>@user.DisplayName has not reach out to the Climbfind community yet...</p>
+}
+else
+{
+<ul class="partner-calls">
+    @foreach (var c in calls)
+    {
+        var place = AppLookups.GetCacheIndexEntry(c.PlaceID);
+        <li>
+            @Html.UserPicThumb(user.ID)
+                
+            <div>
+                <span>Called out on @c.CreatedUtc.ToString("dd MMM yyy")</span>
+                <br />For @c.IndoorOutdoorString climbing with @(((ClimbingLevelGeneral)c.PreferredLevel).ToString().ToLower()) climbers 
+                
+                @if (place.Type != CfType.City && place.Type != CfType.ClimbingArea) { <text>at</text> } else { <text>around</text> }
+                
+                <br /><b>@Html.PlaceLinkWithFlag(c.PlaceID)</b> 
+                
+                <dl>
+                    <dt>Start</dt>
+                    <dd>@c.StartDateTime.AppointmentDateTimeString()</dd>
+                    <dt>End</dt>
+                    <dd>@if (c.HasDefaultEndDate) { <i>None specified</i> } else { @c.EndDateTime.AppointmentDateTimeString() } </dd>
+                </dl>               
+            </div>
+            <div style="float:right">
+                @(Html.DeleteLink<PartnerCallsController>(co=>co.Delete(c.ID), "Delete"))
+            </div>
+
+            
+            <p>@c.Comment</p>
+         </li>               
+    }  
+    </ul>
+}
+
+</div>
+
+</div>
+
+<div id="col2-right">
+
+    
+    <div class="sidemenu navOptions">
+    <h3>Options</h3>
+        <ul>
+            @foreach (var p in places) {
+                <li>@(Html.ActionLink<PartnerCallsController>(c => c.ListPlace(p.ID), "See calls @ " + p.ShortDisplayName))</li>
+            }
+        </ul>
+    </div>
+
+    @Html.Partial("Ads/SideMenu200x200")
+
+</div>

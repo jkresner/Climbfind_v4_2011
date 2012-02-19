@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CheckIn>
+<style type="text/css">
+img.usr { float:left;margin:1px 8px 0px 0px }
+</style>
+
+<ul id="climbing-history">   
+    @foreach (var ci in Model)
+    { var loc = AppLookups.GetCacheIndexEntry(ci.LocationID);
+        
+        <li>
+            <a href="@Url.Action("My", "Visits", new { id = ci.ID })" style="float:right"><b>Full details</b></a>
+            @Html.UserPicThumb(ci.UserID)
+            @Html.UserProfileLink(ci.UserID)
+            <br />
+            <a href="@Url.Action("My", "Visits", new { id = ci.ID })">@ci.Utc.ToString("dd MMM yyyy") @Html.FlagImage(loc) <b>@loc.ShortestName()</b></a>
+            <hr />
+            <div class="details">
+            <p>@ci.Comment</p>     
+            @if (ci.Media.Count == 0 && !string.IsNullOrEmpty(ci.Location.Avatar)) { <ul class="media"><li><img src="@Stgs.ImgsRt/media/tm/@ci.Location.Avatar" /></li></ul>  }
+            else { <ul class="media">@foreach (var m in ci.Media) {<li><img src="@m.ThumbUrl()" /></li>}</ul> }
+            @if (ci.LoggedClimbs.Count == 0) { <i>No climbs logged for this visit</i> }
+            else { <ul class="climbs">@foreach (var c in ci.LoggedClimbs) { 
+                <li>@Html.OutcomeImage(c.Outcome)
+                @Html.ExperienceImage(c.Experince)
+                <span>@c.ClimbName</span></li> }</ul>                
+            }
+            </div>
+        </li>   
+    }  
+</ul>
+
+

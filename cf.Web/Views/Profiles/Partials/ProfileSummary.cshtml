@@ -1,0 +1,26 @@
+﻿@model Profile
+
+<fieldset id="profile-summary">
+    <legend>@Model.DisplayName
+
+        @if (CfIdentity.UserID == Model.ID)
+        { <i> - Edit</i> @(Html.ActionLink<ProfilesController>(c => c.ChooseAvatar(), "pic"))<i> / </i>
+                @(Html.ActionLink<ProfilesController>(c => c.Edit(), "info"))}   
+    </legend>
+    @if (Model.HasAvatar) { <img src="@Stgs.ImgsRt/users/main240/@Model.Avatar" alt="@Model.DisplayName" class="pic" /> }
+    <label>Full name</label><span>@Model.FullName</span>
+    @if (!string.IsNullOrWhiteSpace(Model.NickName)) { <label>Nick name</label><span>@Model.NickName</span>}
+    @if (!string.IsNullOrWhiteSpace(Model.UserName) && !Model.HasDefaultUserName) { <label>Username</label><span>@Model.UserName</span> }
+    @if (!string.IsNullOrWhiteSpace(Model.GradesAverage)) { <label>Grades Avg</label><span>@Model.GradesAverage</span>}
+    @if (!string.IsNullOrWhiteSpace(Model.GradesMaximum)) { <label>Grades Max</label><span>@Model.GradesMaximum</span>}    
+    @if (!string.IsNullOrWhiteSpace(Model.ContactNumber)) { <label>Contact</label><span>@Model.ContactNumber</span>}
+    <label>Nationality</label><span>@Html.FlagImage(Model) <a href="@AppLookups.CountryUrl(Model.CountryID)">@AppLookups.CountryName(Model.CountryID)</a></span>
+    @if (Model.PlaceHome.HasValue) { <label>Home</label><span>@Html.FlagImage(CfCacheIndex.Get(Model.PlaceHome.Value)) @Html.PlaceLinkShortName(Model.PlaceHome.Value)</span>}                                                                                                                                                                                                                                     
+    @if (Model.HasFavorites) { <label>Favorites</label>
+        <span style="font-size:10px">@if (Model.PlaceFavorite1.HasValue) { @Html.PlaceLinkShortName(Model.PlaceFavorite1.Value) <br />}
+              @if (Model.PlaceFavorite2.HasValue) { @Html.PlaceLinkShortName(Model.PlaceFavorite2.Value) <br /> }
+              @if (Model.PlaceFavorite3.HasValue) { @Html.PlaceLinkShortName(Model.PlaceFavorite3.Value) <br /> }
+              @if (Model.PlaceFavorite4.HasValue) { @Html.PlaceLinkShortName(Model.PlaceFavorite4.Value) <br /> }                                                                                                                                                                                   
+              @*@if (Model.PlaceFavorite5.HasValue) { @Html.PlaceLinkShortName(Model.PlaceFavorite5.Value) <br /> }*@
+         </span>}                                                                                                                  
+</fieldset>

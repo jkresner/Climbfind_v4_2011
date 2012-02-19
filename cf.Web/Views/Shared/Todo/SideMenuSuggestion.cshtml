@@ -1,0 +1,45 @@
+﻿@{ Profile user = ViewBag.User; 
+   List<CfCacheIndexEntry> placeFilters = ViewBag.PlaceFilters;
+}
+
+<div class="side-suggestion">
+
+@if (!user.PlaceMostRecent.HasValue || placeFilters.Count < 3)
+{
+@*<fieldset><legend>Climbfind Movie Tip</legend>
+    <hr /><img src="@Stgs.StaticRt/ui/movietip.png" />
+    <p>Learn how to use and <a href="/help#ClimbingFeed" target="_blank">customize the climbing feed</a>.</p>
+</fieldset>*@
+}
+else
+{
+<fieldset><legend>Fill out your profile</legend>
+    @Html.Partial("Todo/SideMenuPersonality")
+</fieldset>
+}
+@*
+<fieldset><legend>Your alerts</legend>
+    <hr /><img src="@Stgs.StaticRt/ui/alert48.png" />
+    <p><b>Customize</b> how much info Climbfind sends you. <a href="/my-partner-call-subscriptions">Subscribe to partner calls</a> & control 
+    <a href="/site-usage-alerts">site usage alerts.</a></p>
+</fieldset>
+*@
+
+   <fieldset><legend>Get Climbfind for iPhone</legend>   
+        <a target="_blank" href="http://itunes.apple.com/us/app/climbfind/id489668971?mt=8"><b>Available from App Store</b>
+            <img src="http://a4.mzstatic.com/us/r1000/074/Purple/4c/c0/37/mzl.rnwgvglr.320x480-75.jpg" style="width:220px;margin:10px 5px" alt="Find Partner Climbfind iPhone" />
+        </a>
+    </fieldset>
+
+    <fieldset><legend>Get Climbfind for Android</legend>   
+        <a target="_blank" href="https://market.android.com/details?id=com.climbfindinc.climbfind"><b>Available from Android Market</b>
+            <img src="https://lh6.ggpht.com/5qbDVoLKd3g2QhbbOD8vdKR9JI0349RvqCvlD38gzwuhjoX0P-ppYI9Taioe-DgFVg" style="width:220px;margin:10px 5px" alt="Find Partner Climbfind Android" />
+        </a>
+    </fieldset>
+
+@*
+<fieldset><legend>Get involved</legend>
+    <p>Join the core Climbfind Team and contribute to our community!</p>
+</fieldset>
+*@
+</div>

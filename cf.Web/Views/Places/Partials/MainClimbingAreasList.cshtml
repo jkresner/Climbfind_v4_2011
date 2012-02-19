@@ -1,0 +1,48 @@
+﻿@inherits PlacesWebViewPage<List<Area>>   
+@{ int i=0; }
+                        
+@{ var addClimbAreaAction = Html.ActionCssLink<PlacesController>(c => c.AreaNew(country.NameUrlPart, "ClimbingArea"), "Add a climbing area to " + current.Name, "jBtn");
+   if (HasProvinceContext) { addClimbAreaAction =
+      Html.ActionCssLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, parentProvince.NameUrlPart), "Add a climbing area", "jBtn");
+   } }
+
+
+<h2>Top rock climbing areas around @current.Name</h2>
+
+@if (Model.Count == 0) { 
+     <div class="mainAddData">
+        <p>Climbfind does not know about any climbing areas around @current.Name</p>
+        <label>Help make our <a href="/world-rock-climbing-database" title="Rock climbing database">rock climbing database</a> better:</label>
+        @addClimbAreaAction
+    </div>
+    
+}
+else
+{ 
+    <ul class="places-list">@foreach (var a in Model)
+                            {
+                                if (i++ % 6 == 0)
+                                { <hr /> }
+                                if (Model.IndexOf(a) == 6)
+                                { <hr /> }
+                                        <li><a href="@a.SlugUrl" title="Rock climbing in @a.Name">
+        
+        <b>@if (String.IsNullOrWhiteSpace(a.NameShort))
+           { 
+               @a.Name }
+           else
+           { @a.NameShort }</b>
+        
+        @if (a.Rating.HasValue) { @Html.StarImage(a.Rating) } else { <i>Not yet rated</i> }
+        
+            @if (a.HasAvatar)
+            { <img src="@(Stgs.ImgsRt+a.AvatarRelativeUrl)" /> }
+            else
+            { <div class="no-img">No image</div> }                                                                           
+                                                                         </a>   
+        </li>}
+    </ul> 
+}
+
+<hr />
+     

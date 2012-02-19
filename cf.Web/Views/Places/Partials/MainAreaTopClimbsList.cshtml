@@ -1,0 +1,44 @@
+﻿@inherits PlacesWebViewPage<IList<Climb>>   
+@{ int r = 1; }                    
+
+<h2>Top ranked climbs in @current.Name <span style="color:Gray;font-size:15px;font-weight:normal">( rated by the Climbfind community )</span></h2>
+    
+@if (Model.Count == 0) { <div class="mainAddData"><p>Climbfind does know about the climbs here yet... please add some for us!</p></div> }
+else 
+{       
+    
+<div class="main-climb-list">
+       
+    @foreach (var c in Model)
+    {
+        <div><span><b>(@(r++))</b><br /> @if (!string.IsNullOrEmpty(c.GradeLocal))
+                   { @c.GradeLocal }
+                   else
+                   { <text>Grade unknown</text> }</span>
+            
+        <a href="@c.SlugUrl">@c.Name.Excerpt(15)</a>     
+        <span>@@ @Html.PlaceLinkShortName(c.LocationID)</span>
+            
+                
+        @if (c.HasAvatar)
+        { <text><img height="40" width="40" alt="thumbnail" src="@(Stgs.ImgsRt + c.AvatarRelativeUrl)"> </text>
+        }
+        else
+        { <text><img alt="@c.Name" src="@Stgs.StaticRt/ui/thumb.jpg"> </text>}
+           
+          @if (c.Rating.HasValue)
+          { @Html.StarImage(c.Rating) }
+          else
+          { <i>Not yet rated</i> }
+        </div> 
+       
+      
+    }
+</div>
+}
+
+<hr />
+
+
+
+

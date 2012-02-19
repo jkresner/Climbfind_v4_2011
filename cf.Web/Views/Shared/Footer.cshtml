@@ -1,0 +1,88 @@
+﻿<div id="footer-outer"><div id="footer-wrap">
+
+@*    <div id="latest-media-roll">
+				<h3>Newest media</h3>
+				@Html.Action("LatestCommunityMediaStrip", "Media")
+				<hr />
+		</div>*@
+
+
+	 <div class="col">
+
+		<h3>Site Info</h3>
+
+				@if (CfIdentity.IsAuthenticated) { <p>Logged in as <i>@CfIdentity.DisplayName</i> [<a href="/logout" style="color:#CB4721">Log off</a>]</p> }
+				<p><strong>Contact: </strong>contact@climbfind.com</p>
+
+				<p>&copy; <strong>Copyright 2011 
+				<br /><a href="http://www.kresner.com/">Jonathon Kresner</a></strong></p>
+
+		<p>Site launched: 16 Oct 2008
+				<br />Last updated: 22 Jan 2012
+				<br />Current version: v4.06</p>
+
+				<h3>Legal stuff</h3>
+				<ul>
+						<li><a href="/legal/terms-of-service">Terms of Service</a></li>
+						<li><a href="/legal/privacy-policy">Privacy Policy</a></li>
+				</ul>
+	</div>
+
+		<div class="col">
+
+				<h3>Climbfind Features</h3>
+				<div class="footer-list">
+			<ul>
+								<li><a href="/rock-climbing-social-network">See who's climbing</a></li>
+								<li><a href="/search-for-rock-climbing-partners">Find climbing partners</a></li>
+								<li><a href="/world-rock-climbing-database" title="World rock climbing database">Explore rock climbing places</a></li>
+								<li><a href="/rock-climbing-search-engine">Rock climbing search engine</a></li>
+								@*<li><a href="/opinions">Share beta & opinions</a></li>
+								<li><a href="/new-rock-climbing-media">Share rock climbing media</a></li>
+								<li><a href="/mobile">Log climbs & progress</a></li>*@
+						</ul>
+		</div>
+
+		</div>
+
+		<div class="col">
+				<h3>Climbing Database</h3>
+				<div class="footer-list">
+					<ul>
+						<li>@(Html.ActionLink<ModerateController>(c => c.Index(), "Moderate climbing places"))</li> 
+								<li>@Html.ActionLink("Rock climbing by Country", "Countries", "Places")</li>
+								<li><a href="/rock-climbing-usa/yosemite-national-park" title="Rock climbing Yosemite">Rock climbing in Yosemite</a></li>
+								<li><a href="/rock-climbing-england/london" title="Indoor climbing London">Indoor climbing in London</a></li>
+								<li><a href="/rock-climbing-australia" title="Australian Rock Climbing, Blue Mountains, Arapiles, The Grampians">Rock climbing around Australia</a></li>
+								<li><a href="/rock-climbing-england/peak-district-national-park" title="The Peak, Climbing Peak District National Park">Outdoor climbing Peak District</a></li>
+@*                <li>@Html.ActionLink("Top climbing areas", "TopAreas", "Opinions")</li>
+								<li>@Html.ActionLink("Top indoor climbing walls", "TopIndoorLocations", "Opinions")</li>
+								<li>@Html.ActionLink("Top outdoor climbing spots", "TopOutdoorLocations", "Opinions")</li>
+								<li>@Html.ActionLink("Top climbs", "TopClimbs", "Opinions")</li>*@
+					</ul>
+				</div>
+		</div>
+
+		<div class="col">
+				<h3>Climbfind Content</h3>
+				<div class="footer-list">
+					<ul>
+								@*<li><a href="/press">Climbfind Press</a></li>
+								<li><a href="/credits">Site credits</a></li>*@
+								<li><a href="/rock-climbing-glossary">Rock climbing glossary</a></li>
+								<li><a href="http://cf3.climbfind.com/" target="_blank">CF3 (Climbfind v3)</a></li>
+								@*<li><a href="/cf5">CF5 (Climbfind v5)</a></li>*@
+								<li><a href="http://cf3.climbfind.com/2008-UK-Roadtrip" target="_blank">2008 Climbfind UK Road Trip</a></li>
+								<li><a href="http://cf3.climbfind.com/2009-Climbfind-USA-Canada-Road-Trip" target="_blank">2009 Climbfind USA Canada Road Trip</a></li>        
+				@*		<li><a href="javascript:alert('Community Update Column coming in Release Candidate preview')">Community Update</a></li>
+						<li><a href="javascript:alert('Travel Dosage Column coming in Release Candidate preview')">Travel Dosage</a></li>
+						<li><a href="javascript:alert('Send Ladder Column coming in Release Candidate preview')">Send Ladder</a></li>
+						<li><a href="javascript:alert('Beta Bits Column coming in Release Candidate preview')">Beta Bits</a></li>*@
+					</ul>
+				</div>
+		</div>
+
+
+<hr />
+</div></div>
+		

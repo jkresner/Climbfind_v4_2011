@@ -1,0 +1,88 @@
+﻿@{ 
+}
+
+
+<form>
+
+<div id="locnew" style="min-height:400px">
+
+<script type="text/javascript">
+    var newIndoorUrl = '/rock-climbing-database/add-indoor-location/';
+    var newOutdoorUrl = '/rock-climbing-database/add-outdoor-location/';
+
+    $(document).ready(function () {
+        step1 = $("#step1");
+        step2indoor = $("#step2indoor");
+        step2outdoor = $("#step2outdoor");
+
+        //reset();
+        //$('input:radio').click(function () { $(".hidden").hide(); });
+
+        $("#locationOutdoorRB").click(function () { step1.hide(); step2outdoor.show(); });
+        $("#locationIndoorRB").click(function () { step1.hide(); step2indoor.show(); });
+        $("#areaRB").click(function () { document.location = '/rock-climbing-database/choose-area-type' });    
+
+        provinceAutocomplete("#psearch", function (item) {
+            var parentProvinceUrlPart = item.url.replace('/rock-climbing-', '');
+            document.location = newIndoorUrl + parentProvinceUrlPart;
+        });
+
+        climbingAreaAutocomplete("#asearch", function (item) {
+            var parentAreaUrlPart = item.url.replace('/rock-climbing-', '');
+            document.location = newOutdoorUrl + parentAreaUrlPart;
+        });
+
+        $(".CancelBtn").click(function () {
+            $("#step2indoor").hide();
+            $("#step2outdoor").hide();
+            $("#step1").show();
+        });
+
+        
+    });
+
+</script>
+
+    <div id="step1">
+
+        <h1>What do you want to do want to add?</h1>
+
+        <p><input id="locationIndoorRB" type="radio" name="locationType" value="indoor" /> <b>Indoor climbing</b> a.k.a a 'Climbing gym' or 'Indoor climbing wall'</p>
+
+        <p><input id="locationOutdoorRB" type="radio" name="locationType" value="outdoor" /> <b>Outdoor climbing</b> including a <i>single</i> rock wall or a <i>single</i> boulder</b></p>
+
+        <p><input id="areaRB" type="radio" name="locationType" value="area" /> <b>An Area</b> A region that encompasses multiple rock walls, boulders or indoor climbing locations</p>
+
+    </div>
+
+    <div id="step2indoor" style="display:none">      
+        
+        <h1>Add an indoor climbing location</h1>
+
+        <div style="padding:10px 0px 10px 0px">
+
+        <label>Name of province/state where the indoor climbing is</label>
+        <div>@Html.TextBox("psearch", "", new { @class = "long jq_watermark", title = "Type name of province" })</div>
+
+        </div>
+
+        <p><a href="#" class="CancelBtn jBtn">Back</a></p>
+    </div>
+
+    <div id="step2outdoor" style="display:none">
+        
+        <h1>Add an outdoor climbing location</h1>
+
+        <div style="padding:10px 0px 10px 0px">
+
+        <label>Name of area where the outdoor climbing (single rock wall / single boulder) is</label>
+        <div>@Html.TextBox("asearch", "", new { @class = "long jq_watermark", title = "Type name of area" })</div>
+
+        </div>
+
+        <p><a href="#" class="CancelBtn jBtn">Back</a></p>
+    </div>
+
+</div> 
+
+</form>

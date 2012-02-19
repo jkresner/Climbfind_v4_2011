@@ -1,0 +1,17 @@
+﻿@inherits  cf.Web.Views.Profiles.ProfileWebViewPage<PersonalityCategory> 
+
+<div id="cat-@Model" class="pMedia">
+    <div class="content">
+        <h4>@Model</h4>
+
+        @if (user.ID == CfIdentity.UserID) {
+            <p style="margin:10px 0px"><i>You don't have any media for the @Model category</i></p>
+            @(Html.ActionCssLink<ProfilesController>(c => c.ChoosePersonalityMedia(Model), "Add my " + Model.ToString(), "jBtn"))  
+        } else {
+            <p style="margin:10px 0px"><i>@user.DisplayName hasn't yet added media for the @Model category</i></p>
+        }
+        
+                                                                                                                                           
+        <div style="margin:10px 0px">@Html.Partial("PersonalityCategoryExplanation", Model)</div>
+    </div>
+</div>

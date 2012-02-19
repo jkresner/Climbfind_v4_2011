@@ -1,0 +1,10 @@
+﻿@model FormOptionsViewModel
+
+<div class="options">
+    <label>Form options</label>
+    <input type="submit" value="Save" class="SubmitBtn jBtn" />
+    <a href="@Model.CancelUrl" class="CancelBtn jBtn">@Model.CancelText</a>
+    @if (!String.IsNullOrWhiteSpace(Model.DeleteUrl)) { <a href="@Model.DeleteUrl" class="DeleteBtn jBtn delete">@Model.DeleteText</a>}
+                                                                                                                    
+    @Html.ValidationSummary()
+</div>

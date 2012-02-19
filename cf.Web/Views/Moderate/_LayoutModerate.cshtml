@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Jonathon Kresner - climbfind.com" />
+    <meta name="description" content="@ViewBag.MetaDescription" />
+    <meta name="keywords" content="@ViewBag.MetaKeywords" />
+    <meta name="robots" content="@ViewBag.Robots" />
+    <link href="@Stgs.StaticRt/css/cf2011.1mod.css" rel="stylesheet" type="text/css" />
+    <script src="@Stgs.StaticRt/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="@Stgs.StaticRt/js/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="@Stgs.StaticRt/js/jquery-cf-v08.js" type="text/javascript"></script>
+    <script src="@Stgs.StaticRt/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="@Stgs.StaticRt/js/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="@Stgs.StaticRt/js/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<!--header -->
+<div id="top-bar">
+    <div id="nav-wrap">
+       <a href="/" id="logo"><img src="@Stgs.StaticRt/ui/cf-mod-menu-emblem.jpg" style="margin:-1x 0px 0px 0px;padding:0" /></a>
+
+       <ul id="nav" style="left:-120px">
+			<li><a href="/moderate">Dashboard</a></li>
+            <li>@(Html.ActionLink<ModerateController>(c=>c.Areas(), "Areas"))</li>
+			<li>@(Html.ActionLink<ModerateController>(c=>c.LocationsIndoor(), "Gyms"))</li>
+			<li>@(Html.ActionLink<ModerateController>(c=>c.LocationsOutdoor(), "Outdoor"))</li>
+            <li>@(Html.ActionLink<ModerateController>(c=>c.Climbs(), "Climbs"))</li>
+            <li><a href="/moderators-project">Moderators Project</a></li>
+            @*<li>@(Html.ActionLink<ModerateController>(c=>c.ActionContribs(), "Contribs"))</li>*@
+            @*<li><a href="javascript:alert('Translations for French, Spanish, Italian, German & Portuguese are coming in CF5, we need lots of help, so get in touch if this is something you want to be invovled in.')">Translate</a></li>*@
+            @*<li><a href="http://wiki.climbfind.org/index.php/Moderators_Project" target="_blank">Wiki</a></li>*@
+            
+            @if (CfPrincipal.Current.IsInRole("ModAdmin")) {
+            <li>@(Html.ActionLink<ModerateController>(c => c.Admin(), "Adm"))</li>}
+		</ul>
+        <form id="quick-search" method="post" action="/search"><input id="qsearch" type="text" name="qsearch" /> </form>
+	</div>
+
+<!--/header-->
+</div>
+	
+<!-- content-outer -->
+<div id="content-wrap" style="float:none">
+
+	<!-- content -->
+   <div id="content" class="Moderation">
+   
+   @RenderBody()
+
+    <!-- content -->
+	</div>
+
+<!-- /content-out -->
+</div>
+<div id="modal-placeholder"></div>
+
+    @if (Environment.MachineName.ToLower() != "jonathon-pc")
+    {
+      
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-1693127-4']);
+        _gaq.push(['_setDomainName', '.climbfind.com']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+        }
+
+</body>
+</html>

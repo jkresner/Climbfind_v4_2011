@@ -1,0 +1,56 @@
+﻿@{  Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   ISearchable place = ViewBag.Place;
+   IEnumerable<ModAction> modActions = ViewBag.ModActions;
+   ModProfile modProfile = ViewBag.ModProfile;
+   int pointsThisMonth = ViewBag.PointThisMonth;
+   }
+
+<style type="text/css"> 
+    .dashSetA { float:left;width:420px;margin-right:10px }
+    .dashSetB { float:left;width:570px }
+    table {margin:5px 0px 0px 0px} table td { padding:2px }  table th { padding:2px } 
+    #placesIModerate td { line-height:14px }
+</style>
+
+<div style="margin:20px">
+
+<div class="dashSetA">
+
+<fieldset id="profileWidgetModDetails"><legend>@Html.UserProfileLink(modProfile.ID)'s mod profile</legend>
+
+<p>See normal profile for @Html.UserProfileLink(modProfile.ID)</p>
+
+<label>Mod Level</label> <span>@modProfile.Role.Replace("Mod", "") (@modProfile.Reputation)</span>
+<label>Moderator Since</label> <span>@modProfile.ModeratorSinceUtc.ToString("dd MMM yyyy") GMT</span>
+<label>Last Activity</label> <span>@modProfile.LastActivityUtc.ToString("dd MMM yyyy") GMT</span>
+<label>Points this month</label> <span>@pointsThisMonth</span>
+<label>Places Added</label> <span>@modProfile.PlacesAdded</span>
+<label>Climbs Added</label> <span>@modProfile.ClimbsAdded</span>
+<label>Verified Edits</label> <span>@modProfile.VerifiedEdits</span>
+
+</fieldset>
+
+</div>
+
+
+<div class="dashSetB">
+
+    <fieldset><legend>Place history</legend>
+    
+        <ul style="padding:0;margin:0;font-size:10px">
+            @foreach (var p in modActions)
+            { <li>
+                <b>+ @p.Points</b>
+                @((ModActionType)p.TypeID)
+                @Html.PlaceLinkWithBlank(p.OnObjectID)
+                @p.Utc.GetAgoStringUtc() 
+
+                @(Html.ActionLink<ModerateController>(c=>c.ActionDetail(p.ID), "details"))
+                </li> }
+        </ul>
+
+    </fieldset>
+
+</div>
+
+</div>

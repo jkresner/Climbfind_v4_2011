@@ -1,0 +1,89 @@
+﻿@model ClimbOutdoorNewViewModel
+@{ LocationOutdoor parent = ViewBag.Location;
+   CfPageTitleMaster.Set("Add new climb");
+   ViewContext.ClientValidationEnabled = true;
+}
+
+<style type="text/css">
+    #optionaldetails { width:512px;margin-left:10px;float:left }
+    #optionaldetails select { width:110px;height:29px;font-size:10px }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ClimbTypeID").val("");
+        $("#CatMultipitch").click(function () {
+            if ($('#CatMultipitch').is(':checked')) { $("#pitches").show(); } else { $("#pitches").hide(); $("#NumberOfPitches").val("1"); } 
+        });
+    });
+</script>
+
+<div id="ClimbFormDiv">
+
+@using (Html.BeginForm("ClimbOutdoorNew", "Climbs", new { id = parent.ID }, FormMethod.Post , null))
+{
+    <h1>Add a climb to <a href="@parent.SlugUrl">@parent.Name</a></h1> 
+
+    <fieldset style="width:410px;float:left"><legend>Required</legend>
+        
+        <div style="float:left;width:120px">
+            <div class="editor-label">@Html.LabelFor(m => m.ClimbTerrainID, "Terrain")</div>
+            <div class="editor-field">@Html.DropDownListFor(m => m.ClimbTerrainID, SelectLists.ClimbTerrainTypeSelectList)</div>
+        </div>
+        
+        <div style="float:left;width:160px">
+            <div class="editor-label">@Html.LabelFor(m => m.ClimbTypeID, "Climb type")  @Html.ValidationMessageFor(m => m.ClimbTypeID, "Select type")</div>
+            <div class="editor-field">@Html.DropDownListFor(m => m.ClimbTypeID, SelectLists.IndoorClimbTypeSelectList, "--- select ---", null)</div>
+        </div>
+    
+        <hr />
+            
+        <div class="editor-label">@Html.LabelFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name, "Name required. Type 'Unknown' if not sure")</div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.Name, new { @class = "long" })</div>
+
+        <div class="editor-label">@Html.LabelFor(m => m.GradeLocal, "Grade") @Html.ValidationMessageFor(m => m.GradeLocal, "Select grade")</div>
+        <div class="editor-label">@Html.DropDownListFor(m => m.GradeLocal, SelectLists.GradeSelectList, "--- select ---", null)</div>    
+        
+        @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = parent.SlugUrl, CancelText = "Cancel" })
+    </fieldset>
+    
+    <fieldset id="optionaldetails"><legend>Optional</legend>
+    
+        <div id="method" class="editor-label">
+            @Html.EditorFor(m => m.Categories, "ClimbOutdoorMethods")
+        </div>
+        
+        <div id="pitches" style="display:none">
+            <div class="editor-label">@Html.LabelFor(m => m.NumberOfPitches, "# of pitches")</div>
+            <div class="editor-label">@Html.TextBoxFor(m => m.NumberOfPitches)</div>
+        </div>
+
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.Description) <i>optional</i></div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.Description, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionWhere, "Where") <i>how to locate the climb at the crag</i></div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionWhere, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionStart, "Start description") <i>how identify the start of the climb</i></div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionStart, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionGear, "Gear needed") <i># of bolts, pads, rack etc.</div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionGear, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionSafety,"Safety & warnings")</div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionSafety, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.SafetyRating, "Safety rating") <i>HS, R/X YDS system etc. </i></div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.SafetyRating)</div>
+        <hr />
+        <div id="categories" class="editor-label">
+            @Html.EditorFor(m => m.Categories, "ClimbOutdoorCategories")
+        </div>
+    </fieldset>
+    
+    <hr />   
+    @Html.HiddenFor(m => m.LocationID)
+}
+
+</div>

@@ -1,0 +1,28 @@
+﻿@model PartnerCallPreViewModel
+
+@using (Html.BeginForm("New", "PartnerCalls", FormMethod.Get, new { id = "partnerCallForm" }))
+{
+    <div class="where">
+        <label>Where </label>@Html.ValidationMessageFor(m => m.id) <br />
+        <input class="tbox jq_watermark long" id="pCallAsearch" type="text" name="asearch" title="Name of area, city, climbing gym, outdoor rock wall or boulder" />
+        @Html.HiddenFor(m => m.id, new { id="PartnerCallPlaceID" })
+    </div>
+    @*<div class="go"><input id="createPCallSubmit" type="submit" class="jBtn" value="Go" /></div>*@
+    
+    <hr />
+}
+
+<script type="text/javascript">
+
+    /* Climbfind functions */
+    jQuery(document).ready(function () {
+        var pcForm = $("#partnerCallForm");
+        disableEnterFormPost("#pCallAsearch");
+
+        placeAllTypesAutocomplete("#pCallAsearch", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { document.location = '/new-partner-call/'+item.id; }
+        });
+    });
+
+</script>

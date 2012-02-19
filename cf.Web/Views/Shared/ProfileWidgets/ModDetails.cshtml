@@ -1,0 +1,17 @@
+﻿@model ModProfile
+
+@if (Model != null && Model.Reputation != 0)
+{
+<fieldset id="profile-moddetails"><legend>Mod profile <i>-</i> @(Html.ActionLink<ModerateController>(c => c.ActionUserList(Model.ID), "Mod activity"))</legend>
+
+<label>Mod Level</label> <span>@Model.Role.Replace("Mod", "") (@Model.Reputation)</span>
+<label>Moderator Since</label> <span>@Model.ModeratorSinceUtc.ToString("dd MMM yyyy")</span>
+<label>Last Activity</label> <span>@Model.LastActivityUtc.ToString("dd MMM yyyy")</span>
+<label>Points this month</label> <span>@ViewBag.PointThisMonth</span>
+<label>Places Added</label> <span>@Model.PlacesAdded</span>
+<label>Climbs Added</label> <span>@Model.ClimbsAdded</span>
+<label>Verified Edits</label> <span>@Model.VerifiedEdits</span>
+
+</fieldset>
+    
+}

@@ -1,0 +1,97 @@
+﻿@{ Profile user = ViewBag.User;
+   CfPageTitleMaster.Set("Message");
+   List<Conversation> conversations = ViewBag.Conversations;
+   }
+
+
+<div id="col1-messages">
+    <div id="conversations">
+        <h5>Your conversations</h5>
+        <ul>
+            @foreach (var c in conversations)
+            {
+                var otherPartyID = c.PartyAID;
+                var myView = c.ConversationViews.Where(cv => cv.PartyID == CfIdentity.UserID).Single();
+                if (c.PartyAID == CfIdentity.UserID) { otherPartyID = c.PartyBID; }
+                if (myView.ShouldShow)
+                {
+            <li id="@c.ID" class="@((ConversationStatus)myView.Status)">
+                @Html.UserPicThumb(otherPartyID)
+                <div>@Html.UserProfileLink(otherPartyID)
+                    <i>@c.LastActivityUtc.GetHappenedStringUtc()</i>
+                    <p>@c.LastExcerpt.Excerpt(28)</p>
+                    <hr />
+                </div>
+                <hr />
+            </li> }
+            }
+        </ul>
+    </div>
+            
+</div>
+
+<div id="col2-messages">
+    <h1 style="font-size:24px;margin:12px 0 6px 0">Messages</h1>
+    @Html.Partial("Forms/MessageForm", new NewMessageViewModel(Guid.Empty) { Action = "Append" })    
+    <div id="messages"></div>   
+</div>
+
+<div id="col3-messages">
+
+    <fieldset class="side-sponsor-ad"><legend>Sponsor</legend>
+        <script type="text/javascript"><!--
+            google_ad_client = "ca-pub-8929518485692248";
+            /* CF4_Area_Sidemenu */
+            google_ad_slot = "3964784439";
+            google_ad_width = 200;
+            google_ad_height = 200;
+        //-->
+        </script>
+        <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+    </fieldset>
+
+    <fieldset class="side-sponsor-ad"><legend>Sponsor</legend>
+        <script type="text/javascript"><!--
+            google_ad_client = "ca-pub-8929518485692248";
+            /* CF4_Area_Sidemenu */
+            google_ad_slot = "3964784439";
+            google_ad_width = 200;
+            google_ad_height = 200;
+    //-->
+    </script>
+    <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+    </fieldset>
+
+
+     @Html.Partial("Ads/SideMenu200x200")
+</div> 
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        attachedLoadConversationEvent();
+        attachedLoadConversationEvent();
+        loadConversation($("#conversations ul").children(':first').find("a"));
+    });
+
+    function attachedLoadConversationEvent(selector) {
+        $("#conversations a").click(function () { loadConversation($(this)); return false; });
+        $("#conversations img").click(function () { loadConversation($(this).parent().find("a")); return false; });
+    }
+
+    function loadConversation(aLink) {
+        var id = aLink.parent().parent().attr("id");
+        $("#conversations a").css("font-weight", "normal");
+
+        $("#ForID").val(id);
+        
+        $.post(
+                "/Messages/ConversationAjax/" + id,
+                function (data) {
+                    $("#messages").html("");
+                    $("#messages").html(data);
+                }
+            );
+        aLink.css("font-weight", "bold");
+    }
+</script>
+    

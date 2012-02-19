@@ -1,0 +1,56 @@
+﻿@model AreaNewPrestepViewModel
+@{ string selectedAreaType = ViewBag.SelectedAreaType; }
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if ('@selectedAreaType' != 'unknown') {
+            $(":radio[value=@selectedAreaType]").attr('checked', true);
+            //            $("#chooseType").hide();
+        }
+
+        $("#addAreaForm").submit(function () {
+            var valid = $("#addAreaForm").valid();
+            if (valid) {
+                $("#addAreaForm").submit();
+            } else {
+                $("#psearch").addClass("input-validation-error");
+                $("#psearch").change(function (e) { $("#checkInLsearch").removeClass("input-validation-error"); });
+            }
+
+            return false;
+        });
+
+        provinceAutocomplete("#psearch", function (item) {
+            var lessUrl = item.url.substring(1, item.url.length);
+            var slashIndex = lessUrl.indexOf("/");
+            var countryUrl = lessUrl.substring("rock-climbing-".length, slashIndex);
+            var nameUrl = lessUrl.substring(slashIndex + 1, lessUrl.length);
+            $("#areaUrlPart").val(nameUrl);
+            $("#countryUrlPart").val(countryUrl);
+        });
+    });
+
+</script>
+
+@*Note here we use hard coded action url because routing engine takes over and adds unknown/unknown junk*@
+@using (Html.BeginRouteForm("AreaNewToAreaStatic", FormMethod.Get, new { id = "addAreaForm" }))
+{
+    <h1>Add an area</h1>    
+
+    <div style="padding:10px 0px 10px 0px;min-height:360px">
+
+        <label>What province/state is the area in?
+            @Html.ValidationMessageFor(m => m.areaUrlPart, "Province/state required")
+        </label>
+        <br />
+        <input id="psearch" class="tbox jq_watermark long" type="text" name="lsearch" title="Type name of province, state or territory" />
+        @Html.HiddenFor(m => m.areaUrlPart)
+        @Html.HiddenFor(m => m.countryUrlPart)
+    
+        <p><input id="submit-province" type="submit" value="Continue" class="jBtn" style="width:100px" /></p>
+
+    </div>    
+
+    <hr />
+}

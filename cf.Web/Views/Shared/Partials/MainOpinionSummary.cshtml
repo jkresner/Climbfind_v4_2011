@@ -1,0 +1,19 @@
+﻿@model IRatableGeo
+@{ string alink = string.Format(@" href=""#{0}"" class=""opinion""", Model.ID);
+   if (Model.Type == CfType.ClimbOutdoor || Model.Type == CfType.ClimbIndoor) {
+       alink = @" href=""javascript:alert('To give your opinion on a climb, log that you have climbed it.')""";
+   }     
+}
+
+@if (Model.RatingCount == 0) { <text>No opinions for @Model.Name yet
+    ... <a @Html.Raw(alink)><b>leave your opinion</b></a> </text>
+} 
+else  
+{
+    <text>
+        Rated <a href="@Url.Action("ListObject", "Opinions", new { id = Model.ID })">@Html.StarImage(@Model.Rating) by @Model.RatingCount</a> 
+    </text>
+    if (Model.RatingCount == 1) {<text> user</text>} else { <text> users</text>}
+    <text>... <a @Html.Raw(alink)>share an opinion on @Model.Name</a></text>
+}
+

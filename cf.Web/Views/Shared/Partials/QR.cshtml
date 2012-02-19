@@ -1,0 +1,34 @@
+﻿@{ var qrUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+   bool QRSet = ViewBag.PageQR != null;
+   if (QRSet) { qrUrl = ViewBag.PageQR; }
+}
+
+<div id="dialog-qr" title="Use the Climbfind Scanner with Climbfind Mobile" style="display:none">
+    
+    @if (QRSet)
+    {
+        <h4>Scan QR Codes with <a href="/mobile">Climbfind Mobile</a></h4>
+        <img id="imageQR" alt="@qrUrl" style="border:solid 1px #d3d3d3;padding:3px"  />
+    }
+    else
+    {
+        <h4><img alt="QR Code" src="@Stgs.StaticRt/ui/icon-qr-28x28.png"> Scan QR Codes with <a href="/mobile">Climbfind Mobile</a>!</h4>
+    
+            <p><i>Try it now:</i></p>  
+            <p>Browse to any 
+            <a href="/rock-climbing-usa/yosemite-valley" target="_blank">Climbing area</a>, 
+            <a href="/indoor-climbing-usa/planet-granite-san-francisco" target="_blank">Indoor climbing wall</a>, 
+            <a href="/outdoor-climbing-australia/rock-wall/right-hand-side" target="_blank">Outdoor rock wall</a>,
+            <a href="/outdoor-climbing-usa/rock-wall/cat-rock-central-park" target="_blank">Boulder</a> or 
+            <a href="/climb/burnt-offerings/562fe59c-95c8-4471-bcbd-0a0d62c943ca" target="_blank">Climb</a>
+        
+        on our website and then hit the QR icon again
+        to get the code for that page.</p>
+    }
+    
+    <hr />
+    
+    <img src="@Stgs.StaticRt/ui/iPhone.jpg" style="margin-right:10px" />
+    <img src="@Stgs.StaticRt/ui/android.jpg" /> 
+
+</div>

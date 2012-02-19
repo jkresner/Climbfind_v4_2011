@@ -1,0 +1,3 @@
+﻿@model List<string>
+
+<div id="members">@foreach (var thumb in Model) { i++; if (i%18==0) { <hr /> } <img src="@Stgs.ImgsRt/users/mainTm/@thumb" /> }</div>

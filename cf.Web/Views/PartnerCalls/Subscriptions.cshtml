@@ -1,0 +1,105 @@
+﻿@{ Profile user = ViewBag.User;
+   List<PartnerCallSubscription> subscriptions = ViewBag.Subscriptions;
+   CfPageTitleMaster.Set("PartnerCall Subscriptions"); }
+
+<div id="col2-left">
+
+<h1>My PartnerCall&trade; Subscriptions</h1>
+
+@if (subscriptions.Count == 0) { @*<p style="margin:20px 0 40px 0">You have no partner call subscriptions :(</p>*@ }
+else { <table style="margin:20px 0 40px 0"><tr><th>Place</th><th>Type</th><th>Logic</th><th style="width:55px">Email</th><th style="width:55px">Mobile</th><th>Options</th></tr>
+    @foreach (var s in subscriptions) { var place = AppLookups.GetCacheIndexEntry(s.PlaceID);
+        <tr>
+            <td><a href="@place.SlugUrl"><b>@place.Name</b></a> <br />@place.Type.ToFriendlyVerboseString()</td><td>
+                @if (s.ForIndoor && !s.ForOutdoor) { <i>Indoor</i> }
+                else if (!s.ForIndoor && s.ForOutdoor) { <i>Outdoor</i> }                                         
+                else { <i>Indoor+Outdoor</i> }                                         
+            </td>
+            <td>@if (s.ExactMatchOnly) { <i>Exact match</i> } else { <i>Geo deduction</i> }</td>
+            <td>@s.EmailRealTime</td>
+            <td>@s.MobileRealTime</td>
+            <td>@(Html.ActionLink<PartnerCallsController>(c=>c.SubscriptionDelete(s.ID), "Delete"))</td>
+        </tr>
+}</table>}
+
+<hr />
+@using (Html.BeginForm("SubscriptionNew", "PartnerCalls", FormMethod.Get, new { id = "partnerCallForm" }))
+{
+    if (subscriptions.Count == 0) { <h1>Add your first subscription</h1> }
+    else
+    {        
+        <h1>Add another subscription</h1>
+        <p>You can subscribe to as many places as you like!</p>
+    }
+    <hr />
+    <div class="where">
+        <label>Where do you want to hear PartnerCalls&trade; for?</label><br />
+        <input class="tbox jq_watermark long" id="pCallAsearch" type="text" name="asearch" title="Type name of area, city, climbing gym, outdoor rock wall or boulder" />
+        @Html.Hidden("id")
+    </div>
+    @*<div class="go"><input id="createPCallSubmit" type="submit" class="jBtn" value="Go" /></div>*@
+    
+    <hr />
+}
+
+
+@if (subscriptions.Count == 0) { 
+    <hr /><br /><h3>Intro movie to creating subscriptions (4 mins)</h3><br />
+    <object id="scPlayer"  width="720" height="400" type="application/x-shockwave-flash" data="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/c5a05809-e3b4-4021-9bac-4c09f73c9647/scplayer.swf" ><param name="movie" value="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/c5a05809-e3b4-4021-9bac-4c09f73c9647/scplayer.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#FFFFFF" /><param name="flashVars" value="thumb=http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/c5a05809-e3b4-4021-9bac-4c09f73c9647/FirstFrame.png&containerwidth=800&containerheight=450&autohide=true&autostart=false&loop=false&showendscreen=true&showsearch=false&showstartscreen=true&tocdoc=left&xmp=sc.xmp&content=http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/c5a05809-e3b4-4021-9bac-4c09f73c9647/PartnerCall%20Subscriptions.mp4&blurover=false" /><param name="allowFullScreen" value="true" /><param name="scale" value="showall" /><param name="allowScriptAccess" value="always" /><param name="base" value="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/c5a05809-e3b4-4021-9bac-4c09f73c9647/" /><iframe type="text/html" frameborder="0" scrolling="no" style="overflow:hidden;" src="http://www.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/c5a05809-e3b4-4021-9bac-4c09f73c9647/embed" height="400" width="720" ></iframe></object>
+    <hr /><br />
+ }
+
+
+<script type="text/javascript">
+
+    /* Climbfind functions */
+    jQuery(document).ready(function () {
+        var pcForm = $("#partnerCallForm");
+        disableEnterFormPost("#pCallAsearch");
+
+        placeAllTypesAutocomplete("#pCallAsearch", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { window.location = "/new-partner-call-subscription/" + item.id; }
+        });
+    });
+
+</script>
+
+</div>
+
+
+<div id="col2-right">
+
+<div class="info">
+
+    <h2>Help ?</h2>
+    <hr />
+    <p><b>"With GREAT POWER comes great responsibility!"</b> - Spider Man, 2002</p>
+    <hr />
+    <p>We know it can take a few goes at PartnerCall&trade; Subscriptions to get your head around how they work, so you
+    get the exact information you want.</p>
+    <hr />
+    <p>To help, we put this short movie together on the
+         <a href="/help#PartnerCallSubscriptions" target="_blank">Full power of PartnerCall&trade; Subscriptions</a>:</p>
+    <br />
+@*    <h2>Areas vs Locations</h2>
+    <hr />
+    <p>Understanding the <a href="/help#AreasVsLocations" target="_blank"><b>difference between areas & locations</b></a> is crucial to setting up your 
+    PartnerCall&trade; Subscriptions to match your exact preferences.</p>
+    <hr />
+    <b>When you subscribe to areas</b>
+    <i>(With geo-deduction logic)</i>
+    <p>You get notified when others post for ANY location that falls in your subscription area or are that intersects your area.</p>
+    <hr />
+    <b>Subscribing to locations</b>
+    <p>When you subscribe to a location, you get notified when someone posts for that location OR an area which that location falls in.</p>
+    <hr />
+    <b>Subscribing with EXACT match</b>
+    <p>When you subscribe with EXACT match, you only get notified when another user posts for the exact area or location you subscribed..</p>
+    <b>Indoor / outdoor?</b>
+    <p>For areas, you can also tell climbfind you only want to know specifically about indoor climbing or outdoor climbing or both!</p>
+*@
+</div>
+
+
+</div>

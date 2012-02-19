@@ -1,0 +1,76 @@
+﻿@model List<int>
+@{ ILocation parent = ViewBag.Location;
+   ViewBag.CategoryIDs = Model; }           
+@functions{
+    protected string IsChecked(ClimbTagCategory type) { int id = (int)type; return Model.Contains(id) ? "checked='checked' " : ""; }
+    protected MvcHtmlString CatCheckbox(ClimbTagCategory type) { return new MvcHtmlString(string.Format(@"<span><input id=""Cat{0}"" type=""checkbox"" name=""Categories"" value=""{1}"" {2}/> {0}</span>", type, (int)type, IsChecked(type))); }
+    protected MvcHtmlString CatCheckbox(ClimbTagCategory type, string label) { return new MvcHtmlString(string.Format(@"<span><input id=""Cat{0}"" type=""checkbox"" name=""Categories"" value=""{1}"" {2}/> {3}</span>", type, (int)type, IsChecked(type), label)); }
+}
+       
+<style type="text/css">
+    #categories { font-size:10px }
+    #categories label { display:block;width:50px;padding-left:10px;font-style:italic }
+    #categories span { display:block;padding-left:16px;float:left }
+</style>  
+
+<label>Angle</label>
+<div>@CatCheckbox(ClimbTagCategory.Vertical)
+@CatCheckbox(ClimbTagCategory.Overhang)
+@CatCheckbox(ClimbTagCategory.Slab)
+@CatCheckbox(ClimbTagCategory.Roof)
+@CatCheckbox(ClimbTagCategory.Traverse)
+@CatCheckbox(ClimbTagCategory.TopOut, "Top out")
+</div> 
+<br />
+<label>Holds</label> 
+<div>@CatCheckbox(ClimbTagCategory.Handles, "Handle")
+@CatCheckbox(ClimbTagCategory.Jugs, "Jug")
+@CatCheckbox(ClimbTagCategory.Crimps, "Crimp")
+@CatCheckbox(ClimbTagCategory.DimeEdgeCrimps, "Dime edge crimps")
+@CatCheckbox(ClimbTagCategory.Edges, "Edge")
+@CatCheckbox(ClimbTagCategory.Ledges, "Ledge")
+@CatCheckbox(ClimbTagCategory.Slopers, "Sloper")
+@CatCheckbox(ClimbTagCategory.Slots, "Slot")
+@CatCheckbox(ClimbTagCategory.Monos, "Mono")
+@CatCheckbox(ClimbTagCategory.TwoFingerPockets, "2 finger pocket")
+@CatCheckbox(ClimbTagCategory.Pockets, "Pocket")
+@CatCheckbox(ClimbTagCategory.Pinches, "Pinch")
+@CatCheckbox(ClimbTagCategory.Volumes, "Volume")
+@CatCheckbox(ClimbTagCategory.Knobs, "Knob")
+</div>
+<hr />
+<label>Features</label> 
+@CatCheckbox(ClimbTagCategory.Crack)
+@CatCheckbox(ClimbTagCategory.Face)
+@CatCheckbox(ClimbTagCategory.Arete)
+@CatCheckbox(ClimbTagCategory.Dihedral)
+@CatCheckbox(ClimbTagCategory.Prow)
+@CatCheckbox(ClimbTagCategory.Bulge)
+@CatCheckbox(ClimbTagCategory.Column)
+@CatCheckbox(ClimbTagCategory.Tufa)
+@CatCheckbox(ClimbTagCategory.Scoop)
+@CatCheckbox(ClimbTagCategory.Blocky)
+@CatCheckbox(ClimbTagCategory.Stalactite)
+@CatCheckbox(ClimbTagCategory.Smears)
+
+<hr />
+<label>Style</label> 
+@CatCheckbox(ClimbTagCategory.Balancy)
+@CatCheckbox(ClimbTagCategory.Bridging)
+@CatCheckbox(ClimbTagCategory.Technical)
+@CatCheckbox(ClimbTagCategory.Powerful)
+@CatCheckbox(ClimbTagCategory.LockOffs, "Lock offs")
+@CatCheckbox(ClimbTagCategory.Deadpoint)
+@CatCheckbox(ClimbTagCategory.Dyno)
+@CatCheckbox(ClimbTagCategory.Reachy)
+@CatCheckbox(ClimbTagCategory.Scrunchy)
+@CatCheckbox(ClimbTagCategory.Blocky)
+@CatCheckbox(ClimbTagCategory.PartyTrick, "Party trick")
+@CatCheckbox(ClimbTagCategory.Awkward)
+@CatCheckbox(ClimbTagCategory.BetaIntensive, "Beta intensive")
+@CatCheckbox(ClimbTagCategory.Tweaky)
+@CatCheckbox(ClimbTagCategory.Kneebar)
+@CatCheckbox(ClimbTagCategory.HeelHook, "Heel hook")
+@CatCheckbox(ClimbTagCategory.ToeHook, "Toe hook")
+@CatCheckbox(ClimbTagCategory.RingLock, "Ring lock")
+<hr />

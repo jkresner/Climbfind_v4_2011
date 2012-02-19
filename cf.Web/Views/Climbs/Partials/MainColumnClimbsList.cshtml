@@ -1,0 +1,41 @@
+﻿@inherits cf.Web.Views.Places.PlacesWebViewPage<List<Climb>>
+@{ Climb climb = ViewBag.Climb;
+   var climbsByGrade = Model.OrderBy(c => c.GradeLocal).ToArray();
+   var topClimb = Model.OrderBy(c => c.Rating).Take(5);
+  }
+
+<style type="text/css">
+    .column-climb-list {}
+    .column-climb-list li { clear:both;height:40px }
+    .column-climb-list img { float:left;padding-bottom:10px }
+    .column-climb-list div { float:left;width:175px;margin:-4px 0 0 10px }
+</style>
+
+<div style="border-top:solid 1px #F3F3F3;padding-top:15px;width:98%">
+
+@if (Model.Count == 0) { <p class="mainAddData">No matches </p> }
+
+<div class="column-climb-list">
+     
+     <ul>
+    @foreach (var c in climbsByGrade) 
+    {
+        <li>
+            @if (c.HasAvatar) { <text><img height="40" width="40" alt="thumbnail" src="@(Stgs.ImgsRt+c.AvatarRelativeUrl)"> </text>
+            } else { <text><img alt="@c.Name" src="@Stgs.StaticRt/ui/thumb.jpg"> </text>}
+                   
+            <div>
+                <span>@c.GradeLocal</span> <a href="@c.SlugUrl">@c.Name</a>     
+                <br />        
+                @if (c.Rating.HasValue)
+                { @Html.StarImage(c.Rating) }
+                else
+                { <i>Not yet rated</i> }
+            </div> 
+        </li>
+    }
+    </ul>  
+    
+</div>
+
+</div>

@@ -1,0 +1,115 @@
+﻿@{ List<CountrySummary> Summaries = ViewBag.CountrySummaries;
+   CfPageTitleMaster.Set("World Rock Climbing - Browse Outdoor Climbing & Indoor Climbing by Country"); }
+
+<style type="text/css">
+    ul.countries { margin:10px 20px 10px 10px;padding:0;border-top: 1px solid #eeeeee }
+    ul.countries li { margin:0;padding: 12px 5px;border-bottom: 1px solid #eeeeee;list-style: none }
+    .horizontalalphabet { height:30px;margin:6x 0px 0px 0px;padding:8px 0px 0px 8px }
+    h4 { margin-top:20px!important }
+    .featured-country { font-size:10px;margin:10px 30px 10px 10px;float:left }
+    .featured-country a { font-size:12px }
+</style>
+
+<div id="col2-left">
+
+<h1>World Rock Climbing by Country</h1>
+
+<h2>Popular rock climbing countries</h2>
+
+@{ var us = AppLookups.Country(245);
+   var ca = AppLookups.Country(43);
+   var en = AppLookups.Country(14);
+   var au = AppLookups.Country(16);
+   var de = AppLookups.Country(61);
+   { var s = Summaries.Where(cs => cs.ID == us.ID).Single(); <div class="featured-country">
+   <img src="@Stgs.StaticRt/flags/@(us.Flag).png" alt="Flag on @us.Name"/><b> <a href="@us.SlugUrl">@us.Name</a><br />@s.ProvinceCount provinces</b>
+   <br />@s.CityCount<text> cities</text><br />@s.ClimbingAreaCount<text> climbing areas</text><br />@s.IndoorLocationCount<text> indoor locations</text>
+   <br />@s.OutdoorLocationCount<text> outdoor locations</text><br />@s.ClimbsCount<text> climbs</text></div>
+   } { var s = Summaries.Where(cs => cs.ID == ca.ID).Single(); <div class="featured-country">
+   <img src="@Stgs.StaticRt/flags/@(ca.Flag).png" alt="Flag on @ca.Name"/><b> <a href="@ca.SlugUrl">@ca.Name</a><br />@s.ProvinceCount provinces</b>
+   <br />@s.CityCount<text> cities</text><br />@s.ClimbingAreaCount<text> climbing areas</text><br />@s.IndoorLocationCount<text> indoor locations</text>
+   <br />@s.OutdoorLocationCount<text> outdoor locations</text><br />@s.ClimbsCount<text> climbs</text></div>
+   }{ var s = Summaries.Where(cs => cs.ID == en.ID).Single(); <div class="featured-country">
+   <img src="@Stgs.StaticRt/flags/@(en.Flag).png" alt="Flag on @en.Name"/><b> <a href="@en.SlugUrl">@en.Name</a><br />@s.ProvinceCount provinces</b>
+   <br />@s.CityCount<text> cities</text><br />@s.ClimbingAreaCount<text> climbing areas</text><br />@s.IndoorLocationCount<text> indoor locations</text>
+   <br />@s.OutdoorLocationCount<text> outdoor locations</text><br />@s.ClimbsCount<text> climbs</text></div>
+   }{ var s = Summaries.Where(cs => cs.ID == au.ID).Single(); <div class="featured-country">
+   <img src="@Stgs.StaticRt/flags/@(au.Flag).png" alt="Flag on @au.Name"/><b> <a href="@au.SlugUrl">@au.Name</a><br />@s.ProvinceCount provinces</b>
+   <br />@s.CityCount<text> cities</text><br />@s.ClimbingAreaCount<text> climbing areas</text><br />@s.IndoorLocationCount<text> indoor locations</text>
+   <br />@s.OutdoorLocationCount<text> outdoor locations</text><br />@s.ClimbsCount<text> climbs</text></div>
+   }{ var s = Summaries.Where(cs => cs.ID == de.ID).Single(); <div class="featured-country">
+   <img src="@Stgs.StaticRt/flags/@(de.Flag).png" alt="Flag on @de.Name"/><b> <a href="@de.SlugUrl">@de.Name</a><br />@s.ProvinceCount provinces</b>
+   <br />@s.CityCount<text> cities</text><br />@s.ClimbingAreaCount<text> climbing areas</text><br />@s.IndoorLocationCount<text> indoor locations</text>
+   <br />@s.OutdoorLocationCount<text> outdoor locations</text><br />@s.ClimbsCount<text> climbs</text></div>
+   }
+
+}
+<hr />
+<h2>Rock climbing countries by Alphabet</h2>
+
+<div class="horizontalalphabet">
+    @Html.Partial("Partials/AlphabetPager")
+</div>
+
+<ul class="countries">
+    @{ string lastLetter = "A"; }
+    @foreach (var c in AppLookups.Countries) {
+        var s = Summaries.Where(cs => cs.ID == c.ID).Single();
+        if (c.Name.Substring(0,1) != lastLetter) { lastLetter = c.Name.Substring(0,1); <h4 id="@lastLetter">@lastLetter</h4> } 
+     <li>
+        <div><img src="@Stgs.StaticRt/flags/@(c.Flag).png" alt="Flag on @c.Name"/><b> <a href="@c.SlugUrl">@c.Name</a> : @s.ProvinceCount provinces</b></div>
+        <div class="post-details">
+            @if (s.CityCount == 1) {<text>1 city,</text> } else { <text>@s.CityCount cities,</text> }
+            @if (s.ClimbingAreaCount == 1) {<text>1 climbing area,</text> } else { <text>@s.ClimbingAreaCount climbing areas,</text> }
+            @if (s.IndoorLocationCount == 1) {<text>1 indoor climbing location,</text> } else { <text>@s.IndoorLocationCount indoor climbing locations,</text> }
+            @if (s.OutdoorLocationCount == 1) {<text>1 outdoor climbing location,</text> } else { <text>@s.OutdoorLocationCount outdoor rock climbing locations,</text> }
+            @if (s.ClimbsCount == 1) { <text>1 climb</text> } else { <text>@s.ClimbsCount climbs</text> }   
+        </div>
+    </li>
+    }
+</ul>
+</div>
+<div id="col2-right">
+
+<div class="info">
+
+<h2>The Climbfind Rock Climbing Database</h2>
+
+<p>Climbfind stores climbing areas, outdoor rock climbing locations a.k.a rock walls & boulders, 
+indoor climbing locations a.k.a 'climbing gyms', 'climbing walls' & 'rock gyms', 
+climbs a.k.a 'routes' & 'problems', plus lots more useful stuff
+ <a href="/world-rock-climbing-database" title="World Rock Climbing Database of Outdoor rock climbing, Indoor rock climbing & more">...read more</a></p>
+</div>
+
+
+<div class="info">
+
+<h2>Navigating Climbfind's Climbing Database</h2>
+
+<p>You can drill into our database by starting on this page and browsing down the hierarchy of country => province => city => climbing area =>
+location => climb.
+However, we HIGHLY recommend you start navigating the site using the search bar at the top to jump directly to what you're looking for.
+It's like travelling around the world in seconds :)
+</p>
+
+</div>
+
+
+<div class="info">
+
+<h2>The Climbfind Moderators Project</h2>
+
+<p>Climbfind's database is supported by a growing team of VERY dedicated volunteers. If you're thinking about contributing,
+read up about <a href="/moderators-project">The Climbfind Moderators Project</a></p>
+
+</div>
+
+
+</div>
+
+<script type="text/javascript">
+
+    var countryFlags = { @foreach (var c in AppLookups.Countries) { <text>@c.ID : "@c.Flag", </text>} };
+    var countryNames = { @foreach (var c in AppLookups.Countries) { <text>@c.ID : "@c.Name", </text>} };
+
+</script>

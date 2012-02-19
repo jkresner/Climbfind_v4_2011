@@ -1,0 +1,68 @@
+﻿@model FeedPostListViewData
+<link href="@Stgs.StaticRt/css/cfposts.1.css" rel="stylesheet" type="text/css" />
+<div id="posts">
+
+<ol id="postslist">
+
+@if (Model.FeedPosts.Count == 0)
+{
+<li style="height:900px"><p style="margin:80px 0px 20px 0px;font-style:italic;font-size:13px;text-align:center">No posts found based on feed filters.</p></li>
+}
+else
+{
+foreach (var p in Model.FeedPosts)
+{
+    if (!p.IsStale)
+    {
+    <li>
+        @Html.UserPicThumb(p.UserAvatar, p.UserDisplayName)
+
+        <div>
+            <b><a href="@p.UserSlugUrl">@p.UserDisplayName</a></b> <label>@p.Utc.GetAgoStringUtc()</label>
+            <br />@Html.PlaceLinkWithFlag(p.PlaceID)
+			<p>@Html.Raw(p.Content)</p>
+			<div class="actions">
+                                                                                                                                          
+                <a href="/post/@p.ID" rel="nofollow"><b>See/comment</b></a>
+                - <a href="/message/@p.UserID" rel="nofollow">Msg @p.UserDisplayName</a>
+		 	</div>
+        </div>
+        @if (p.PostComments.Count > 0)
+        { <ul class="comments">@foreach (var o in p.PostComments)
+                               {
+        <li>@Html.UserPicThumb(o.UserID) 
+                <div>@Html.UserProfileLink(o.UserID) <i>@o.Utc.GetAgoStringUtc()</i> <p>@o.Message</p></div>
+             <hr /></li>
+                               }</ul> }
+        <hr />
+	</li>
+    }
+
+    
+    }
+}    
+</ol>
+
+
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        attachedDeleteEvent();
+    });
+
+    function attachedDeleteEvent() {
+        $("a.del").click(function () {
+            var id = $(this).attr("id");
+            var postid = $(this).attr("href");
+
+            $.post(
+                "/Posts/DeleteComment/" + postid.substring(1, postid.length) + "?commentID=" + id,
+                function (data) { $("#" + id).parent().fadeOut(500, function () { $(this).remove(); }); }
+            );
+            return false;
+        });
+    }
+</script>
+  
+
+

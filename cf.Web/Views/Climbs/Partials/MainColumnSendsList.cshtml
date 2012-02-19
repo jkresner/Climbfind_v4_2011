@@ -1,0 +1,26 @@
+﻿@model List<LoggedClimb>
+@{ }
+
+<style type="text/css">
+  #sendslist { border-top:solid 1px #F3F3F3;padding-top:15px;width:98% }
+  #sendslist li { clear:both }
+  #sendslist .usr { float:left;padding-bottom:10px }
+  #sendslist div { float:left;width:175px;margin:-4px 0 0 10px }
+  #sendslist p { width:90% }
+</style>
+
+
+<div id="sendslist">
+    @if (Model.Count == 0) { <p>No one has logged a successful attempt yet.</p> }
+    else {
+    <ul>
+    @foreach (var send in Model) {
+        <li>
+        @Html.UserPicThumb(send.UserID)
+        <div> @Html.UserProfileLink(send.UserID) <br />@Html.OutcomeImage(send.Outcome) @Html.ExperienceImage(send.Experince)
+        </div>
+        </li>
+    }
+    </ul>
+        }
+</div>

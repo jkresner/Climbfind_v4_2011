@@ -1,0 +1,20 @@
+﻿@model cf.Web.Views.Media.AddViewModel
+@{ ViewBag.Title = "Add media"; }
+
+@using (Html.BeginForm("Add", "Media", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="min-height:360px">
+    <h1>Add media to <a href="@Model.ObjectSlug">@Model.ObjectName</a></h1>    
+    
+    <h6 style="margin-top:10px">Select media source:</h6>
+    
+    @Html.HiddenFor(m => m.ObjectId)
+    @Html.HiddenFor(m => m.ObjectName)
+    @Html.HiddenFor(m => m.ObjectSlug)
+    <hr />
+
+    @Html.Partial("Partials/MediaChooser", Model)
+        
+    </div>
+    <hr />
+}

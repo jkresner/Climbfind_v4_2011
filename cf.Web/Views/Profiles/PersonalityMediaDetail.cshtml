@@ -1,0 +1,41 @@
+﻿@{ ViewBag.Title = "Personality media";
+   UserPersonalityMedia media = ViewBag.Media;
+   List<IOpinion> opinions = media.Media.MediaOpinions.ToIOpinionList();
+   UsersPersonalityMediaCollection personalityMedia = ViewBag.Personality;
+   Profile owner = ViewBag.MediaOwner;
+}
+
+<h1>@media.Category by @Html.UserProfileLink(owner.ID)</h1>
+@if (opinions.Count > 0) { 
+    <p>@Html.StarImage(media.Media.Rating) by @media.Media.RatingCount users</p>
+}
+
+<div style="width:170px;margin:10px auto 3px auto">
+    @Html.AddThisPersonalityMediaShare(media, true)
+</div>
+
+<div>
+    <div style="float:left;margin-bottom:30px;width:70%">
+        @Html.Raw(media.Media.RenderMediaHtml()) 
+        <hr />
+        <p>@media.Media.Description</p>
+    </div>        
+</div>
+   
+<hr />
+<div class="ratings">
+    
+    @Html.Partial("Forms/OpinionFormWithCommentsList", new NewOpinionWithCommentsListViewModel() { ActionName = "OpinionNewAjax",
+        ControllerName = "Profiles", Opinions = opinions, TargetID = media.Media.ID, TargetOwnerID = media.UserID })
+
+    @if (opinions.Count == 0)
+    {
+        <div style="width:170px;margin:10px auto 3px auto">
+            @Html.AddThisPersonalityMediaShare(media, false)
+        </div>
+    }
+
+</div>
+
+<hr />
+

@@ -1,0 +1,22 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage<List<Location>>
+@{ int i = 1; }        
+
+<fieldset id="profile-gyms">
+    <legend style="margin-left:15px">Gyms I've visited
+            @if (CfIdentity.UserID == user.ID)
+        { <i>-</i><a href="javascript:alert('Use the form on your Logbook to add a gym to your profile!');" style="width:65px;display:inline;float:none">Add gyms</a> }   
+    </legend>
+    
+    @if (Model.Count == 0) { <p>No gyms added to @user.DisplayName's logbook yet…</p> }
+    else
+    {
+    foreach (var l in Model) { i++; if (i !=2 && i%2==0){<hr />}
+        <a href="@l.SlugUrl">@Html.FlagImage(l) @l.ShortDisplayName.Excerpt(18)
+            @if (string.IsNullOrWhiteSpace(l.Avatar)) { <p style="margin-top:15px">No logo available</p> }
+            else { <img src="@(Stgs.ImgsRt + l.AvatarRelativeUrl)" class="logo" /> }
+            
+        </a> 
+        
+        }
+        }
+</fieldset>

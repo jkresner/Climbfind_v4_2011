@@ -1,0 +1,33 @@
+﻿@model List<PlaceWithModDetails>
+         
+@if (Model.Count == 0) { <p style="color:Red;font-weight:bold">You don't have any places claimed.</p>
+    <p>Claiming an area means you are responsible for the content on that page. When people edit that page Climbfind will tell you.
+     You can then review and approve their edits to increase your reputation.</p>
+    
+     <p>To claim (or own) a place, go to the page of the place you would like to own and click "Claim this page".</p>
+}
+else
+{
+<table>
+    <tr><th>Page</th><th>History</th><th>CQR</th><th>Verified</th></tr>
+    @foreach (var p in Model)
+    {
+        if (!p.PlaceDeleted)
+        {
+        <tr>
+            <td>@Html.PlaceLinkWithFlag(p.ID)<br />&nbsp [@(Html.ActionLink<ModerateController>(c=>c.UnclaimPage(p.ID), "Un-claim"))]</td>
+            <td style="font-size:10px">
+              @(Html.ActionLink<ModerateController>(c => c.ActionPlaceList(p.ID), "See history", new { style="float:right" }))
+                           
+              @(Html.ActionLink<ModerateController>(c => c.ActionDetail(p.CreatedActionID), "Created"))
+               @p.CreatedUtc.GetAgoStringUtc() by @Html.UserProfileLink(p.CreatedByModUserID)
+               <br />
+               @(Html.ActionLink<ModerateController>(c => c.ActionDetail(p.LastChangedActionID), "Last change"))
+               @p.LastChangedUtc.GetAgoStringUtc() by @Html.UserProfileLink(p.LastChangedModUserID)
+               I be            
+             </td>
+            <td>@p.CQR</td><td>@p.Verified / 3</td></tr> }
+    }
+
+</table>
+}

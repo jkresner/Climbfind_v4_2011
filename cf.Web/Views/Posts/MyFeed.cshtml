@@ -1,0 +1,155 @@
+﻿@{ Profile user = ViewBag.User;
+   List<PostRendered> posts = ViewBag.Posts; 
+   List<CfCacheIndexEntry> placeFilters = ViewBag.PlaceFilters;
+   bool userHasDeletePostRights = CfPrincipal.IsGod();
+   CfPageTitleMaster.Set("Climbfind feed"); 
+}
+
+@if (!user.PlaceHome.HasValue)
+{
+    <div class="takeaction">
+        <p>Your feed isn't personalized, customize it now ...
+         try &nbsp @(Html.ActionCssLink<ProfilesController>(c => c.EditPlacePreferences(), "Add home & favorite places", "jBtn")) </p>
+    </div>
+} else if (!user.HasAvatar) { 
+    <div class="takeaction">
+        <p>Your profile's looking kinda boring ...
+         try &nbsp @(Html.ActionCssLink<ProfilesController>(c => c.ChooseAvatar(), "Upload your avatar", "jBtn")) </p>
+    </div>
+}
+
+
+<script type="text/javascript">
+
+    var pID = "@if (placeFilters.Count ==0){@Guid.Empty}else{@Stgs.MyFeedID}";
+    var pType = "Unknown";
+
+    jQuery(document).ready(function () {
+
+        $("a.placefilter").click(function () {
+            $("a.placefilter").css("font-weight", "normal");
+            $("a.placefilter").parent().removeClass("selected");
+            var id = $(this).attr("id");
+            pID = id;
+            $(this).parent().addClass("selected");
+            $(this).css("font-weight", "bold");
+            $("#posts").remove();
+            $("#col2-homefeed").append("<p class='feed-loading'>Feed reloading</p>");
+            $.post("/Posts/PlaceAjaxRefresh/" + pID + "?pType="+pType, function (data) {
+                $(".feed-loading").remove();
+                $("#col2-homefeed").append(data);
+            });
+        });
+
+        $("a.typefilter").click(function () {
+            $("a.typefilter").css("font-weight", "normal");
+            $("a.typefilter").parent().removeClass("selected");
+            var id = $(this).attr("id");
+            pType = id;
+            $(this).parent().addClass("selected");
+            $(this).css("font-weight", "bold");
+            $("#posts").remove();
+            $("#col2-homefeed").append("<p class='feed-loading'>Feed reloading</p>");
+            $.post("/Posts/PlaceAjaxRefresh/" + pID + "?pType="+pType, function (data) {
+                $(".feed-loading").remove();
+                $("#col2-homefeed").append(data);
+            });
+        });
+    });
+
+</script>
+
+<style type="text/css"> li.selected { background-color:#FFF7CC } </style>
+
+<div id="col1-homefeed">
+
+    @*    
+    <div id="feed-filters" style="margin-top:15px">
+        <h5>Feed post filters</h5>
+        <ul>
+            <li class="selected"><a id="@PostType.Unknown" class="typefilter" href="#" style="font-weight:bold">Show all posts</a></li>
+            <li><a id="@PostType.PartnerCall" class="typefilter" href="#">PartnerCalls</a></li>
+            <li><a id="@PostType.Visit" class="typefilter" href="#">Visits</a></li>
+            <li><a id="@PostType.Opinion" class="typefilter" href="#">Opinions</a></li>
+            <li><a id="@PostType.ContentAdd" class="typefilter" href="#">New places/climbs</a></li>
+            <li><a id="@PostType.Talk" class="typefilter" href="#">Talk</a></li>
+        </ul>
+    </div>
+*@
+    <div id="feed-places">
+        <h5>Show posts for</h5>
+        <ul>
+            @if (placeFilters.Count > 0) {
+                <li class="selected"><span style="float:left"><a href="/climber/edit-place-preferences" style="font-size:10px">Edit</a></span>
+                <a id="@Stgs.MyFeedID" href="#" class="placefilter" style="font-weight:bold">All my places</a><i>My activity & preferences</i></li>
+            }
+            @foreach (var p in placeFilters)
+            {
+            <li>
+                <a id="@p.ID" href="#" class="placefilter"> 
+            @if (string.IsNullOrWhiteSpace(p.NameShort))
+            { <text>@p.Name</text> }
+            else
+            { <text>@p.NameShort</text>} </a>
+                <i>@p.Type.ToFriendlyString()</i>
+            </li> }
+            <li @if(placeFilters.Count==0){<text> class="selected"</text>}><a id="@Guid.Empty" href="#" class="placefilter" @if(placeFilters.Count==0){<text> style="font-weight:bold"</text>}>Show everywhere</a><i>Latest posts on Climbfind</i></li>
+        </ul>
+
+        @if (placeFilters.Count == 0) { <p style="font-size:14px;margin:50px 0px 20px 0px;text-align:center"><a href="/climber/edit-place-preferences">Add places<br />to feed</a></p> }
+    </div>
+            
+</div>
+
+<div id="col2-homefeed" style="padding-top:13px">
+    
+    @*<ul id="cffeed-post-options">
+        <li id="aCheckIn" class="ui-state-default ui-corner-top current"><a href="#">Check in</a></li>
+        <li id="aLogClimbs" class="ui-state-default ui-corner-top"><a href="#">Log climbs</a></li>
+        <li id="aPartnerCall" class="ui-state-default ui-corner-top"><a href="#">Post PartnerCall</a></li>
+        <li id="aTalk" class="ui-state-default ui-corner-top"><a href="#">GeoTalk</a></li>
+    </ul>
+    <div id="cffeed-checkInForm">@Html.Partial("Forms/CheckInForm", new NewHistoricalCheckInViewModel())</div>
+    <div id="cffeed-logClimbsForm" style="display:none">@Html.Partial("Forms/LogClimbsPreForm", new ClimbsLogPreViewModel())</div>
+    <div id="cffeed-partnerCallForm" style="display:none">@Html.Partial("Forms/PartnerCallPreForm", new PartnerCallPreViewModel())</div>
+    <div id="cffeed-talkForm" style="display:none">@Html.Partial("Forms/TalkForm", new TalkViewModel())</div>*@
+    <div style="background:#f2f2f2;color:Black;padding:3px 10px 2px 0px;text-align:right;font-weight:bold">Want to find partners => <a href="javascript:showChooseCallPlaceModal()">Post a Partner Call</a></div>
+    @Html.Partial("Partials/FeedPostList", new FeedPostListViewData() { FeedPosts = ViewBag.Posts, UserHasDeletePostRights = userHasDeletePostRights })
+</div>
+
+<div id="col3-homefeed">
+    @Html.Partial("Todo/SideMenuSuggestion")        
+</div> 
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#aCheckIn").click(function () { hideAllPostForms(); $("#cffeed-checkInForm").show(); $("#aCheckIn").addClass("current"); });
+        $("#aLogClimbs").click(function () { hideAllPostForms(); $("#cffeed-logClimbsForm").show(); $("#aLogClimbs").addClass("current"); });
+        $("#aPartnerCall").click(function () { hideAllPostForms(); $("#cffeed-partnerCallForm").show(); $("#aPartnerCall").addClass("current"); });
+        $("#aTalk").click(function () { hideAllPostForms(); $("#cffeed-talkForm").show(); $("#aTalk").addClass("current"); });
+    });
+
+    function hideAllPostForms() {
+        $("#cffeed-checkInForm").hide(); $("#aCheckIn").removeClass("current");
+        $("#cffeed-logClimbsForm").hide(); $("#aLogClimbs").removeClass("current");
+        $("#cffeed-partnerCallForm").hide(); $("#aPartnerCall").removeClass("current");
+        $("#cffeed-talkForm").hide(); $("#aTalk").removeClass("current");
+    }
+
+    function showChooseCallPlaceModal() {
+        $("#newcallplace").attr("title", "Post Partner Call for?");
+        $("#newcallplace").dialog({ minWidth: 540, modal: true });
+
+        placeAllTypesAutocomplete("#callplace", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { document.location = '/new-partner-call/' + item.id; }
+        });
+    }
+</script>
+
+
+<div id="newcallplace" style="display:none"><form style='padding-top:10px;border:none!important;background:none!important'>
+    <label><b>Where</b></label> &nbsp; <input id='callplace' type='text' title='Type city, climbing gym or outdoor climbing place' class='tbox jq_watermark long' />
+</form></div>
+

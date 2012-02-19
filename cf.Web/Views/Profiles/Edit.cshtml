@@ -1,0 +1,163 @@
+﻿@model EditProfileViewModel
+@{ ViewBag.Title = "Edit profile"; }
+
+<style type="text/css">
+    .optionaldetails { width:506px;margin-left:10px;float:left }
+    .optionaldetails select { width:110px;height:29px;font-size:10px }
+    fieldset { padding-top:8px }
+    #basic-details input[type='text'] { width:340px!important }
+    #place-preferences input[type='text'] { width:310px!important }
+    .jq_watermark { font-size:10px!important }
+    .validation-summary-errors { width:410px!important;margin-right:0px!important }
+    .field-validation-error { display:block }
+</style>
+
+@using (Html.BeginForm("Update", "Profiles", null, FormMethod.Post, null))
+{
+    <h1>Update your climber profile & settings</h1>
+    
+    <div id="basic-details" style="width:450px;float:left">
+    
+         <fieldset><legend>Basic info</legend>
+                     
+            <div class="editor-label">@Html.LabelFor(m => m.FullName, "Full name") <i>so friends can find you</i> @Html.ValidationMessageFor(m => m.FullName)</div>
+            <div class="editor-field">@Html.TextBoxFor(m => m.FullName)</div>
+
+            <div class="editor-label">@Html.LabelFor(m => m.NickName, "Nick name") <i>how you like to be called</i> @Html.ValidationMessageFor(m => m.NickName)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.NickName)</div> 
+
+            <div class="editor-label">@Html.LabelFor(m => m.UserName, "User name") <i>if you want to use Climbfind under an alias</i> @Html.ValidationMessageFor(m => m.UserName)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.UserName)</div> 
+
+            <div class="editor-label">@Html.LabelFor(m => m.DisplayNameTypeID, "Display name") <i>how other will see you in the feed</i> </div>
+            <div class="editor-field">@Html.DropDownListFor(m => m.DisplayNameTypeID, SelectLists.DisplayNameTypeSelectList, new { style = "width:315px" })</div> 
+
+            <div class="editor-label">
+                @Html.LabelFor(m => m.CountryID, "Nationality")
+                @Html.ValidationMessageFor(m => m.CountryID, "select nationality")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(m => m.CountryID, (SelectList)ViewBag.NationatliySelectList, new { style = "width:315px" })
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(m => m.IsMale, "Sex")
+                @Html.ValidationMessageFor(m => m.IsMale, "select sex")
+            </div>
+
+            <div class="editor-field">
+                <span>Male</span> @Html.RadioButton("IsMale", true, Model.IsMale) &nbsp &nbsp
+                <span>Female</span> @Html.RadioButton("IsMale", false, !Model.IsMale)
+            </div>
+
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.ContactNumber, "Contact number") <i>(optional) useful for last minute hook ups</i> @Html.ValidationMessageFor(m => m.ContactNumber)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.ContactNumber)</div> 
+
+            <div class="editor-label">@Html.LabelFor(m => m.GradesAverage, "Average grades") <i>(optional) e.g. "Top rope 11.c, boulder V5"</i> @Html.ValidationMessageFor(m => m.GradesAverage)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.GradesAverage)</div> 
+
+            <div class="editor-label">@Html.LabelFor(m => m.GradesMaximum, "Top grades") <i>(optional) e.g. "Lead 7a outdoors, V6 in the gym twice"</i>@Html.ValidationMessageFor(m => m.GradesMaximum)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.GradesMaximum)</div> 
+
+            @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "/climber/my-profile", DeleteUrl = Url.Action("Delete"), DeleteText = "Delete profile" }) 
+        </fieldset>
+    
+    </div>
+       
+@*    <fieldset class="optionaldetails" id="place-preferences"><legend>Place preferences</legend>
+    
+        <p style="padding-top:0px;margin-top:0px;font-size:10px">Climbfind intelligently feeds you information & activity based on your 
+        place preferences (here) AND where you've recently posted PartnerCalls&trade;, visited and left opinions on. After 
+        you've saved your settings, start posting to the feed - the more you post, the smarter Climbfind gets!</p>
+
+        <div style="width:64%;float:left">
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceHome, "Home") @Html.ValidationMessageFor(m => m.PlaceHome)</div>
+            <div class="editor-field"> @Html.HiddenFor(m => m.PlaceHome) @Html.TextBoxFor(m => m.PlaceHomeName, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite1, "Optional favorite 1") @Html.ValidationMessageFor(m => m.PlaceFavorite1)</div>
+            <div class="editor-field"> @Html.HiddenFor(m => m.PlaceFavorite1) @Html.TextBoxFor(m => m.PlaceFavorite1Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite2, "Optional favorite 2") @Html.ValidationMessageFor(m => m.PlaceFavorite2)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite2) @Html.TextBoxFor(m => m.PlaceFavorite2Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite3, "Optional favorite 3") @Html.ValidationMessageFor(m => m.PlaceFavorite3)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite3) @Html.TextBoxFor(m => m.PlaceFavorite3Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite4, "Optional favorite 4") @Html.ValidationMessageFor(m => m.PlaceFavorite4)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite4) @Html.TextBoxFor(m => m.PlaceFavorite4Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite5, "Optional favorite 5") @Html.ValidationMessageFor(m => m.PlaceFavorite5)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite5) @Html.TextBoxFor(m => m.PlaceFavorite5Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+        </div>
+        <div style="width:32%;float:right">
+            <p style="color:Gray"><span style="color:Red">Note </span> You have the option of being very specific, by choosing say a rock climbing gym, e.g. "Planet Granite San Francisco"
+            or you can be more general and specify a whole city e.g. "San Francisco".</p>
+            <p style="color:Gray">Also if the place you want doesn't exist, please <a href="/rock-climbing-database/add-climbing-location" target="_blank">add it to Climbfind</a> (though make sure you save before you leave this page first).</p>
+        </div>
+
+    </fieldset>*@
+    
+    <script type="text/javascript">
+        /* Climbfind functions */
+        $(document).ready(function () {
+            attachAutocompleteAndSet("#PlaceHomeName", "#PlaceHome");
+            attachAutocompleteAndSet("#PlaceFavorite1Name", "#PlaceFavorite1");
+            attachAutocompleteAndSet("#PlaceFavorite2Name", "#PlaceFavorite2");
+            attachAutocompleteAndSet("#PlaceFavorite3Name", "#PlaceFavorite3");
+            attachAutocompleteAndSet("#PlaceFavorite4Name", "#PlaceFavorite4");
+            attachAutocompleteAndSet("#PlaceFavorite5Name", "#PlaceFavorite5");
+        });
+
+        function attachAutocompleteAndSet(textBoxID, hiddenID) {
+            var textBox = $(textBoxID), hidden = $(hiddenID);
+            textBox.change(function () {
+                textBox.removeClass('ui-autocomplete-set'); textBox.addClass('ui-autocomplete-unset'); hidden.val("");
+            });
+
+            placeAllTypesAutocomplete(textBox, function (item) {
+                if (item.id == null) { hidden.val(""); textBox.val(""); alert(textBox.val()); }
+                else { hidden.val(item.id); textBox.val(item.title); textBox.removeClass('ui-autocomplete-unset'); textBox.addClass('ui-autocomplete-set'); }
+            });
+
+            if (textBox.val() == "") { textBox.addClass('ui-autocomplete-unset'); } else { textBox.addClass('ui-autocomplete-set'); }
+        }
+
+    </script>
+    
+    <fieldset class="optionaldetails"><legend>Privacy options</legend>
+    
+        <div class="editor-label">@Html.LabelFor(m => m.SlugUrlPart, "Personalize Climbfind Url") @Html.ValidationMessageFor(m => m.SlugUrlPart)</div>
+        <div class="editor-field">http://www.climbfind.com/climber/@Html.TextBoxFor(m => m.SlugUrlPart, new { style = "width:220px" })</div>  
+        <p style="font-size:10px;font-style:italic;margin-top:0px;padding-top:0px">Leave blank if you DON'T want google to index your Climbfind profile</p>
+        <div style="border-top:solid 1px #d3d3d3;margin:10px 0px"></div>
+
+        <div class="editor-label">@Html.CheckBoxFor(m => m.PrivacyShowFeed) @Html.LabelFor(m => m.PrivacyShowFeed, "Show personal feed")</div>
+        <div class="editor-field">Display a feed of your activity on your profile page.</div> 
+        <hr />
+        <div class="editor-label">@Html.CheckBoxFor(m => m.PrivacyPostsDefaultIsPublic) @Html.LabelFor(m => m.PrivacyPostsDefaultIsPublic, "Show activity on the public feed")</div>
+        <div class="editor-field">Show posts when you check in, post partner calls, leave opinions etc. in the public climbing feed (<a href="/my-climbing-feed" target="_blank">"Home" on this site</a> & "Feed" on Climbfind Mobile)</div> 
+        <hr />
+        <div class="editor-label">@Html.CheckBoxFor(m => m.PrivacyShowHistory) @Html.LabelFor(m => m.PrivacyShowHistory, "Show climbing history")</div>
+        <div class="editor-field">Display "Recent history" block on your profile page and allow others to view your <a href="/history/@CfIdentity.UserID" target="_blank">climbing history</a>.</div> 
+        <hr />
+        <div class="editor-label">@Html.CheckBoxFor(m => m.PrivacyAllowNewConversations) @Html.LabelFor(m => m.PrivacyAllowNewConversations, "Allow new conversations")</div>
+        <div class="editor-field">Let users who you have not yet started a conversation with message you. If you disallow new conversation, you must message 
+         other users and start the conversation before they can message you back. If you do not yet have a conversation
+          going and you have both disallowed new conversations you will be in a stale mate.</div> 
+        <hr />
+        <div class="editor-label">@Html.CheckBoxFor(m => m.PrivacyShowInSearch) @Html.LabelFor(m => m.PrivacyShowInSearch, "Show me in search")</div>
+        <div class="editor-field">Let others find you through the search bar at the top right corner of the site and "Search" on Climbfind mobile.</div> 
+        <hr />
+        <div class="editor-label">@Html.CheckBoxFor(m => m.PrivacyShowOnPartnerSites) @Html.LabelFor(m => m.PrivacyShowOnPartnerSites, "Show me on partner sites")</div>
+        <div class="editor-field">Climbfind has teamed up with partnering rock gyms like 
+            <a href="http://www.planetgranite.com/" target="_blank">Planet Granite</a> & <a href="http://www.brooklynboulders.com/" target="_blank">Brooklyn Boulders</a>
+            to expose Climbfind users & features directly on their websites. This drastically increases participation and likelihood of connecting you with other
+            climbers.
+        </div> 
+        
+    </fieldset>
+    
+    
+    <hr />      
+}

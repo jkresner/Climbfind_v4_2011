@@ -1,0 +1,140 @@
+﻿@{ Profile user = ViewBag.User;
+   CfCacheIndexEntry place = ViewBag.Place;
+   List<CfCacheIndexEntry> deducPlace = ViewBag.DeducPlaces;
+   List<PartnerCall> calls = ViewBag.PartnerCalls;
+   ViewBag.Title = "Partner feed";
+}
+
+<style type="text/css"> .partner-calls p { color:Black;font-size:13px } .reply span { font-size:12px!important } </style>
+<div id="col2-left">
+    
+<div style="min-height:450px">
+
+@if (place == null)
+{
+    <h1>Partners feed</h1>
+    <p style="margin:20px 0px 30px 0px;font-size:15px">Welcome to your personalized Partner Feed! Let's set it up...</p>
+} else {
+    @(Html.ActionLink<PartnerCallsController>(c => c.New(place.ID), "Post PartnerCall for " + place.Name, new { @class = "jBtn", style="float:right;margin-top:10px"}))
+    <h1>Partners feed</h1>
+    <h6>for <i>@place.Name</i> - <a id="setplacelink" href="javascript:toggleSetPlace()">want somewhere else?</a></h6>
+}
+
+@using (Html.BeginForm("New", "PartnerCalls", FormMethod.Get, new { id = "setplace" }))
+{
+    <div class="where">
+        <label>Where do you want to see PartnerCalls for?</label><br />
+        <input class="tbox jq_watermark long" id="placesearch" type="text" name="asearch" title="Name a city, climbing gym or outdoor climbing place" />
+    </div>
+    @*<div class="go"><input id="createPCallSubmit" type="submit" class="jBtn" value="Go" /></div>*@
+}
+
+<div id="newcallplace" style="display:none"><form style='padding-top:10px;border:none!important;background:none!important'>
+    <label><b>Where</b></label> &nbsp; <input id='callplace' type='text' title='Type city, climbing gym or outdoor climbing place' class='tbox jq_watermark long' />
+</form></div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        @if (place != null) { <text>$("#setplace").hide();</text> }
+        
+        var pcForm = $("#setplace");
+        disableEnterFormPost("#placesearch");
+
+        placeAllTypesAutocomplete("#placesearch", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { document.location = '/update-partner-feed/' + item.id; }
+        });
+    });
+
+    function toggleSetPlace()
+    {
+        if ($("#setplacelink").html() == "hide") { $("#setplacelink").html("Change feed location"); }
+        else { $("#setplacelink").html("hide"); }
+        $("#setplace").toggle();
+    }
+
+    function showChooseCallPlaceModal() {
+        $("#newcallplace").attr("title", "Post Partner Call for:");
+        $("#newcallplace").dialog({ minWidth: 600, modal: true });
+
+        placeAllTypesAutocomplete("#callplace", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { document.location = '/new-partner-call/' + item.id; }
+        });
+    }
+
+</script>
+
+@if (place !=null)
+{
+
+    if (calls.Count == 0)
+    { 
+    <p>No one has posted for @place.Name on the new Climbfind yet.</p>
+    <p style="font-size:16px;margin-top:10px"><b>@(Html.ActionLink<PartnerCallsController>(c => c.New(place.ID), "Post a PartnerCall", new { }))</b> to find partners!</p>
+    }
+    else
+    {
+<ul class="partner-calls">
+    @foreach (var c in calls)
+    {
+        <li>
+            <a href="/climber/@c.UserID">@Html.UserPicThumb(c.UserID)</a>
+                
+            <div>
+                <label>@Html.UserProfileLink(c.UserID)</label>
+                <span>Called out on @c.CreatedUtc.ToString("dd MMM yyy")</span>
+                <br />For @c.IndoorOutdoorString climbing with @(((ClimbingLevelGeneral)c.PreferredLevel).ToString().ToLower()) climbers 
+                
+                @if (place.Type != CfType.City && place.Type != CfType.ClimbingArea)
+                { <text>at</text> }
+                else
+                { <text>around</text> }
+                
+                <br />@Html.PlaceLinkWithFlag(c.PlaceID) 
+                <dl>
+                    <dt>Start</dt>
+                    <dd>@c.StartDateTime.AppointmentDateTimeString()</dd>
+                    @if (!c.HasDefaultEndDate)
+                    {<dt>End</dt>
+                    <dd>@c.EndDateTime.AppointmentDateTimeString()</dd> } 
+                </dl>               
+            </div>
+            <div style="float:right;padding-top:5px">
+                <a href="/partner-call/@c.ID" class="jBtn reply" target="_blank">Comment/reply</a>
+                @*@if (CfPrincipal.IsGod()) { @(Html.DeleteLink<PartnerCallsController>(co => co.Delete(c.ID), "x")) }*@
+            </div>
+
+            <p>@c.Comment</p>
+         </li>               
+    }  
+    </ul>
+    }
+}
+</div>
+
+</div>
+
+<div id="col2-right">
+
+@if (place != null)
+{
+    <div class="sidemenu navOptions">
+    <h3>Options</h3>
+        <ul>
+            <li><b>@(Html.ActionLink<PartnerCallsController>(c => c.New(place.ID), "Post call for " + place.ShortDisplayName))</b></li>
+            @foreach (var p in deducPlace)
+            {
+                if (p.ID != place.ID)
+                {
+                <li>@(Html.ActionLink<PartnerCallsController>(c => c.New(p.ID), "Post call for " + p.ShortDisplayName))</li>
+                }
+            }
+            <li><a href="javascript:showChooseCallPlaceModal()">Post partner call for somewhere else</a></li>
+        </ul>
+    </div>
+
+    @Html.Partial("Ads/SideMenu200x200")
+}
+</div>

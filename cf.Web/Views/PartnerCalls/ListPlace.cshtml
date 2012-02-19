@@ -1,0 +1,72 @@
+﻿@{ CfCacheIndexEntry place = ViewBag.Place;
+   List<PartnerCall> calls = ViewBag.PartnerCalls;
+   ViewBag.Title = "Latest partner calls at " + place.Name;
+}
+
+
+<div id="col2-left">
+    
+
+<div style="min-height:450px">
+
+<h1>Latest PartnerCalls&trade; at <a href="@place.SlugUrl">@place.Name</a></h1>
+
+@if (calls.Count == 0)
+{ 
+    <p>@place.Name has not had anyone looking for partners...</p>
+}
+else
+{
+<ul class="partner-calls">
+    @foreach (var c in calls)
+    {
+        <li>
+            @Html.UserPicThumb(c.UserID)
+                
+            <div>
+                <span>Called out on @c.CreatedUtc.ToString("dd MMM yyy")</span>
+                <br />For @c.IndoorOutdoorString climbing with @(((ClimbingLevelGeneral)c.PreferredLevel).ToString().ToLower()) climbers 
+                
+                @if (place.Type != CfType.City && place.Type != CfType.ClimbingArea)
+                { <text>at</text> }
+                else
+                { <text>around</text> }
+                
+                <br /><b>@Html.PlaceLinkWithFlag(c.PlaceID)</b> 
+                
+                <dl>
+                    <dt>Start</dt>
+                    <dd>@c.StartDateTime.AppointmentDateTimeString()</dd>
+                    <dt>End</dt>
+                    <dd>@if (c.HasDefaultEndDate)
+                        { <i>None specified</i> }
+                        else
+                        { @c.EndDateTime.AppointmentDateTimeString() } </dd>
+                </dl>               
+            </div>
+            <div style="float:right">
+                @(Html.DeleteLink<PartnerCallsController>(co => co.Delete(c.ID), "x"))
+            </div>
+
+            
+            <p>@c.Comment</p>
+         </li>               
+    }  
+    </ul>
+}
+
+</div>
+
+</div>
+
+<div id="col2-right">
+
+    
+    <div class="sidemenu navOptions">
+    <h3>Options</h3>
+        
+    </div>
+
+    @Html.Partial("Ads/SideMenu200x200")
+
+</div>

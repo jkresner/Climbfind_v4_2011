@@ -1,0 +1,231 @@
+﻿@model ClimbLogViewModel
+@{ CheckIn current = ViewBag.CheckIn; }
+
+<script type="text/javascript" src="@Stgs.StaticRt/js/jquery.ui.stars.js"></script>
+
+@using (Html.BeginForm("LogClimb", "visits", new { id = current.ID }, FormMethod.Post, new { id = "addLoggedClimbForm", style = "display:none" }))
+{
+    <div style="float:left;width:514px">
+
+        <div class="where">
+            <label>Climb to log </label>@Html.ValidationMessageFor(m => m.ClimbID, "Select a climb") 
+            <label style="float:right;font-weight:normal;font-style:italic;margin-right:100px">Climb not appearing? <a href="/rock-climbing-database/add-climb/@current.LocationID" target="_blank">Add your climb</a></label><br />
+            <input class="tbox jq_watermark long" id="term" type="text" name="term" title="Enter grade or name of climb" />
+            @Html.HiddenFor(m => m.ClimbID, new { id = "ClimbID" })
+        </div>    
+  
+        <div id="logClimbClimb" style="display:none">
+            <div class="climbLogInputs">             
+                <img class="climbthumb" style="float:left;margin-right:10px;width:80px">
+                <div style="float:left;width:300px;margin-top:-12px"><label class="climbname"></label><i class="climbgrade"></i></div>
+                
+                <hr />
+                <div class="outcome">
+                    <label>The outcome @Html.ValidationMessageFor(m=>m.Outcome)</label>
+                    <img title="Attemped & failed" class="Attempt" src="@Stgs.StaticRt/climbed/AttemptBW.png" />
+                    <img title="Finished with break" class="Finished" src="@Stgs.StaticRt/climbed/BreaksBW.png" />
+                    <img title="Finished with no break" class="Redpoint" src="@Stgs.StaticRt/climbed/RedpointBW.png" />
+                    <img title="Finished first time with beta" class="Flash" src="@Stgs.StaticRt/climbed/FlashBW.png" />
+                    <img title="Finished first time with no beta" class="Onsight" src="@Stgs.StaticRt/climbed/OnsightBW.png" />
+                    @Html.HiddenFor(m=>m.Outcome)
+                </div>
+                <div class="experience">
+                    <label>Your experience @Html.ValidationMessageFor(m=>m.Experience)</label>
+                    <img title="Painful" class="Painful" src="@Stgs.StaticRt/climbed/PainfulBW.png" />
+                    <img title="Scary" class="Scary" src="@Stgs.StaticRt/climbed/ScaryBW.png" />
+                    <img title="Neutral" class="Neutral" src="@Stgs.StaticRt/climbed/NeutralBW.png" />
+                    <img title="Cruisey" class="Cruisey" src="@Stgs.StaticRt/climbed/CruiseyBW.png" />
+                    <img title="Fun" class="Fun" src="@Stgs.StaticRt/climbed/FunBW.png" />
+                    <img title="Lovely" class="Lovely" src="@Stgs.StaticRt/climbed/LovelyBW.png" />
+                    <img title="Gratifying" class="Gratifying" src="@Stgs.StaticRt/climbed/GratifyingBW.png" />
+                    @Html.HiddenFor(m=>m.Experience)
+                </div>
+                <div class="climbGradeOppinion">
+                    <label>What did you think of the grade @Html.ValidationMessageFor(m => m.Opinion)</label>
+                    @Html.DropDownListFor(m => m.Opinion, SelectLists.GradeOpinionSelectList, "-- Grade Opinion --", null)
+                </div>
+                <div class="climbRating">
+                    <label>What you thought of the climb @Html.ValidationMessageFor(m => m.Rating, "Rate the climb")</label>
+                    <span class="stars-wrapper"><select name="Rating"><option value='1'>Very poor</option><option value='2'>Not that bad</option><option value='3'>Average</option><option value='4'>Good</option><option value='5'>Perfect</option></select></span> <span id="stars-cap"></span>
+                </div>
+                <hr />
+                <div>
+                    <label>Comment explaining your rating @Html.ValidationMessageFor(m => m.Comment, "Enter comment")</label>
+                    @Html.TextAreaFor(m => m.Comment, new { style="width:420px;height:60px" })
+                </div>
+            </div>
+            
+            @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "javascript:cancelLogClimb()" })
+        </div>  
+        
+    </div>
+  
+    <div class="smiley-key" style="float:right;width:120px">
+        <b>Outcome</b>
+        <br /><img class="Attempt" src="@Stgs.StaticRt/climbed/Attempt.png" /> Attempt
+        <br /><img class="Breaks" src="@Stgs.StaticRt/climbed/Breaks.png" /> Breaks
+        <br /><img class="Redpoint" src="@Stgs.StaticRt/climbed/Redpoint.png" /> Redpoint
+        <br /><img class="Flash" src="@Stgs.StaticRt/climbed/Flash.png" /> Flash
+        <br /><img class="Onsight" src="@Stgs.StaticRt/climbed/Onsight.png" /> Onsight
+
+        <hr />
+        <b>Experience</b>
+        <br /><img src="@Stgs.StaticRt/climbed/Painful.png" /> Painful
+        <br /><img src="@Stgs.StaticRt/climbed/Scary.png" /> Scary
+        <br /><img src="@Stgs.StaticRt/climbed/Neutral.png" /> Neutral
+        <br /><img src="@Stgs.StaticRt/climbed/Cruisey.png" /> Cruisey
+        <br /><img src="@Stgs.StaticRt/climbed/Fun.png" /> Fun
+        <br /><img src="@Stgs.StaticRt/climbed/Lovely.png" /> Lovely
+        <br /><img src="@Stgs.StaticRt/climbed/Gratifying.png" /> Gratifying
+    </div>
+    
+    <hr />
+}
+
+<script type="text/javascript">
+
+    function logClimb() {
+        $("#term").val("");
+        $("#addLoggedClimbForm").show();
+        $("#logClimbClimb").hide();
+        $("#addloggedclimblkn").html("Close");
+        $("#addloggedclimblkn").attr("href", "javascript:cancelLogClimb()");
+        if ($("#addloggedclimbbtn").length > 0) { $("#addloggedclimbbtn").hide(); }
+    }
+
+    function cancelLogClimb() {
+        $("#addLoggedClimbForm").hide();
+        $("#addloggedclimblkn").html("Add");
+        $("#addloggedclimblkn").attr("href", "javascript:logClimb()");
+    }
+
+
+    jQuery(document).ready(function () {
+        attachAddClimbAjaxPost();
+
+        var searchSelector = "#term";
+
+        $(searchSelector).autocomplete({
+            minLength: 2,
+            source: function (request, response) {
+                $.ajax({
+                    delay: 550,
+                    type: "POST",
+                    url: "/get-available-climbs-for-logging/@current.ID",
+                    dataType: "json",
+                    data: "term=" + $("#term").val(),
+                    success: function (data) {
+                        var regex = new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + request.term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi");
+
+                        response($.map(data, function (item) {
+                            var lbl = ("<b>" + item.Grade + "</b> " + item.Name).replace(regex, "<strong>$1</strong>");
+                            return { label: lbl, value: item.Name, thm: item.Thumb, grd: item.Grade, id: item.ID }
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                if (ui.item.id != '00000000-0000-0000-0000-000000000000') {
+
+                    $(searchSelector).val(ui.item.Title);
+
+                    $("#ClimbID").val(ui.item.id);
+
+                    renderClimbToLog(ui.item);
+
+                    $("#addLoggedClimbForm .options").show();
+                }
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>").data("item.autocomplete", item)
+				    .append("<a href=''>" + item.label + "</a>")
+				    .appendTo(ul);
+        };
+    });
+
+    function attachAddClimbAjaxPost() {
+
+        $("#logClimbClimb").hide();
+        
+        $("#addLoggedClimbForm").submit(function () {
+            var fValid = $("#addLoggedClimbForm").valid();
+            var actionUrl = $("#addLoggedClimbForm").attr("action");
+
+            if (fValid) {
+                $.post(actionUrl, $("#addLoggedClimbForm").serialize(),
+                function (data) {
+                    cancelLogClimb();
+                    $("#myloggedclimbs").append("<li>"+data+"</li>");
+                    //$('#myloggedclimbs').children(':last').hide().fadeIn();
+                });
+            }
+
+            return false;
+        });
+    }
+
+    function renderClimbToLog(item) {
+                
+        $("#logClimbClimb").show();
+        
+        //-- reset form
+        resetImagesToBW("div.outcome");
+        $("#Outcome").val("");
+        resetImagesToBW("div.experience");
+        $("#Experience").val("");
+        $("#Opinion").val("");
+        $("#Rating").val("");
+        $("#Comment").val("");
+        resetFormButtonOptions();
+
+        //-- show climb ui feedback
+        $("#logClimbClimb .climbgrade").text(item.grd);
+        $("#logClimbClimb .climbname").text(item.value);
+
+        if (item.thm != null && item.thm.length > 0)
+            { $("#logClimbClimb .climbthumb").attr("src", "@Stgs.ImgsRt" + item.thm); }
+            else { $("#logClimbClimb .climbthumb").removeAttr("src"); }
+
+        $("div.experience img").click(function () { setExperience(this); });
+        $("div.outcome img").click(function () { setOutcome(this); });
+        
+        $(".stars-wrapper").stars({ inputType: "select", captionEl: $("#stars-cap") });
+        $(".stars-wrapper").stars("select", 0);
+        $("#Rating").val("");
+        reattachedValidationToStars(".stars-wrapper");
+    }
+
+    var isbw = new RegExp("BW.png");
+
+    function toggleBW(img) {
+        var imgSrc = $(img).attr('src');
+        if (isbw.test(imgSrc)) { $(img).attr('src', imgSrc.replace("BW.png", ".png")); }
+        else { $(img).attr('src', imgSrc.replace(".png", "BW.png")); }
+    }
+
+    function resetImagesToBW(parentSelector) {
+        $(parentSelector+" img").each(function () { var imgSrc = $(this).attr('src'); if (!isbw.test(imgSrc)) { toggleBW($(this)); } });
+    }
+
+    function setExperience(img) {
+        resetImagesToBW("div.experience");
+        var expValue = $(img).attr('class');
+        toggleBW(img)
+        $("div.experience").find("input").val(expValue);
+    }
+
+    function setOutcome(img) {
+        resetImagesToBW("div.outcome");
+        var outcomeValue = $(img).attr('class');
+        toggleBW(img)
+        $("div.outcome").find("input").val(outcomeValue);
+    }
+
+</script>
+
+<style type="text/css"> 
+    .options { margin-top:10px!important }
+    .climbLogInputs label { display:block;margin:10px 0 5px 0 }
+    #stars-cap { font-weight:bold;color:Orange;padding:4px 0 0 10px }
+    .validation-summary-errors { margin-right:0px!important;width:350px!important }
+</style>

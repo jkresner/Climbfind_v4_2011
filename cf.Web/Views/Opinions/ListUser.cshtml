@@ -1,0 +1,47 @@
+﻿@{ Profile user = ViewBag.User;
+   List<Opinion> opinions = ViewBag.Opinions;
+   ViewBag.Title = user.DisplayName + "'s opinions";
+}
+
+
+<div id="col2-left">
+
+<h1>Opinions by <a href="@user.SlugUrl">@user.DisplayName</a></h1>
+
+@if (opinions.Count > 0)
+{
+    var avg = opinions.Average(o => o.Rating);
+   <p style="margin-left:10px">Showing @Html.StarImage(avg) average from @opinions.Count opinions</p> }
+
+
+@if (opinions.Count == 0)
+{ 
+    <p>@user.DisplayName doesn't seem to be very opinionated...</p>
+}
+else
+{
+    <ul class="opinions">
+    @foreach (var o in opinions)
+    {
+        <li>
+            @if (CfIdentity.UserID == o.UserID) { <div style="float:right;width:20px">@(Html.DeleteLink<OpinionsController>(c=>c.Delete(o.ID),"Del"))</div> }
+            @Html.UserPicThumb(o.UserID)
+            <div>
+                <b>@Html.PlaceLinkWithFlag(o.ObjectID)</b>        
+                <span>@o.Utc.ToString("dd MMM yyy") @Html.StarImage(o.Rating) </span>
+                <p>@o.Comment</p>
+            </div>
+            <hr />
+        </li>               
+                      
+    }  
+    </ul>
+}
+
+
+</div>
+<div id="col2-right">
+
+    @Html.Partial("Ads/SideMenu200x200")
+
+</div>

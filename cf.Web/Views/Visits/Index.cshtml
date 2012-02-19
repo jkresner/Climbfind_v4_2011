@@ -1,0 +1,34 @@
+﻿@model IEnumerable<cf.Entities.CheckIn>
+@{ ViewBag.Title = "Latest Check-ins";
+   IEnumerable<CheckIn> checkIns = ViewBag.CheckIns;}
+
+<h2>Index</h2>
+
+<p>@Html.ActionLink("Create New", "Create")</p>
+<table>
+    <tr>
+        <th></th>
+        <th>UserID</th>
+        <th>LocationID</th>
+        <th>DateTime</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Comment</th>
+    </tr>
+
+@foreach (var item in checkIns)
+{
+    <tr>
+        <td>@Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })</td>
+        <td>@item.UserID</td>
+        <td>@item.LocationID</td>
+        <td>@String.Format("{0:g}", item.Utc)</td>
+        <td>@String.Format("{0:F}", item.Latitude)</td>
+        <td>@String.Format("{0:F}", item.Longitude)</td>
+        <td>@item.Comment</td>
+    </tr>
+}
+
+</table>
+

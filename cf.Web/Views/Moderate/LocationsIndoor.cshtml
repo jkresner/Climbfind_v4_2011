@@ -1,0 +1,52 @@
+﻿@{  Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   ViewBag.Title = "My Indoor Locations";
+   List<PlaceWithModDetails> modsPlaces = ViewBag.ModeratorPlaces;
+   List<ModAction> modsActions = ViewBag.ModeratorActions; }
+
+<style type="text/css"> 
+    td { line-height:14px }
+</style>
+
+
+<div class="listContent">
+
+<div style="width:65%;float:left">
+
+    <fieldset style="padding:6px"><legend>Indoor locations I moderate</legend>
+
+    @Html.Partial("Partials/ModeratorsClaims", modsPlaces)
+
+    </fieldset>
+
+    <fieldset><legend>Latest edits to my indoor locations</legend>
+
+
+        <ul style="padding:0;margin:0">
+            @foreach (var p in modsActions)
+            { <li>
+                @Html.UserProfileLink(p.UserID)
+                @((ModActionType)p.TypeID)
+                @Html.PlaceLink(p.OnObjectID)
+                @p.Utc.GetAgoStringUtc() 
+                </li> }
+        </ul>
+
+    </fieldset>
+
+</div>
+
+@*<div style="width:30%;float:right">
+
+    <fieldset><legend>Locations that need to be claimed</legend>
+
+        <p>When we get around to setting a home location on your profile and see where you're actively climbing, 
+        we'll use that information to suggest locations where you climb at that need ownership.</p>
+
+        <p>Claiming locations is a particularly good way to meet other people passionate about the same spots as you.</p>
+
+    </fieldset>
+
+</div>*@
+
+
+</div>

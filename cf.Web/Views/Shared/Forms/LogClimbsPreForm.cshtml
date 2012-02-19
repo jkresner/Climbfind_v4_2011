@@ -1,0 +1,21 @@
+﻿@model ClimbsLogPreViewModel
+@{ List<CheckIn> visits = ViewBag.UsersLatestVisits; }
+
+@using (Html.BeginForm("My", "Visits", FormMethod.Get, new { id = "logClimbsForm" }))
+{  
+    if (visits.Count == 0) { <div class="when"><p style="margin:5px 5px 10px 5px">Check in first to start logging climbs.</p></div> }
+    else
+    {
+    <div class="when">
+        <label>When</label> @Html.ValidationMessageFor(m => m.id, "Select a visit to log climbs to") 
+            @if (visits.Count == 10)
+            { <i>Older visit? Open <b><a href="/history/@CfIdentity.UserID">full climbing history</a></b></i>}<br />
+        @Html.DropDownListFor(m => m.id,
+             visits.ToSelectList(c => c.ID, c => string.Format("{0:ddd dd MMM yyyy} @ {1}",
+                c.Utc, AppLookups.GetCacheIndexEntry(c.LocationID).ShortDisplayName)), "--- Select visit to add climbs to ---")      
+ 
+    </div>
+    <div class="go"><input id="logClimbsSubmit" type="submit" class="jBtn" value="Go" /></div>
+    }
+    <hr />
+}

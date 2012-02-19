@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94E43E4D-121D-4552-AAD8-C4D70C1605B7}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>cf.Web</RootNamespace>
+    <AssemblyName>cf.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <SilverlightApplicationList>{DBFA66E1-0F33-4EF0-86F3-AFF600D3842E}|..\cf.Uploader\ImageUploader.csproj|ClientBin|False</SilverlightApplicationList>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.IdentityModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\lib\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\lib\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Omu.ValueInjecter">
+      <HintPath>..\lib\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routing\AlertsRouteRegistrar.cs" />
+    <Compile Include="Routing\ClimbsRouteRegistrar.cs" />
+    <Compile Include="Routing\HelpRouteRegistrar.cs" />
+    <Compile Include="Routing\HomeRouteRegistrar.cs" />
+    <Compile Include="Routing\MediaRouteRegistrar.cs" />
+    <Compile Include="Routing\MessagesRouteRegistrar.cs" />
+    <Compile Include="Routing\ModerateRouteRegistrar.cs" />
+    <Compile Include="Routing\OpinionsRouteRegistrar.cs" />
+    <Compile Include="Routing\PartnerCallsRouteRegistrar.cs" />
+    <Compile Include="Routing\PlacesRouteRegistrar.cs" />
+    <Compile Include="Routing\PostsRouteRegistrar.cs" />
+    <Compile Include="Routing\RouteRegistrar.cs" />
+    <Compile Include="Routing\UltimateRouteRegistrar.cs" />
+    <Compile Include="Routing\UsersRouteRegistrar.cs" />
+    <Compile Include="Routing\UtilityRouteRegistrar.cs" />
+    <Compile Include="Routing\VisitsRouteRegistrar.cs" />
+    <Compile Include="Views\Alerts\UpdateSiteSettingsViewModel.cs" />
+    <Compile Include="Views\Alerts\_AlertsController.cs" />
+    <Compile Include="Views\PartnerCalls\NewPartnerCallSubscriptionViewModel.cs" />
+    <Compile Include="Views\Profiles\EditPlacePreferencesViewModel.cs" />
+    <Compile Include="Views\Profiles\EditProfileViewModel.cs" />
+    <Compile Include="Views\Visits\UpdateCommentViewModel.cs" />
+    <Compile Include="Views\Visits\_VisitsController.cs" />
+    <Compile Include="Views\God\_GodController.cs" />
+    <Compile Include="Views\Help\_HelpController.cs" />
+    <Compile Include="Views\Home\_HomeController.cs" />
+    <Compile Include="Views\Media\AddViewModel.cs" />
+    <Compile Include="Views\Media\EditViewModel.cs" />
+    <Compile Include="Views\Media\MediaRatingNewViewModel.cs" />
+    <Compile Include="Views\Media\ViewerViewModel.cs" />
+    <Compile Include="Views\Media\_MediaController.cs" />
+    <Compile Include="Views\Moderate\ClimbOutdoorEditViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\NewMessageViewModel.cs" />
+    <Compile Include="Views\Messages\_MessagesController.cs" />
+    <Compile Include="Views\Moderate\AreaEditViewModel.cs" />
+    <Compile Include="Views\Moderate\Controller\_ModerateController.Actions.cs" />
+    <Compile Include="Views\Moderate\Controller\_ModerateController.Admin.cs" />
+    <Compile Include="Views\Moderate\Controller\_ModerateController.Areas.cs" />
+    <Compile Include="Views\Moderate\Controller\_ModerateController.Climbs.cs" />
+    <Compile Include="Views\Moderate\Controller\_ModerateController.cs" />
+    <Compile Include="Views\Moderate\Controller\_ModerateController.Locations.cs" />
+    <Compile Include="Views\Moderate\CountryEditViewModel.cs" />
+    <Compile Include="Views\Moderate\LocationIndoorEditViewModel.cs" />
+    <Compile Include="Views\Moderate\LocationOutdoorEditViewModel.cs" />
+    <Compile Include="Views\PartnerCalls\_PartnerCallsController.cs" />
+    <Compile Include="Views\Places\AreaNewPrestepViewModel.cs" />
+    <Compile Include="Views\Places\AreaNewViewModel.cs" />
+    <Compile Include="Views\Climbs\ClimbNewViewModel.cs" />
+    <Compile Include="Views\Places\Controller\_PlacesController.areas.cs" />
+    <Compile Include="Views\Climbs\_ClimbsController.cs" />
+    <Compile Include="Views\Places\Controller\_PlacesController.cs" />
+    <Compile Include="Views\Places\Controller\_PlacesController.locations.cs" />
+    <Compile Include="Views\Places\LocationIndoorNewViewModel.cs" />
+    <Compile Include="Views\Places\LocationOutdoorNewViewModel.cs" />
+    <Compile Include="Views\Places\_PlacesWebViewPage.cs" />
+    <Compile Include="Views\Shared\Forms\ClimbsLogViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\ClimbsLogPreViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\NewCommentWithCommentsListViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\NewOpinionWithCommentsListViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\TalkViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\PartnerCallPreViewModel.cs" />
+    <Compile Include="Views\PartnerCalls\NewPartnerCallViewModel.cs" />
+    <Compile Include="Views\Shared\Forms\NewHistoricalCheckInViewModel.cs" />
+    <Compile Include="Views\Posts\_PostsController.cs" />
+    <Compile Include="Views\Profiles\PersonalityMediaNewViewModel.cs" />
+    <Compile Include="Views\Profiles\_ProfileWebViewPage.cs" />
+    <Compile Include="Views\Profiles\_ProfilesController.cs" />
+    <Compile Include="Views\Opinions\NewRatingViewModel.cs" />
+    <Compile Include="Views\Opinions\_OpinionsController.cs" />
+    <Compile Include="Views\Shared\EditorTemplates\Bing7EditAreaMapWithViewModel.cs" />
+    <Compile Include="Views\Shared\Maps\Bing7GeoJsonMapViewModel.cs" />
+    <Compile Include="Views\Shared\Maps\Bing7MapViewModel.cs" />
+    <Compile Include="Views\Shared\Maps\Bing7MapViewOptionsViewModel.cs" />
+    <Compile Include="Views\Shared\Maps\Bing7MapWithLocationViewModel.cs" />
+    <Compile Include="Views\Shared\Partials\DiskMultiImageUploadModel.cs" />
+    <Compile Include="Views\Shared\Partials\SideOpinionsListModel.cs" />
+    <Compile Include="Views\Shared\Partials\FeedPostListViewData.cs" />
+    <Compile Include="Views\Shared\Partials\FormOptionsViewModel.cs" />
+    <Compile Include="Views\Shared\Partials\INewMediaViewModel.cs" />
+    <Compile Include="Views\Shared\Partials\WebUrlCropImageModel.cs" />
+    <Compile Include="Views\Shared\_BaseController.cs" />
+    <Compile Include="Views\Shared\_UtilityController.cs" />
+    <Compile Include="Views\Upload\_UploadController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="apple-touch-icon-precomposed.png" />
+    <Content Include="apple-touch-icon.png" />
+    <Content Include="ClientBin\ImageUploader.xap" />
+    <Content Include="Climbfind-Email-Signature.png" />
+    <Content Include="crossdomain.xml" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="google384ab6eb09013cd5.html" />
+    <Content Include="images\emailtemplates\cfheader1.png" />
+    <Content Include="images\emailtemplates\cfheader1side.png" />
+    <Content Include="images\emailtemplates\footerbg.jpg" />
+    <Content Include="page-not-found.htm" />
+    <Content Include="robots.txt" />
+    <Content Include="sitemap.xml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="_bin_deployableAssemblies\Microsoft.SqlServer.Types.dll" />
+    <Content Include="_bin_deployableAssemblies\SqlServerSpatial.dll" />
+    <Content Include="Views\Shared\Tests.cshtml" />
+    <Content Include="Views\Home\Bugs.cshtml" />
+    <Content Include="Views\Profiles\Edit.cshtml" />
+    <Content Include="Views\Shared\Partials\SilverlightClientResizedAzureBlogSingleFileUpload.cshtml" />
+    <Content Include="Views\Home\IndexUserThumbs.cshtml" />
+    <Content Include="Views\PartnerCalls\SubscriptionSuggestion.cshtml" />
+    <Content Include="Views\Profiles\EditPlacePreferences.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfileGyms.cshtml" />
+    <Content Include="Views\Home\ClimbingPartners.cshtml" />
+    <Content Include="Views\Home\ClimbingTravel.cshtml" />
+    <Content Include="Views\Home\TermsOfService.cshtml" />
+    <Content Include="Views\Home\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Home\ClimbingIndoor.cshtml" />
+    <Content Include="Views\Home\AboutTheUpgrade.cshtml" />
+    <Content Include="Views\PartnerCalls\Index.cshtml" />
+    <Content Include="Views\Shared\Partials\HomePostList.cshtml" />
+    <Content Include="Views\Home\ResetPassword.cshtml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.WebData.xml" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.WebData.dll" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.Data.xml" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.Data.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Administration.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.dll" />
+    <None Include="_bin_deployableAssemblies\NuGet.Core.dll" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.xml" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cf.Caching.WazMemcached\cf.Caching.WazMemcached.csproj">
+      <Project>{8964FDCB-7A1A-4715-B44A-5E298F8658F5}</Project>
+      <Name>cf.Caching.WazMemcached</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\cf.Web.Mvc\cf.Web.Mvc.csproj">
+      <Project>{6E138A9E-E0EA-4F04-8079-D04B1E54FCBB}</Project>
+      <Name>cf.Web.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\cf\cf.csproj">
+      <Project>{D349A201-6B88-4534-A749-4437071D9D0F}</Project>
+      <Name>cf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetFrameworkExtensions\NetFrameworkExtensions.csproj">
+      <Project>{71ED7755-9BD3-4331-91D3-D7C0911423C7}</Project>
+      <Name>NetFrameworkExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\certificates\accounts.climbfind.com.pfx" />
+    <Content Include="Views\Visits\Detail.cshtml" />
+    <Content Include="Views\Visits\Index.cshtml" />
+    <Content Include="Views\Visits\ListLocation.cshtml" />
+    <Content Include="Views\Visits\ListUser.cshtml" />
+    <Content Include="Views\Help\Faq.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Credits.cshtml" />
+    <Content Include="Views\Home\Glossary.cshtml" />
+    <Content Include="Views\Home\Growth.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\ModeratorsProject.cshtml" />
+    <Content Include="Views\Home\ModeratorReputation.cshtml" />
+    <Content Include="Views\Home\Press.cshtml" />
+    <Content Include="Views\Home\AboutSearch.cshtml" />
+    <Content Include="Views\Home\Team.cshtml" />
+    <Content Include="Views\Media\Add.cshtml" />
+    <Content Include="Views\Media\LatestCommunityMediaStrip.cshtml" />
+    <Content Include="Views\Media\Viewer.cshtml" />
+    <Content Include="Views\Moderate\ActionDetail.cshtml" />
+    <Content Include="Views\Moderate\ActionPlaceList.cshtml" />
+    <Content Include="Views\Moderate\ActionUserList.cshtml" />
+    <Content Include="Views\Moderate\Admin.cshtml" />
+    <Content Include="Views\Moderate\AreaEdit.cshtml" />
+    <Content Include="Views\Moderate\Areas.cshtml" />
+    <Content Include="Views\Moderate\AreaVerify.cshtml" />
+    <Content Include="Views\Moderate\Climbs.cshtml" />
+    <Content Include="Views\Moderate\CountryEdit.cshtml" />
+    <Content Include="Views\Moderate\Index.cshtml" />
+    <Content Include="Views\Moderate\LocationIndoorEdit.cshtml" />
+    <Content Include="Views\Moderate\LocationOutdoorEdit.cshtml" />
+    <Content Include="Views\Moderate\LocationsIndoor.cshtml" />
+    <Content Include="Views\Moderate\LocationsOutdoor.cshtml" />
+    <Content Include="Views\Moderate\Partials\ModeratorsClaims.cshtml" />
+    <Content Include="Views\Moderate\PerformanceTuneMap.cshtml" />
+    <Content Include="Views\Moderate\RefreshSearchIndex.cshtml" />
+    <Content Include="Views\Moderate\Web.config" />
+    <Content Include="Views\Places\AreaDetail.cshtml" />
+    <Content Include="Views\Places\AreaNew.cshtml" />
+    <Content Include="Views\Places\AreaNewPrestep.cshtml" />
+    <Content Include="Views\Places\CityDetail.cshtml" />
+    <Content Include="Views\Climbs\ClimbOutdoorDetail.cshtml" />
+    <Content Include="Views\Places\Countries.cshtml" />
+    <Content Include="Views\Places\CountryDetail.cshtml" />
+    <Content Include="Views\Places\LocationIndoorDetail.cshtml" />
+    <Content Include="Views\Places\LocationIndoorNew.cshtml" />
+    <Content Include="Views\Places\LocationOutdoorDetail.cshtml" />
+    <Content Include="Views\Places\LocationOutdoorNew.cshtml" />
+    <Content Include="Views\Places\Partials\MainAreaSummary.cshtml" />
+    <Content Include="Views\Shared\Partials\MainClimbsSummary.cshtml" />
+    <Content Include="Views\Places\Partials\MainClimbingAreasList.cshtml" />
+    <Content Include="Views\Places\Partials\MainLocationIndoorList.cshtml" />
+    <Content Include="Views\Places\Partials\MainLocationOutdoorList.cshtml" />
+    <Content Include="Views\Shared\Partials\MainMediaRoll.cshtml" />
+    <Content Include="Views\Places\Partials\MainAreaTopClimbsList.cshtml" />
+    <Content Include="Views\Climbs\Partials\SideMenuClimbOptions.cshtml" />
+    <Content Include="Views\Places\Partials\SideMenuOptions.cshtml" />
+    <Content Include="Views\Places\Partials\SideMenuProvincesList.cshtml" />
+    <Content Include="Views\Places\PlaceNew.cshtml" />
+    <Content Include="Views\Places\PlaceNewAdvanced.cshtml" />
+    <Content Include="Views\Places\ProvinceDetail.cshtml" />
+    <Content Include="Views\Climbs\Web.config" />
+    <Content Include="Views\Posts\MyFeed.cshtml" />
+    <Content Include="Views\Profiles\ChooseAvatar.cshtml" />
+    <Content Include="Views\Profiles\ChooseHeadshot.cshtml" />
+    <Content Include="Views\Profiles\ChoosePersonalityMedia.cshtml" />
+    <Content Include="Views\Profiles\Detail.cshtml" />
+    <Content Include="Views\Profiles\Me.cshtml" />
+    <Content Include="Views\Profiles\Personality.cshtml" />
+    <Content Include="Views\Profiles\PersonalityCategoryAdd.cshtml" />
+    <Content Include="Views\Profiles\PersonalityCategoryExplanation.cshtml" />
+    <Content Include="Views\Profiles\PersonalityCategoryShow.cshtml" />
+    <Content Include="Views\Profiles\ProfileNotFound.cshtml" />
+    <Content Include="Views\Shared\Ads\HeaderLeaderBoard.cshtml" />
+    <Content Include="Views\Shared\BrowserNotSupported.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Bing7EditLocationMap.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Bing7MapViewOptions.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClimbCategories.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClimbGrade.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+    <Content Include="Views\Shared\Maps\Bing7GeoJsonMap.cshtml" />
+    <Content Include="Views\Shared\Maps\Bing7LocationMap.cshtml" />
+    <Content Include="Views\Shared\PageNotFound.cshtml" />
+    <Content Include="Views\Shared\Partials\AlphabetPager.cshtml" />
+    <Content Include="Views\Shared\Partials\FeedPostList.cshtml" />
+    <Content Include="Views\Shared\Partials\WebUrlImageCropper.cshtml" />
+    <Content Include="Views\Shared\PlaceNotFound.cshtml" />
+    <Content Include="Views\Shared\ProfileWidgets\ModDetails.cshtml" />
+    <Content Include="Views\Shared\Unauthorized.cshtml" />
+    <Content Include="Views\Moderate\_LayoutModerate.cshtml" />
+    <Content Include="Views\Shared\Partials\QR.cshtml" />
+    <Content Include="Views\Places\Partials\ThanksForInterestInAddingContent.cshtml" />
+    <Content Include="Views\Shared\Partials\MediaChooser.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfilePersonality.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfileRecentHistory.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfileSummary.cshtml" />
+    <Content Include="Views\Media\MediaRatingComment.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LocationAutocompletePicker.cshtml" />
+    <Content Include="Views\Places\Partials\MainCitiesList.cshtml" />
+    <Content Include="Views\Places\Partials\SideAreaTopLocationsList.cshtml" />
+    <Content Include="Views\Shared\Ads\SideMenu200x200.cshtml" />
+    <Content Include="Views\Shared\Forms\CheckInForm.cshtml" />
+    <Content Include="Views\Places\LocationNewPrestep.cshtml" />
+    <Content Include="Views\Home\CF5.cshtml" />
+    <Content Include="Views\Moderate\ActionContribs.cshtml" />
+    <Content Include="Views\Places\Partials\SideMenuAreaHierarchy.cshtml" />
+    <Content Include="Views\Profiles\UsersLoggedClimbs.cshtml" />
+    <Content Include="Views\Home\Vision.cshtml" />
+    <Content Include="Views\Home\Mobile.cshtml" />
+    <Content Include="Views\Home\MobileIPhoneHelp.cshtml" />
+    <Content Include="Views\Home\AboutQR.cshtml" />
+    <Content Include="Views\Opinions\TopAreas.cshtml" />
+    <Content Include="Views\Opinions\TopIndoorLocations.cshtml" />
+    <Content Include="Views\Opinions\TopOutdoorLocations.cshtml" />
+    <Content Include="Views\Opinions\TopClimbs.cshtml" />
+    <Content Include="Views\Home\WorldRockClimbingDatabase.cshtml" />
+    <Content Include="Views\Places\Partials\SideAreaTopOutdoorLocationsList.cshtml" />
+    <Content Include="Views\Places\Partials\SideAreaTopClimbsList.cshtml" />
+    <Content Include="Views\Shared\Partials\FormOptions.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfileOpinions.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfileClimbed.cshtml" />
+    <Content Include="Views\Opinions\New.cshtml" />
+    <Content Include="Views\Home\AboutOpinions.cshtml" />
+    <Content Include="Views\Opinions\ListUser.cshtml" />
+    <Content Include="Views\Opinions\NewLogin.cshtml" />
+    <Content Include="Views\Home\Partners.cshtml" />
+    <Content Include="Views\Places\Partials\MainSubClimbingAreasList.cshtml" />
+    <Content Include="Views\Shared\Partials\SideOpinionsList.cshtml" />
+    <Content Include="Views\Opinions\ListObject.cshtml" />
+    <Content Include="Views\Shared\Partials\MainOpinionSummary.cshtml" />
+    <Content Include="Views\Visits\My.cshtml" />
+    <Content Include="Views\Visits\CreateCurrent.cshtml" />
+    <Content Include="Views\Visits\Partials\SideMenuCheckInList.cshtml" />
+    <Content Include="Views\Visits\UpdateComment.cshtml" />
+    <Content Include="Views\Shared\Forms\LogClimbsPreForm.cshtml" />
+    <Content Include="Views\Shared\Forms\PartnerCallPreForm.cshtml" />
+    <Content Include="Views\PartnerCalls\New.cshtml" />
+    <Content Include="Views\PartnerCalls\ListUser.cshtml" />
+    <Content Include="Views\PartnerCalls\AreaMap.cshtml" />
+    <Content Include="Views\Alerts\Index.cshtml" />
+    <Content Include="Views\Shared\Forms\TalkForm.cshtml" />
+    <Content Include="Views\Shared\Todo\SideMenuSuggestion.cshtml" />
+    <Content Include="Views\Shared\Todo\SideMenuPersonality.cshtml" />
+    <Content Include="Views\Profiles\PersonalityMediaDetail.cshtml" />
+    <Content Include="Views\Shared\Forms\OpinionFormWithCommentsList.cshtml" />
+    <Content Include="Views\Profiles\OpinionDetail.cshtml" />
+    <Content Include="Views\Media\Edit.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfilePartnerCalls.cshtml" />
+    <Content Include="Views\Posts\Detail.cshtml" />
+    <Content Include="Views\Posts\TalkList.cshtml" />
+    <Content Include="Views\Profiles\Partials\ProfileAdmin.cshtml" />
+    <Content Include="Views\God\Success.cshtml" />
+    <Content Include="Views\PartnerCalls\ListPlace.cshtml" />
+    <Content Include="Views\Media\MediaSourceMyLibrary.cshtml" />
+    <Content Include="Views\Visits\AddMedia.cshtml" />
+    <Content Include="Views\Visits\AddLoggedClimb.cshtml" />
+    <Content Include="Views\Visits\Partials\MainVisitsList.cshtml" />
+    <Content Include="Views\Shared\Forms\PostCommentFormWithCommentsList.cshtml" />
+    <Content Include="Views\Visits\Partials\LoggedClimbDetail.cshtml" />
+    <Content Include="Views\PartnerCalls\Detail.cshtml" />
+    <Content Include="Views\Opinions\Detail.cshtml" />
+    <Content Include="Views\Messages\Index.cshtml" />
+    <Content Include="Views\Messages\New.cshtml" />
+    <Content Include="Views\Messages\MessagesList.cshtml" />
+    <Content Include="Views\Shared\Forms\MessageForm.cshtml" />
+    <Content Include="Views\Messages\Empty.cshtml" />
+    <Content Include="Views\Climbs\ClimbIndoorDetail.cshtml" />
+    <Content Include="Views\Moderate\ClimbOutdoorEdit.cshtml" />
+    <Content Include="Views\Climbs\ClimbIndoorNew.cshtml" />
+    <Content Include="Views\Climbs\ClimbPhotosEdit.cshtml" />
+    <Content Include="Views\Places\Web.config" />
+    <Content Include="Views\Shared\EditorTemplates\ClimbIndoorCategories.cshtml" />
+    <Content Include="Views\Climbs\ClimbOutdoorNew.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClimbOutdoorCategories.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClimbOutdoorMethods.cshtml" />
+    <Content Include="Views\Shared\Partials\DiskMultiImageUpload.cshtml" />
+    <Content Include="Views\Climbs\Partials\MainColumnClimbsList.cshtml" />
+    <Content Include="Views\Climbs\Partials\MainColumnSendsList.cshtml" />
+    <Content Include="Views\Climbs\ClimbSectionDetail.cshtml" />
+    <Content Include="Views\PartnerCalls\Subscriptions.cshtml" />
+    <Content Include="Views\Alerts\SiteSettings.cshtml" />
+    <Content Include="Views\PartnerCalls\SubscriptionNew.cshtml" />
+    <Content Include="Views\PartnerCalls\ProcessWorkItem.cshtml" />
+    <Content Include="Views\Alerts\SiteSettingsEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3808</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://cfdev:8989/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

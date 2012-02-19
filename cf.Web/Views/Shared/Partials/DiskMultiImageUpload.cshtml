@@ -1,0 +1,73 @@
+﻿@model DiskMultiImageUploadModel
+<script type="text/javascript">
+function resetWebCrop() 
+{ 
+    $("#getImageFromDisk").show(); 
+    $("#failedUploadDiv").hide(); 
+    $("#processingImageDiv").hide(); 
+}
+
+function CuteWebUI_AjaxUploader_OnPostback() {
+    var uploader = document.getElementById("multiuploader");
+	var guidlist = uploader.value;
+
+	//Send Request
+	var xh;
+	if (window.XMLHttpRequest) xh = new window.XMLHttpRequest();
+	else xh = new ActiveXObject("Microsoft.XMLHTTP");
+        
+    var handlerurl = "@Model.PostActionUrl";
+	xh.open("POST", handlerurl, false, null, null);
+	xh.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+	xh.send("guidlist=" + guidlist);
+
+	//call uploader to clear the client state
+	uploader.reset();
+
+	if (xh.status != 200) {
+	    alert("http error " + xh.status);
+	    setTimeout(function () { document.write(xh.responseText); }, 10);
+	    return;
+	}
+
+	var list = eval(xh.responseText); //get JSON objects
+	//Process Result:
+	for (var i = 0; i < list.length; i++) 
+    {
+	    var item = list[i];
+	    var msg;
+	    if (item.Error != null) {
+	        msg = "Error " + item.FileGuid + " - " + item.Error;
+	    }
+	    else {
+            //-- Add the photo to the photo list
+            
+	    }
+	}
+//	$("#getImageFromDisk").hide();
+    @(Model.JavascriptSuccessCallback)(list);
+}
+
+</script>
+
+<div>
+<div id="getImageFromDisk">
+    <p style="color:Black;font-weight:bold;margin-bottom:20px">Files must be <span style="color:Red">less than 1mb</span></p>
+    <hr />
+    
+    @Html.SetAjaxMultiImageUploader("Browse my computer", 1048)
+    
+</div>
+    
+<div id="failedUploadDiv" style="display:none">
+    
+</div>
+
+<div id="processingImageDiv" style="display:none">
+    <p>Processing image</p>
+    <p><img src="@Stgs.StaticRt/ui/img-uploading.gif" alt="loading" /></p>
+</div>
+
+</div>
+
+<hr />

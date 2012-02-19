@@ -1,0 +1,20 @@
+﻿@{ ViewBag.Title = "Tests Menu";
+}
+
+<div id="col2-left">
+    <h4 style="margin-left:20px;margin-top:2px;padding:0">Site Tests</h4>
+    <p style="color:Green">@ViewBag.TestResult</p>
+    <hr />
+    @Html.Raw(ViewBag.TestDetails)
+</div>
+<div id="col2-right">
+    <div class="sidemenu navOptions">
+    <h3>Options</h3>
+    <ul>
+        <li>@(Html.ActionLink<UtilityController>(c => c.ThrowError(), "Throw exception"))</li>
+        <li>@(Html.ActionLink<UtilityController>(c => c.SendMessageEmail(), "Send message to contact@climbfind.com"))</li>
+        <li>@(Html.ActionLink<UtilityController>(c => c.SendHtmlTestEmail(), "Send test html mail"))</li>
+        <li></li>
+    </ul>
+    </div>
+</div>

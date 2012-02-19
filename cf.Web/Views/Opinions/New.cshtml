@@ -1,0 +1,36 @@
+﻿@model NewRatingViewModel
+@{ var cacheEntry = AppLookups.GetCacheIndexEntry(Model.RateObjectID);
+   string objectType = "place ";
+   if (cacheEntry.Type == CfType.ClimbIndoor || cacheEntry.Type == CfType.ClimbOutdoor) { objectType = "climb "; }
+   
+   }
+
+@using (Html.BeginForm("New", "Opinions", FormMethod.Post, new { id = "rating-form" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(m => m.RateObjectID)
+        
+    <p style="padding:6px 0px 10px 0px"><b style="color:Red">Note</b> you are rating the physical @objectType '@cacheEntry.Name', NOT the content presented on Climbfind.
+    Please read <a href="/opinions" target="_blank"><b>How opinions improve Climbfind</b></a> to fully understand the power of 
+    submitting your opinion.
+    </p>
+    
+    <div class="editor-label"><label>Rating <span id="stars-cap"></span></label></div>
+    <div class="editor-field" id="score-div">
+        <div id="stars-wrapper">
+            @Html.DropDownListFor(m => m.RateScore, SelectLists.RatingSelectList) 
+        </div>
+        @Html.ValidationMessageFor(m => m.RateScore)
+    </div>
+
+    <hr />
+    <div class="editor-label"><b>Thoughtful comment explaining your rating/opinion</b>
+    <span style="font-size:9px;color:Gray">(People read these, so you don't want to sound like a douche)</span></div>
+    <div class="editor-field">
+        @Html.TextAreaFor(m => m.RateComment, 4, 94, null)
+        @Html.ValidationMessageFor(m => m.RateComment)
+    </div>
+
+    @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "javascript:closeModal()" })    
+}

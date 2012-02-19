@@ -1,0 +1,3 @@
+﻿@model IQueryable<Media>
+
+<div>@foreach (var m in Model) { <img src="@m.ThumbUrl()" class="tm" />} </div>

@@ -1,0 +1,309 @@
+﻿@model AreaNewViewModel
+@{ List<Area> cities = ViewBag.Cities;
+   List<Area> provinces = ViewBag.Provinces;
+   List<Area> climbingareas = ViewBag.ClimbingAreas;
+   bool HasAddedAPlace = CfPrincipal.ModDetails != null && CfPrincipal.ModDetails.PlacesAdded > 1; 
+}
+
+<style type="text/css">
+    .hidden { margin:8px } 
+    .noColor { color:#777777 } 
+    #explainPlaceTypesDIV { padding-bottom:20px } 
+    #closeAboutAreasAndLocations { padding:10px 30px 10px 20px;font-size:16px }
+    #content { padding-bottom:0 }
+    h4 { margin:30px 0 4px 0;clear:both }
+    h6 { margin:25px 0px 10px 0px } 
+    img.add { float:left;margin:0px 10px 25px 0 }
+    p.add { float:left;padding-top:0px;color:#777777;width:85% }
+    
+    #selectLocationTypeDIV a { font-weight:bold }
+    #selectAreaTypeDIV a { font-weight:bold }
+</style> 
+ 
+<script type="text/javascript">
+    var choose, explanation;
+
+    $(document).ready(function () {
+        choose = $("#selectPlaceTypeDIV");
+        explanation = $("#explainPlaceTypesDIV");
+        locationType = $("#selectLocationTypeDIV");
+        areaType = $("#selectAreaTypeDIV");
+
+        reset();
+        $('input:radio').click(function () { $(".hidden").hide(); });
+
+        $("#aboutLocationsAndAreas").click(function () { choose.hide(); explanation.show(); });
+        $("#locatoinRB").click(function () { choose.hide(); locationType.show(); });
+        $("#areaRB").click(function () { choose.hide(); areaType.show(); });
+
+        $("#locationIndoorRB").click(function () { $("#LocationIndoorProvinceChoose").show(); });
+        $("#locationRockWallRB").click(function () { $("#LocationRockWallAreaChoose").show(); });
+        $("#locationBoulderRB").click(function () { $("#LocationBoulderAreaChoose").show(); });
+        $("#locationOtherOutdoorRB").click(function () { $("#OtherOutdoorAreaChoose").show(); });
+        $("#locationPoiRB").click(function () { $("#LocationPoiAreaChoose").show(); });
+        $("#locationBusinessRB").click(function () { $("#LocationBusinessAreaChoose").show(); });
+
+        $("#AreaCityRB").click(function () { $("#AreaCityCountryChoose").show(); });
+        $("#AreaCitySectionRB").click(function () { $("#AreaCitySectionCityChoose").show(); });
+        $("#AreaCityBitRB").click(function () { $("#AreaCityBitCityChoose").show(); });
+        $("#AreaTownAndSurroundsRB").click(function () { $("#AreaTownProvinceChoose").show(); });
+        $("#AreaNationParkRB").click(function () { $("#AreaNationalParkProvinceChoose").show(); });
+        $("#AreaClimbingAreaRB").click(function () { $("#AreaClimbingAreaProvinceChoose").show(); });
+        $("#AreaClimbingAreaSectionRB").click(function () { $("#AreaSubAreaAreaChoose").show(); });
+        $("#AreaBoulderingAreaRB").click(function () { $("#AreaBoulderingAreaProvinceChoose").show(); });       
+
+        if (@((!HasAddedAPlace).ToString().ToLower())) {
+            choose.hide(); explanation.show();
+        }
+
+        initializeAutocompletes();
+    });
+
+    function reset() {
+        choose.show();
+        explanation.hide();
+        locationType.hide();
+        areaType.hide();
+        $('input:radio').each(function () {
+            $(this).attr('checked', false);
+        });
+        $(".hidden").hide(); 
+    }
+
+    function initializeAutocompletes() 
+    {
+        initializeProvinceAutocomplete("#idpsearch", '/rock-climbing-database/add-indoor-location/');
+        initializeProvinceAutocomplete("#stpsearch", '/rock-climbing-database/add-sub-area-to-area/');
+        initializeProvinceAutocomplete("#stpsearch", '/rock-climbing-database/add-sub-area-to-area/');
+        initializeProvinceAutocomplete("#bfpsearch", '/rock-climbing-database/add-sub-area-to-area/');
+        
+        $("#cosearch").autocomplete({ source: countries,
+            select: function (event, ui) { document.location = "/rock-climbing-database/add-climbing-area/" + ui.item.value + "/city"; }
+            }).data("autocomplete")._renderItem = function(ul, item) {
+			    return $( "<li></li>" ).data( "item.autocomplete", item)
+				    .append( "<a href=''><img src='@Stgs.StaticRt/flags/" + item.icon + ".png' /> " + item.label + "</a>" )
+				    .appendTo(ul);
+	    };
+    }
+
+    function initializeProvinceAutocomplete(inputSelector, baseUrl)
+    {
+        provinceAutocomplete(inputSelector, function (item) {
+            var lessUrl = item.url.substring(1, item.url.length);
+            var slashIndex = lessUrl.indexOf("/");
+            var countryUrl = lessUrl.substring("rock-climbing-".length, slashIndex);
+            var nameUrl = lessUrl.substring(slashIndex + 1, lessUrl.length);
+            document.location = baseUrl + countryUrl + "/" + nameUrl;
+        });  
+    }
+
+    var countries = [ @foreach (var c in AppLookups.Countries)
+                      { <text>{ value: "@c.NameUrlPart", label: "@c.Name", icon:  "@c.Flag" },</text> } ];
+
+</script>
+
+
+
+@using (Html.BeginForm("PlaceNew", "Places", FormMethod.Get))
+{
+    <h1>Add a place to <a href="@current.SlugUrl">@current.Name</a></h1>    
+    
+    <div id="selectPlaceTypeDIV" style="display:none;min-height:360px"> 
+       
+        <h6>Choose the type of place to add:</h6>
+            
+        <p style="font-size:16px;font-weight:bold"><input id="areaRB" type="radio" name="type" value="area" style="padding:1px" /> Area <span style="color:Gray;font-size:11px;font-weight:normal">inc. Cities, Parks, Beaches, Mountain Ranges, National Parks, Bouldering Fields etc.</span></p>
+        <p style="font-size:16px;font-weight:bold"><input id="locatoinRB" type="radio" name="type" value="location" style="padding:1px" /> Location  <span style="color:Gray;font-size:11px;font-weight:normal">inc. Indoor climbing, single Outdoor Rock Wall, single Boulder</span></p>                
+     
+        <p style="margin:20px 0px 0px 0px;color:Green"><b><i>Tip:</i></b>  Not sure? Learn the <b><a id="aboutLocationsAndAreas" href="#">Difference between areas & locations</a></b></p>
+
+    </div>
+    <div id="selectLocationTypeDIV"> 
+       
+        <h6>Choose the type of location to add:</h6>
+    
+        <h4>Indoor</h4>
+
+        <p><input id="locationIndoorRB" type="radio" name="locationType" value="indoor" /> <b>Indoor climbing facility</b> also known as a 'Climbing gym' or 'Indoor climbing wall'</p>
+        <div id="LocationIndoorProvinceChoose" class="hidden">
+            <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+            
+            <p class="add"> Add indoor climbing to 
+                @foreach (var province in provinces)
+                {
+                    @(Html.ActionLink<PlacesController>(c => c.LocationIndoorNew(country.NameUrlPart, province.NameUrlPart), province.Name )) <text>| </text>  }
+                or 
+                <input id="idpsearch" class="tbox jq_watermark" type="text" name="idpsearch" title="Type name of province, state or territory to add to" />           
+            </p>
+        </div>
+
+        <h4>Outdoor</h4>
+
+        @if (current.Type == CfType.Province && climbingareas.Count == 0)
+        { <p class="noColor">You must add a climbing area to the province/state @current.Name before you can add climbing locations.</p>}
+        else
+        { 
+
+        <p><input id="locationRockWallRB" type="radio" name="locationType" value="rockwall" /> <b>Single rock wall</b> that can NOT be split into multiple rock walls each with their own name</p>
+        <div id="LocationRockWallAreaChoose" class="hidden">
+            <p class="noColor" style="margin-bottom:20px;font-style:italic">If the place you are adding contains a collection of smaller walls, 
+                that each have their own name, you should 
+                <a href="javascript:reset()" class="jBtn CancelBtn">add your place as a <i>climbing area</i></a> and subsequently 
+                 use this option to add each individual wall. Otherwise:</p>
+            
+            <p class="add"> <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+            Add a rock wall to @foreach (var area in climbingareas)
+            { @(Html.ActionLink<PlacesController>(c => c.LocationOutdoorNew(country.NameUrlPart, area.NameUrlPart), area.Name)) <text>| </text> }
+            or browse to the page of the climbing area you want to add to and click <i>Add place</i>. If you can't find the area by browsing, you might need to add it first.</p>
+        </div>
+
+        <p style="clear:both"><input id="locationBoulderRB" type="radio" name="locationType" value="rockwall" /> <b>Single boulder</b> that belongs to an area with one or more boulders</p>
+        <div id="LocationBoulderAreaChoose" class="hidden">
+            <p class="noColor" style="margin-bottom:20px;font-style:italic">If the place you are adding has multiple boulders, you actually want to 
+                <a href="javascript:reset()" class="jBtn CancelBtn">add your place as an <i>area/boulder field</i></a>
+                 and subsequently use this option to add each individual boulder.
+                 Otherwise:</p>
+            
+            <p class="add"> <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                Add a boulder to
+            @foreach (var area in climbingareas)
+            {
+            @(Html.ActionLink<PlacesController>(c => c.LocationOutdoorNew(country.NameUrlPart, area.NameUrlPart), area.Name)) <text>| </text>}
+             or browse to the page of the area you want to add to & click <i>Add place</i>. If you can't find the area by browsing, you might need need to add it.</p>
+        </div>
+
+        <p style="clear:both"><input id="locationOtherOutdoorRB" type="radio" name="locationType" value="otherOutdoor" /> <b>Other type</b>
+                including ice wall, alpine route, water soloing</p>
+         <div id="OtherOutdoorAreaChoose" class="hidden">
+            <p class="add">Other outdoor location types are coming in a future release</p>
+            <hr />
+        </div>
+            
+        }
+
+        <div class="options">
+            <label>Form options</label>
+            <a href="javascript:reset()" class="jBtn CancelBtn">Back</a>
+        </div>
+    </div>
+    
+    <div id="selectAreaTypeDIV"> 
+       
+        <h6>Choose the type of area to add:</h6>
+    
+        <h4>Urban</h4>
+
+        <p><input id="AreaCityRB" type="radio" name="areaType" value="City" /> <b>City</b> of more than 100,000 people</p>
+        <div id="AreaCityCountryChoose" class="hidden" style="height:30px">
+            <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+            <p class="add"> Add a city to @Html.FlagImage(country) @(Html.ActionLink<PlacesController>(c => c.AreaNew(country.NameUrlPart, "city"), country.Name)) 
+            or <input id="cosearch" class="tbox jq_watermark" type="text" name="cosearch" title="Type name of country to add your city to" /></p>
+        </div>
+        
+        <p style="margin-left:40px;clear:both">
+        
+        <input id="AreaCityBitRB" type="radio" name="areaType" value="area" /> <b>Park, beach or cliff</b> within a city</p>
+        <div id="AreaCityBitCityChoose" class="hidden" style="margin-left:40px">
+            @if (cities.Count() == 0)
+            { <p class="noColor">Browse to the city you want to add a park or beach to and click <i>Add place</i>. If the city you want to
+            add to isn't in our database, you will have to add first.</p>
+            }
+            else
+            {
+                <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                <p class="add"> Add a park, beach or cliff to @foreach (var city in cities)
+                                                              {
+                @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, city.NameUrlPart), city.Name)) <text>| </text> }
+                or browse to the city you want to add your place to & click <i>Add place</i>. If you can't find the city by browsing, you might need to add it first.</p>
+            }
+        </div>
+
+        <p style="clear:both"><input id="AreaTownAndSurroundsRB" type="radio" name="areaType" value="area" /> <b>Small town</b> surrounded by climbing in which climbers use the name of the town to refer to the region's climbing (e.g. <a href="/rock-climbing-around/canada/squamish" target="_blank">Squamish, BC</a>)</p>
+        <div id="AreaTownProvinceChoose" class="hidden">
+            <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                <p class="add">Add a town to @foreach (var province in provinces)
+                                             {
+            @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, province.NameUrlPart), province.Name)) <text>| </text>}
+            
+            or <input id="stpsearch" class="tbox jq_watermark" type="text" name="stpsearch" title="Type name of province, state or territory to add to" />           
+            
+            </p>
+        </div>
+        
+        <h4>Natural</h4>
+
+        <p><input id="AreaClimbingAreaRB" type="radio" name="areaType" value="area" /> <b>Climbing area</b> which contains one or more rock walls and/or boulders</p>
+        <div id="AreaClimbingAreaProvinceChoose" class="hidden">
+           <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                <p class="add">Add a climbing area to @foreach (var province in provinces)
+                                                      {
+            @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, province.NameUrlPart), province.Name))  <text>| </text>}
+            
+            or <input id="capsearch" class="tbox jq_watermark" type="text" name="stpsearch" title="Type name of province, state or territory to add to" />           
+            
+            </p>
+        </div>
+        
+        <p style="margin-left:40px;clear:both"><input id="AreaClimbingAreaSectionRB" type="radio" name="areaType" value="area" /> <b>Sub section</b> of a climbing area</p>
+        <div id="AreaSubAreaAreaChoose" class="hidden" style="margin-left:40px">
+            @if (climbingareas.Count() == 0)
+            { <p class="noColor">Browse to the climbing area you want to sub section to and click 'Add place'. If the climbing area you want to
+            add a sub section to isn't in our database, you will have to add it before you can add a sub section.</p>
+            } 
+            
+        <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                <p class="add">Add a sub section (sub area) to 
+            @foreach (var area in climbingareas)
+            { @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, area.NameUrlPart), area.Name))  <text>| </text>}
+            or browse to the page of the climbing area you want to add a sub-section to and click 'Add place'. If the climbing area is not
+            in database, use the option above to add it.</p>
+        </div>
+
+        <p style="clear:both"><input id="AreaBoulderingAreaRB" type="radio" name="areaType" value="area" /> <b>Bouldering field</b> which contains one or boulders</p>
+        <div id="AreaBoulderingAreaProvinceChoose" class="hidden">
+            <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                <p class="add">Add a bouldering field to @foreach (var province in provinces)
+                                                         {
+            @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, province.NameUrlPart), province.Name)) <text>| </text>}
+            or browse to the province you want to add a bouldering field to and click 'Add place'.</p>
+        </div>
+
+        <p style="clear:both"><input id="AreaNationParkRB" type="radio" name="areaType" value="area" /> <b>National park or mountain</b></p>
+        <div id="AreaNationalParkProvinceChoose" class="hidden">
+            <img src="@Stgs.StaticRt/ui/add32.png" class="add" alt="add indoor climbing" />
+                <p class="add">Add a national park or mountain to @foreach (var province in provinces)
+                                                                  {
+            @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, province.NameUrlPart), province.Name )) <text>| </text> }
+            
+            or <input id="bfpsearch" class="tbox jq_watermark" type="text" name="bfpsearch" title="Type name of province, state or territory to add to" />           
+            
+            </p>
+        </div>        
+
+        <hr />
+        <div class="options">
+            <label>Form options</label>
+            <a href="javascript:reset()" class="jBtn CancelBtn">Back</a>
+        </div>
+    </div>
+    <div id="explainPlaceTypesDIV">
+        
+        <p class="seriousAttention" style="margin:20px 0px 30px 0px;width:624px"><b>It's important you understand some geography!</b><br />
+            Because you're new to adding places on Climbfind, there's a few things you need to get before you start.
+            Please take a minute to watch this video so you understand the difference between areas and locations.    
+        </p> 
+    
+        <div style="height:380px">
+            <object id="scPlayer"  width="640" height="360" type="application/x-shockwave-flash" data="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/20aa080d-b99d-4465-b3f9-a33e5184c66c/scplayer.swf" ><param name="movie" value="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/20aa080d-b99d-4465-b3f9-a33e5184c66c/scplayer.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#FFFFFF" /><param name="flashVars" value="thumb=http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/20aa080d-b99d-4465-b3f9-a33e5184c66c/FirstFrame.png&containerwidth=640&containerheight=360&autohide=true&autostart=false&loop=false&showendscreen=true&showsearch=false&showstartscreen=true&tocdoc=left&xmp=sc.xmp&content=http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/20aa080d-b99d-4465-b3f9-a33e5184c66c/Areas%20and%20Locations%20on%20www.climbfind.com%20V4.mp4&blurover=false" /><param name="allowFullScreen" value="true" /><param name="scale" value="showall" /><param name="allowScriptAccess" value="always" /><param name="base" value="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/20aa080d-b99d-4465-b3f9-a33e5184c66c/" /><iframe type="text/html" frameborder="0" scrolling="no" style="overflow:hidden;" src="http://www.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/20aa080d-b99d-4465-b3f9-a33e5184c66c/embed" height="360" width="640" ></iframe></object>
+        </div>
+
+        <p style="margin-bottom:36px;font-style:italic">If you're still not sure about the difference between areas and locations, you can read more on <a href="/help/faq#areas-and-locations" target="_blank">the Climbfind FAQ</a></p>
+    
+        <hr />
+        <a id="closeAboutAreasAndLocations" href="javascript:reset()" class="jBtn">I got it, let's get started!</a>
+        <hr />
+
+    </div>
+    
+    <hr />
+}

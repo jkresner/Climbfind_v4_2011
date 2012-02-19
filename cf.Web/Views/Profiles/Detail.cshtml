@@ -1,0 +1,43 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage
+@{ CfPageTitleMaster.Set("{0}' climber profile", user.DisplayName);
+   IEnumerable<CheckIn> latestCheckIns = ViewBag.LatestCheckIns;
+   IEnumerable<PartnerCall> latestPartnerCalls = ViewBag.LatestPartnerCalls;
+   ModProfile modProfile = ViewBag.ModProfile;
+   UsersPersonalityMediaCollection personality = ViewBag.PersonalityMedia;
+   List<Opinion> opinions = ViewBag.LatestOpinions;
+   List<Location> indoorLocs = ViewBag.IndoorClimbedAt;
+   bool userHasDeletePostRights = CfPrincipal.IsGod();
+   }
+
+<div id="profile-col-left">
+
+<div id="latest-media">
+    @Html.Partial("Partials/MainMediaRoll", user.SlugUrl)
+</div>
+
+<div id="feed">
+    @if (!user.PrivacyShowFeed) { <p style="margin:100px 220px;font-style:italic">Personal feed has been disabled by this user.</p> }
+    else {
+        @Html.Partial("Partials/FeedPostList", new FeedPostListViewData() { FeedPosts = ViewBag.Posts, UserHasDeletePostRights = userHasDeletePostRights }) }
+</div>
+</div>
+
+<div id="profile-col-right">
+
+    <div style="margin:15px 0px 7px 0px;width:280px;height:29px">
+        <div style="clear:both;height:1px"></div>
+        @(Html.ActionLink<MessagesController>(c => c.New(user.ID), "Send message", new { @class = "jBtn", style = "height:12px;padding:7px 21px!important;margin-right:3px" }))
+        <a href="javascript:alert('Coming in a future version');" class="jBtn" style="height:12px;padding:7px 19px!important">Invite to climb</a>
+    </div>
+
+    @Html.Partial("Partials/ProfileSummary", user)
+    @Html.Partial("Partials/ProfilePersonality", personality)
+    @Html.Partial("Partials/ProfileOpinions", opinions)
+    @if (user.PrivacyShowHistory) { @Html.Partial("Partials/ProfileRecentHistory", latestCheckIns) }
+    @Html.Partial("Partials/ProfilePartnerCalls", latestPartnerCalls)
+    @Html.Partial("Partials/ProfileGyms", indoorLocs)
+    @Html.Partial("ProfileWidgets/ModDetails", modProfile)       
+    
+    @if (CfPrincipal.IsGod()) { @Html.Partial("Partials/ProfileAdmin") }
+
+</div>

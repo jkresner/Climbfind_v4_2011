@@ -1,0 +1,171 @@
+﻿@model cf.Web.Views.Shared.Partials.INewMediaViewModel
+@{ bool fromExisting = Model.ChooseFromExisting; }
+
+@Html.HiddenFor(m => m.Content)
+
+<style type="text/css">
+    #media-choice { width:496px;text-align:center;font-weight:bold;background:none;margin-bottom:20px }
+    #media-choice td { padding:4px;text-align:center;font-weight:bold;background:none }
+    .urlTextbox { float:left;font-size:10px;width:460px!important } 
+    .videoResult { clear:both;display:none;padding-top:10px }
+    .videoResult fieldset { width:100px;padding:5px }
+    .videoResult fieldset legend { background:url('@Stgs.StaticRt/ui/yes.png') no-repeat;padding-left:20px }
+</style>
+
+<table id="media-choice">
+    <tr class="icons">
+        <td><img src="@Stgs.StaticRt/ui/AddMediaThumb.jpg" alt="Upload a photo" /></td>
+        <td><img src="@Stgs.StaticRt/ui/youtube.png"  alt="Use youtube" /></td>
+        <td><img src="@Stgs.StaticRt/ui/vimeo.png" alt="Use vimeo"  /></td>
+        @if (fromExisting) {<td><img src="@Stgs.StaticRt/ui/mymedia.png" alt="From library"  /></td>}
+    </tr>
+    <tr>
+        <td>Image Upload</td>
+        <td>YouTube</td>
+        <td>Vimeo</td>
+        @if (fromExisting) { <td>My Media</td> }
+    </tr>
+    <tr>
+        <td><input id="TypeImage" type="radio" name="Type" value="Image" /></td>
+        <td><input id="TypeYoutube" type="radio" name="Type" value="Youtube" /></td>
+        <td><input id="TypeVimeo" type="radio" name="Type" value="Vimeo" /></td>
+        @if (fromExisting) {<td><input id="TypeMy" type="radio" name="Type" value="My" /></td> }
+    </tr>
+</table>
+
+    <fieldset id="addformfieldset" style="width:496px;display:none"><legend id="typetitle"></legend>
+    
+    <div id="name-input" style="display:none">
+        <div class="editor-label">@Html.LabelFor(m => m.Title) @Html.ValidationMessageFor(m => m.Title)</div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.Title, new { @class = "long" })</div>
+    </div>
+
+    <div id="youtube-select" style="display:none">   
+        <div class="editor-label"><label>YouTube video url</label></div>
+
+        <input id="youtubeUrl" type="text" class="urlTextbox" />
+        <div id="getYouTubeData"><hr /><a href="#" class="jBtn">Get movie</a></div>
+        <div id="youTubeResult" class="videoResult">       
+            <fieldset><legend>Movie found</legend><img id="youtubeThumb" alt="you tube thumb"></fieldset>            
+            @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = HttpContext.Current.Request.Url.AbsoluteUri, CancelText = "Start again" })
+        </div>
+        <hr />
+    </div>  
+
+
+    <div id="vimeo-select" style="display:none">
+        <div class="editor-label"><label>Vimeo video url</label></div>
+        <input id="vimeoUrl" type="text" class="urlTextbox" />
+        <div id="getVimeoData"><hr /><a href="#" class="jBtn">Get movie</a></div>
+        <div id="vimeoResult" class="videoResult">       
+            <fieldset><legend>Movie found</legend><img id="vimeoThumb" alt="you tube thumb"></fieldset>          
+            @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = HttpContext.Current.Request.Url.AbsoluteUri, CancelText = "Start again" })
+        </div>
+        <hr />
+    </div>
+
+    <div id="image-select" style="display:none">
+        <div class="editor-label"><label>Image</label></div>
+        @Html.Partial("Partials/SilverlightClientResizedAzureBlogSingleFileUpload")
+    </div>
+
+    <div id="medialibrary-select" style="display:none" class="mediaPage">
+        @if (fromExisting) { @Html.Partial("MediaSourceMyLibrary", (cf.Web.Views.Media.AddViewModel)Model) }
+    </div>
+
+    </fieldset>
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+        $("#TypeImage").click(function () {
+            hideAll(); setFeildSetTitle("Upload image");
+            var checked = $(this).attr("checked", "checked");
+            if (checked) { $("#image-select").show(); $("#name-input").show(); }
+        });
+
+        $("#TypeYoutube").click(function () {
+            hideAll(); setFeildSetTitle("Grab YouTube movie");
+            var checked = $(this).attr("checked", "checked");
+            if (checked) { $("#youtube-select").show(); }
+        });
+
+        $("#TypeVimeo").click(function () {
+            hideAll(); setFeildSetTitle("Grab Vimeo movie");
+            var checked = $(this).attr("checked", "checked");
+            if (checked) { $("#vimeo-select").show(); }
+        });
+
+        $("#getYouTubeData a").click(function () {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetYouTubeData", "Utility")',
+                dataType: "json",
+                data: "youtubeUrl=" + $("#youtubeUrl").val(),
+                success: function (data) { $("#name-input").show(); RenderYouTubeData(data); }
+            });
+        });
+
+        $("#getVimeoData a").click(function () {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetVimeoData", "Utility")',
+                dataType: "json",
+                data: "vimeoUrl=" + $("#vimeoUrl").val(),
+                success: function (data) { $("#name-input").show(); RenderVimeoData(data); }
+            });
+        });
+
+    });
+
+    function hideAll() {
+        $("#name-input").hide();
+        $("#image-select").hide();
+        $("#youtube-select").hide();
+        $("#vimeo-select").hide();
+        $("#medialibrary-select").hide();
+    }
+
+    function setFeildSetTitle(title) {
+        $("#addformfieldset").show();
+        $("#typetitle").text(title);
+    }
+
+    var jsonResult;
+    function RenderYouTubeData(obj) {
+        jsonResult = obj;
+
+        $("#Content").val(JSON.stringify(jsonResult));
+
+        if (jsonResult.Success != 'true') { alert('Your you tube search failed'); }
+        else {
+            $("#Title").val(jsonResult.Title);
+            $("#youTubeResult").show();
+            $("#getYouTubeData").hide();
+            $("#youtubeThumb").attr('src', obj.Thumbnail);
+        }
+    }
+
+    function RenderVimeoData(obj) {
+        jsonResult = obj;
+
+        $("#Content").val(JSON.stringify(jsonResult));
+
+        if (jsonResult.Success != 'true') { alert('Your vimeo search failed'); }
+        else {
+            $("#Title").val(jsonResult.Title);
+            $("#vimeoResult").show();
+            $("#getVimeoData").hide();
+            $("#vimeoThumb").attr('src', obj.Thumbnail);
+        }
+    }
+
+    //Fires when files are selected to stop the upload being brought up multiple times
+    var allowBrowse = true;
+    function CuteWebUI_AjaxUploader_OnBrowse() { if (allowBrowse) { allowBrowse = false; setTimeout('allowBrowse=true;', 1500); return true; } return false; }
+
+    function UploadFinished(fileUrl) {
+        $("#Content").val(fileUrl);
+        document.forms[0].submit();
+    }
+</script>

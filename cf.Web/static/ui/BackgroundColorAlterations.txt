@@ -1,0 +1,9 @@
+Header:
+
+Amount 40
+Hue 38
+
+Footer
+
+Amount 100
+Hue 30	

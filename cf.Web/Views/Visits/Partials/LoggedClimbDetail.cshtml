@@ -1,0 +1,13 @@
+﻿@model LoggedClimb
+@{ var c = AppLookups.GetCacheIndexEntry(Model.ClimbID); }      
+         
+<dl>
+    <dt>@Html.OutcomeImage(Model.Outcome) @Html.ExperienceImage(Model.Experince)</dt>
+    <dd><a id="@Model.ID" href="#" class="delLC">x</a>
+        
+        <b><a href="@c.SlugUrl" target="_blank">@Model.ClimbName</a></b>
+        <br />@Html.StarImage(Model.Rating) <i>@((ClimbGradeOpinion)Model.GradeOpinion) for grade</i>
+        <p>@Model.Comment</p>
+        <hr />
+    </dd>
+</dl>

@@ -1,0 +1,90 @@
+bin/
+obj/
+.idea/
+latest/
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+#ignore thumbnails created by windows
+Thumbs.db
+
+#Ignore files build by Visual Studio
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.exe
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tlh
+*.tmp
+*.vspscc
+.build
+*.ncb
+*.bak
+*.cache
+*.log
+*.xap
+*.gpState
+*.lib
+*.sbr
+*.user
+*.aps
+
+# Click-Once directory
+publish
+
+# Others
+[Bb]in
+[Oo]bj
+TestResults
+*.Cache
+ClientBin
+stylecop.*
+~$*
+*.dbmdl
+Generated_Code #added for RIA/Silverlight projects
+
+# Backup & report files from converting an old project file to a newer
+# Visual Studio version. 
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+release/latest/
+*.nupkg
+release/*
+App_Data/*
+*App_Data/
+*.Publish.xml
+*FederationMetadata.xml
+
+#Include following exes
+!memcached.exe
+!AspNetMVC3Setup.exe
+
+*Release.config
+*crossdomain.xml
+
+lib/*
+Docs/*
+DatabaseSetup/*
+cf.AzureDeployHost/*
+cf.QRPrinter/*
+cf.PG/*
+cf.Web/google384ab6eb09013cd5.html
+
+*God/
+cf.Web/Views/Home/PrivacyPolicy.cshtml
+cf.Web/Views/Home/TermsOfService.cshtml

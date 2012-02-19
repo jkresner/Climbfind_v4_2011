@@ -1,0 +1,16 @@
+﻿@model string    
+@{ IList<Media> media = ViewBag.MediaList;
+   var mediaCount = media.Count;
+   var photoSlug = "/" + cf.Content.CfUrlProvider.MediaUrlPrefix + Model; 
+   if (Model.StartsWith("/personality")) { photoSlug = "/climber" + Model; }
+}
+
+<div class="media-roll">
+	
+    <p><a href="@photoSlug">
+        @foreach (var m in media) { <img src="@m.ThumbUrl()" /> }
+        @for (int i = 0; i < 11 - mediaCount; i++) { <img src="@Stgs.StaticRt/ui/AddMediaThumb.jpg" /> }
+        </a>
+    </p>
+    <hr />
+</div>

@@ -1,0 +1,8 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage<IEnumerable<PartnerCall>>
+
+<fieldset id="profile-partnercalls">
+<legend>Latest calls <i>-</i> @(Html.ActionLink<PartnerCallsController>(c => c.ListUser(user.ID), "All PartnerCalls"))&trade;</legend>
+
+@if (Model.Count() == 0) { <p>No PartnerCalls&trade; from @user.DisplayName yet…</p> } else {
+    foreach (var c in Model) { <label>@c.StartDateTime.ToString("dd MMM")</label> <span>@@ @Html.PlaceLink(c.PlaceID)</span> } }
+</fieldset>

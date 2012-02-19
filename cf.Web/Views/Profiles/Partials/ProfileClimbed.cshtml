@@ -1,0 +1,10 @@
+﻿@*@inherits cf.Web.Views.Profiles.ProfileWebViewPage<List<LoggedClimb>>
+
+<fieldset id="profile-climbed">
+    <legend>Latest Climbs <i>[See <a href="javascript:alert('coming VERY soon')"> climbing history</a>]</i></legend>
+    
+    @foreach (var lc in Model)
+    { <span> @Html.CfLink(lc.ClimbID)</span><br /> }
+
+</fieldset>
+*@

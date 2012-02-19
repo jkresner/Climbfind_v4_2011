@@ -1,0 +1,24 @@
+﻿1) Organization
+
+	Event though the entities folder is broken into sub-folders, this is only for manageability and project navigation. 
+	All class inside the Entities folder or it's sub-folders are in the namespace 'cf.Entities'
+
+2) Mixture of class origin
+
+	Some classes come from the EF4 Poco TT generation script. Other classes are hand written. Either way, all entities that
+	are accessed via the DataAccess namespace (repository classes) implement the IKeyEntity<T> interface.
+
+	Hence classes are partial and some have a declaration both from the .tt script and in another sub-folder inside the
+	Entities folder.
+
+3) Validation strategy
+
+	It's frustrating that if you apply a meta data class to a class that does not contain all the properties within the meta
+	data class .net throws an exception. Otherwise it would have been perfect to define the validation set once and apply
+	that metadata type to the entity as well as all the view data classes.
+
+	Instead to minimize repetition the strategy is as follows
+
+	i) Define a create entity validation class (which is the minimum fields required to create an entity)
+	ii) Define a complete entity validation class (which inherits the create entity validation class)
+	iii) For each edit view model manually copy over the validation properties relevant to that class (SO ANNOYING!)

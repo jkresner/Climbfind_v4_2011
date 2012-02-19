@@ -1,0 +1,4 @@
+﻿@model Area    
+    
+@if (!string.IsNullOrWhiteSpace(Model.SearchSupportString)) { <p style="font-size:10px"><b>Related terms: </b>@Model.SearchSupportString</p> }
+@if (!string.IsNullOrWhiteSpace(Model.Description)) { <p style="color:Black">@Html.Raw(Model.Description.GetHtmlParagraph())</p> }

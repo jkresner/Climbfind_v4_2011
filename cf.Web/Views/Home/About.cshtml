@@ -1,0 +1,74 @@
+﻿@{ ViewBag.Title = "Rock Climbing Social Network"; }
+
+<style type="text/css">  #col1 p {font-size:13px } </style>
+
+<div id="col1">
+
+<div id="col1-content">
+
+<img src="@Stgs.StaticRt/screenshots/traffic/cf3-growth.png" style="float:right;margin-top:15px;border:solid 1px #d3d3d3;padding:3px" />
+
+<div style="float:left;width:440px">
+<h1>Rock Climbing Social Network</h1>
+<p>
+
+Climbfind is the world's newest and fastest growing rock climbing social network.
+Members are active in 
+<a href="/rock-climbing-usa" target="_blank" title="American Rock Climbing Netowrk, USA Indoor Climbing Social Network">The USA</a>, 
+<a href="/rock-climbing-canada" target="_blank" title="Canadian Rock Climbing Netowrk, Canada Indoor Climbing Social Network">Canada</a>,
+<a href="/rock-climbing-england" target="_blank" title="English Rock Climbing Netowrk, British Indoor Climbing Social Network">England</a>,
+<a href="/rock-climbing-scotland" target="_blank" title="Scottish Rock Climbing Netowrk, Scotland Indoor Climbing Social Network">Scotland</a>,
+<a href="/rock-climbing-australia" target="_blank" title="Australian Rock Climbing Netowrk, Australia Indoor Climbing Social Network">Australia</a>,
+<a href="/rock-climbing-germany" target="_blank" title="German Rock Climbing Netowrk, Germany Indoor Climbing Social Network">Germany</a> and many other countries.
+Climbfind was built to help you find indoor climbing partners and when you're ready to climb outdoors you can also use it to search for outdoor rock 
+climbing partners. It helps you
+become familiar with other climbers who climb at the same places as you. When you begin building up your climbing history via your Logbook, 
+Climbfind starts to suggest to you other climbers who have climbed where you have climbed.
+</p>
+<h2 id="see-whos-rock-climbing">See who's rock climbing</h2>
+<p>Climbfind provides the ability to log the rock climbing places you visit. Rock climbing areas and locations in our
+<a href="/world-rock-climbing-database" target="_blank">World Rock Climbing Database</a>
+include indoor rock climbing facilities (a.k.a. rock gyms/ indoor climbing walls) as
+well as outdoor rock walls & boulders. Your visits are visible to other members and you can see where others are climbing and what climbs
+they've tried in the climbing feed.
+</p>
+</div>
+<hr />
+
+
+
+
+<hr />
+<h2 id="see-whos-rock-climbing">Finding new climbing buddies</h2>
+
+<p>Climbfind is the world's most advanced and powerful social networking resource for <a href="/find-rock-climbing-partners"><b>finding climbing partners</b></a>.</p>
+
+
+@if (!User.Identity.IsAuthenticated)
+{
+<p>Ready to get started?</p>
+
+<div style="height:228px;height:60px;margin:50px 0px 20px 155px">
+    <div id="login"><a href="/login" class="jBtn" style="padding:20px 44px 20px 44px;font-size:34px">Sign in now</a></div>
+</div>
+}
+
+
+@*<H4>Want to meet new climbers in your area? Climbfind!</H4>
+Climbfind allows climbers to connect with each other to climb both indoors and outside. Post a PartnerCall for a specific area (Southeast Base of El Capitan) or a general area (Upstate New York) and other climbers will be notified and new climbing partnerships are made!
+
+<H4>If your partner bails on you- Climbfind! </H4>
+Post a partnercall or just see which other climbers have checked in to your crag or gym recently and go meet up with a familiar face or make a new connection.  
+
+<H4>On a roadtrip? Climbfind!</H4>
+Use our maps to find a place to climb that you may not even know about, ask for a partner, and meet up with that person for a fun time at the gym or outdoors!
+
+<H4>Curious what is happening in your local climbing community? Climbfind!</H4>
+The Feed on your homepage keeps you updated on the climbing activity for your local area- see what climbs are being climbed (avoid waiting in line!), see who is checking in, find out which climbs are being added, all sorts of community news! 
+
+<br>
+<img src="http://static.climbfind.com/ui/climbfind.jpg"><br /> Partnering People and Places
+*@
+    
+</div>
+</div>

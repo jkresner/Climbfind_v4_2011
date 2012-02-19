@@ -1,0 +1,45 @@
+﻿@model AreaEditViewModel
+@{  Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   Area area = ViewBag.Area; Country country = AppLookups.Country(area.CountryID);
+   CfPageTitleMaster.Set("Verify Area: {0}", area.Name);
+}
+<div>
+
+@using (Html.BeginForm()) {
+
+    <h1>Verify: <a href="@area.SlugUrl">@area.Name</a>, @country.Name</h1>    
+    
+    <fieldset><legend>Area details</legend>
+        <p style="margin-top:0;padding-top:0">Open <a href="@area.SlugUrl" target="_blank">the @area.Name area page</a> in a separate browser window / tab and
+            check each box to confirm the information on the @area.Name page is ready to be verified:</p>
+    
+        <input type="checkbox" /> Is there a description?
+        <br /><input type="checkbox" /> Does the description contain only accurate information?
+        <br /><input type="checkbox" /> Are all the climbing areas and crags that you associate with @area.Name showing on the area page?
+        <br /><input type="checkbox" /> Are all the indoor climbing gym that you know about showing on the area page?
+
+        <hr />
+        <a href="#" class="more">Verify details</a>
+    </fieldset>
+    
+    <fieldset><legend>Area map image</legend>
+        
+        
+        @if (area.HasMapImage)
+        {
+        <img src="@(Stgs.ImgsRt + area.MapImageRelativeUrl)" />
+        <p>
+            <input type="checkbox" /> Is the image iconic of the area
+        <br /><input type="checkbox" /> Is the image clear
+        </p>
+        <hr />
+        <a href="#">Verify map image</a> 
+        }
+        else
+        {
+            <p style="color:red">@area.Name does not have a map image.</p>
+            <p>Please @(Html.ActionLink<ModerateController>(c=>c.AreaEdit(area.ID), "edit the "+area.Name + " page")) and add one now.</p>
+        }
+    </fieldset>
+}
+</div>

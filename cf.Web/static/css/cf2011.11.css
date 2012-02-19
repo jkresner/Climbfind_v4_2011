@@ -1,0 +1,645 @@
+/* import stylesheets and hide from IE/Mac \*/
+@import url("reset.css");
+@import url("jquery-ui.css"); 
+
+/* Basics
+----------------------------------------------------------*/
+body { font:12px/170% 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;color:#777;margin:0;padding:0 }
+hr { border:none;width:0px;clear:both;height:1px;background:transparent }
+strong { font-weight:bold }
+
+a:link, a:visited { text-decoration:none;color:#CB4721 }
+a:hover { color:black }
+a.delete { color:Red }
+
+/* Headings
+----------------------------------------------------------*/
+h1, h2, h3, h4, h5, h6 { color:#333333;line-height:1em;font:'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;font-weight:bold }
+h1 { font-size:30px;margin:10px 0 0 0;padding-bottom:4px;letter-spacing:-2.0px;}
+h1 i { font-size:23px;font-weight:normal;text-decoration:none }
+h2 { font-size:20px;margin-bottom:0;padding-bottom:4px;letter-spacing:-1.2px }
+h2 a { color:#333333 }
+h3 { font-size:18px;letter-spacing:.5px;margin:8px 0px 8px 0; }
+h4 { color:#555555;font-size:18px;margin:4px 0px 8px 0 }
+h5 { font-size:13px }
+h6 { font-weight:normal;color:black;margin:4px 0px 8px 0;padding:4px 0px 0px 0px }
+
+/* Forms
+----------------------------------------------------------*/
+form { margin:0;padding:12px;background:#F3F4F5;border: 1px solid #E2E4E7 }
+form h1 { margin:4px 0px 10px 0px;font-weight:bold;font-size:1.5em;text-decoration:underline;letter-spacing:-1px; }
+form p { padding: 12px 0 5px 0;	margin: 0;color:black } /* old blue color: #2C76A6 */
+
+form .short { width:180px!important }
+form .long { width:400px!important }
+form .vlong { width:600px!important }
+form .description { width:624px!important;height:80px!important }
+form input[type='text'] { width:300px }
+form input[type='radio'] { border:none }
+form input[type='checkbox'] { border:none;padding:3px }
+
+form .options { background:transparent;border-top:solid 1px #d3d3d3;margin:30px 0px 0px 0px;padding:5px 0px 5px 5px }
+form .options label { display:block;font-size:10px;font-weight:normal;font-style:italic;margin-left:1px;color:black;margin-bottom:14px }
+form .options .validation-summary-errors { float:right;margin-right:150px;font-size:10px;width:550px }
+
+label { font-weight:bold;color:#666666 }
+fieldset { border:1px solid #ddd;padding:1.4em;margin:0 0 0.5em 0 }
+legend { font-size:1.2em;font-weight:bold;color:Black }
+
+input, select, textarea { margin:5px 0;padding:7px 6px;color:#6A6969;border-width:1px;
+	border-style:solid;border-color:#D4D4D4 #EBEBEB #EBEBEB #D4D4D4;font: 11px 'Lucida Grande', Verdana, Helvetica, sans-serif }
+input:focus, select:focus, textarea:focus { color:#19465D;background:#EEF8FB }
+input.button { font: bold 12px Arial, Sans-serif;height:30px;margin:0;padding:2px 3px;
+	color: #FFF;background:#2C76A6;border-width:1px;border-style:solid;border-color:#86BBDF #245F86 #245F86 #86BBDF;cursor:pointer }
+
+#modal-placeholder { display:none }
+#modal-placeholder form { background:transparent;padding:0;border:none }
+
+.seriousAttention { margin:10px 0px 26px 0px;width:500px;background-color:#ffeeee;border:1px solid red;padding:7px;color:Black }
+.seriousAttention b { color:red }
+
+/* Tables
+----------------------------------------------------------*/
+table { border-collapse:collapse;margin:0px;padding:0;width:100% }
+tr { background: #FFF; }
+th, td { text-align:left;border-width:1px;border-style:solid;padding:5px }
+th { background:#d3d3d3;border-color:white;color:Black;font-weight:normal }
+td { border-color: #E9E9E9;padding:2px 4px 2px 4px }
+
+/* ------------------------------------------------------------------------------
+    B U T T O N S
+--------------------------------------------------------------------------------- */
+
+.jBtn { font-size:14px;padding:4px 7px 4px 7px;border:1px solid #fbcb09;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;font-weight:bold;color:#CB4721!important }
+.jBtn:hover { color:Green;background:#E6F0E6;cursor:pointer;border: 1px solid green }
+a.jBtn  { padding:5px 11px 5px 11px }
+.SubmitBtn { font-size:18px;padding:5px 12px 5px 12px;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x!important;font-weight:bold;color:#c77405; }
+.SubmitBtn:hover { color:Green;background:#E6F0E6;cursor:pointer;border: 1px solid green }
+.DeleteBtn { border:1px solid #FF9999;font-weight:normal }
+.DeleteBtn:hover { border:1px solid red;color:red!important;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x; }
+.CancelBtn { font-weight:normal;border: 1px solid #CCCCCC;background:url("../ui/jquery/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6!important; }
+.CancelBtn:hover { border:1px solid black; }
+
+.ButtonNextToTextBox { margin-top:2px;padding-top:4px;padding-bottom:5px;float:none!important }
+
+/* ------------------------------------------------------------------------------
+    L A Y O U T
+--------------------------------------------------------------------------------- */
+
+#top { position:relative;margin:0 auto;width:1064px;padding:5px 0px 5px 0px;height:44px }
+#top img { margin:1px 0px 0px 3px;float:left }
+#top iframe { overflow:hidden;width:150px;height:21px;margin:19px 0 0 14px;position:relative;top:-5px;border:none;float:left }
+#top p { position:relative;width:190px;font-size:9px;line-height:14px;float:left;margin:17px 200px 0px 0px;font-style:italic }
+#top #follow { float:left;position:relative }
+
+#top ul { margin:14px 16px 13px 13px;float:right }
+#top ul li { float:left;font-size:13px;margin:0px 5px 0px 0px; }
+
+#quick-search { float:right;background:transparent;border:none;margin:3px 5px 0px 0px;padding:0;width:290px }
+#quick-search div { border:none;width:290px;height:38px;padding:0;margin:0px 0px 10px 0px;background:url('../ui/search.png') }
+#quick-search input { border:none;float:left;padding:0;margin:0 }
+#quick-search input.tbox { color:#7d8285;font-weight:bold;margin:15px 0 10px 10px;width:290px;background-color:transparent!important }
+
+#nav-section { background:black;height:41px }
+#nav-wrap { position:relative;margin:0 auto 0 auto;width:1064px;padding:5px 0px 4px 0px }
+#nav-wrap #nav { width:880px;margin:0 0px 0px -4px;padding:6px 0px 0px 0px;float:left }
+#nav-wrap #nav li { float:left;margin:0;padding:0 }
+#nav-wrap #nav a { float:left;margin:0;padding:0 15px 5px 15px;color:#FFCC00;font:bold 14px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif }/*color:#baa7a7*/
+#nav-wrap #nav li a:hover, #nav-wrap #nav li a:active { border:none;color:white }
+#nav-wrap #nav li#current a { /* color:#FFCC00 */ }
+#nav-wrap #options { float:right;width:180px;padding:0;margin:1px 6px 0 0;text-align:right }
+#nav-wrap #options span { padding-top:4px;display:block }
+#nav-wrap #options li { margin:0 0 0 6px;display:block;float:right;padding:0 }
+#nav-wrap #options li:hover { border:solid 1px black }
+
+/* content */
+#content-wrap { background:url('http://static.climbfind.com/ui/header-space-bg.jpg')!important;clear:both;margin:0;padding:0;background:#fff;width:100%;float:left }
+#content { width:1034px;margin:0 auto;padding:0 10px 20px 10px;background:white }
+
+.takeaction { width:90%;height:40px;background:#FFB733;margin:0px auto 10px auto;padding-top:20px;text-align:center;border-bottom:solid 1px black }
+.takeaction p { font-size:14px;color:Black;font-weight:bold }
+.takeaction a.jBtn { border:solid 1px gray;padding:5px 20px }
+
+/* single column */
+#main { float:left;margin:0;padding:12px 0 0 20px;width:736px;border-right:solid 1px #F1F1F1 }
+
+/* 2 columns */
+#col1 { padding:20px;min-height:400px;background:url('../ui/BG_MidSize.png') no-repeat }
+#col1-content { background:rgba(255, 255, 255, 0.95);padding:10px 10px 10px 10px;min-height:580px }
+#col1 h1 { margin-bottom:10px }
+#col1 p { margin-bottom:10px;font-size:12px }
+
+#col2-left { border-right:1px solid #F1F1F1;float:left;margin:0;padding:0 17px 0 8px;width:730px;min-height:400px }
+#col2-left h1 { margin:14px 0px 10px -2px }
+#col2-left h2 { font-size:22px }
+.col2-left-1 { border-right:1px solid #F1F1F1;float:left;width:150px }
+.col2-left-2 { float:left;width:578px }
+* html body .col2-left-1 .post-meta ul li { height: 1%; }
+
+#col2-right { float:right;font-size:0.95em;margin:0 3px 0 0;padding:5px 4px 0 4px;width:265px }
+#col2-right .info { margin:14px 5px 5px 5px }
+
+/* sidemenu */
+.topsidemenu { margin-top:0px }
+.sidemenu { width:280px }
+.sidemenu h3 { font:bold 1.4em 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;letter-spacing:.2px;margin-left:10px;color:#333;padding-top:0 }
+.sidemenu ul { text-align:left;margin: 10px 15px 10px 8px;padding: 0;border-top: 1px solid #EFEFEF; }
+.sidemenu ol { text-align:left;margin:10px 15px 10px 8px;padding: 0;border-top: 1px solid #EFEFEF; }
+.sidemenu ul li { list-style:none;font-size:11px;margin:0;padding:7px 5px;border-bottom:1px solid #EFEFEF }
+.sidemenu ol li { list-style-position:inside;font-size:11px;margin:0;padding:7px 5px;border-bottom:1px solid #EFEFEF }
+* html body .sidemenu ul li { height: 1%; }
+.sidemenu p { margin:5px 0 0 10px } 
+.sidemenu dl { margin:5px 0 0 10px } 
+.sidemenu dd { padding-left:10px } 
+.sidemenu .pad25 { padding-left:25px } 
+.sidemenu .pad40 { padding-left:40px } 
+.sidemenu .pad55 { padding-left:55px }
+.sidemenu .pad70 { padding-left:70px }
+
+.legal-page { text-align:justify!important }
+.legal-page span { display:inline-block;width:40px }
+.legal-page p { margin-top:10px }
+
+/* ------------------------------------------------------------------------------
+    S I T E   W I D G E T S
+--------------------------------------------------------------------------------- */
+
+.side-suggestion { }
+.side-suggestion fieldset { padding-top:6px }
+.side-suggestion h4 { font-size:14px }
+.side-suggestion img { float:left }
+.side-suggestion p { float:left;width:171px;margin:1px 0px 0px 10px }
+
+/* ------------------------------------------------------------------------------
+    F O O T E R
+--------------------------------------------------------------------------------- */
+
+#footer-outer { clear:both;text-align:left;width:100%;font-size:.9em;color:Black;padding-bottom:30px;border-top:#1a5d8a;background:black url('../ui/rock-climbing-partners.jpg') bottom right no-repeat }
+#footer-wrap { width:1000px;margin:0 auto }
+#footer-wrap p { color:White }
+#footer-wrap a:link, #footer-wrap a:visited { color: #fff; }
+#footer-wrap a:hover { color:#CB4721; }
+#footer-wrap h3 { font-size:1.7em;letter-spacing:.2px;margin:25px 0 15px 0;color:#FFCC00 }
+#footer-wrap .col { width:250px;float:left }
+
+/* footer-list */
+.footer-list ul { margin:10px 25px 10px 5px;background:url('../ui/footer-line.gif') repeat-x left top;list-style:none;padding:0 }
+.footer-list ul li { border-bottom:0.5px dotted gray; }
+.footer-list ul li a:link,
+.footer-list ul li a:visited { display:block;width:98%;line-height:2em;padding:5px 0 5px 5px;margin-left:0;color:#fff }
+.footer-list ul li a:hover { color: #99CCFF; }
+
+/* ------------------------------------------------------------------------------
+    A R C H I V E S  ( A L E R T S )
+---------------------------------------------------------------------------------*/
+ul.archive { margin:10px 20px 10px 0px;padding:0;border-top: 1px solid #eeeeee }
+ul.archive li { margin:0;padding: 12px 4px;border-bottom: 1px solid #eeeeee;list-style: none }
+ul.archive li label { display:block;float:left;width:94px;font-size:10px }
+ul.archive li .post-title { margin:0;padding:0 }
+ul.archive li .post-details { margin-left:0;margin-top:0;font-size:.9em }
+
+/* ------------------------------------------------------------------------------
+    P R O F I L E
+--------------------------------------------------------------------------------- */
+
+#profile-col-left { float:left;margin:0;padding:0 17px 0 8px;width:730px }
+#profile-col-left #latest-media { margin:14px 0px 10px 5px }
+
+#profile-col-left #feed { padding:0 7px 0 5px }
+#profile-col-left #postslist li { border-left:solid 0px white!important } 
+#profile-col-left #postslist li div { width:630px } 
+#profile-col-left #postslist li .ops { width:80px!important }
+
+#profile-col-right { float:right;font-size:0.95em;margin:0 0px 0 0;padding:5px 0px 0 4px;width:275px }
+#profile-col-right fieldset { padding:6px 15px 6px 15px }
+#profile-col-right fieldset legend { font-size:10px }
+#profile-col-right fieldset legend i { font-size:10px;color:Gray;font-weight:normal }
+#profile-col-right fieldset legend i a { font-size:11px;font-weight:bold }
+
+#profile-summary { }
+#profile-summary .pic { margin-bottom:10px;display:block }
+#profile-summary label { float:left;width:82px;display:block;clear:left }
+#profile-summary span { float:left;display:block }
+#profile-personality { font-size:10px;padding:8px 8px 0px 15px!important }
+#profile-personality p { margin-bottom:8px }
+#profile-personality div { width:40px;height:40px;overflow:hidden;float:left;margin:0px 8px 7px 0px }
+#profile-personality div img { width:40px }
+#profile-checkins { font-size:10px }
+#profile-checkins label { float:left;width:40px;display:block;clear:left;font-weight:normal }
+#profile-checkins span { float:left;display:block }
+#profile-opinions { font-size:10px } 
+#profile-opinions img { padding:1px 1px 0px 0px } 
+#profile-partnercalls { font-size:10px }
+#profile-partnercalls label { float:left;width:40px;display:block;clear:left;font-weight:normal }
+#profile-partnercalls span { float:left;display:block }
+#profile-gyms { padding-left:3px!important;padding-right:3px!important;font-size:10px }
+#profile-gyms a { float:left;width:126px;text-align:center;margin-bottom:7px;margin-left:6px }
+#profile-gyms a img.logo { width:94%;display:block;margin:1px auto 2px auto }
+#profile-gyms p { margin-left:12px }
+
+#profile-moddetails { font-size:10px }
+#profile-moddetails label { float:left;width:130px;display:block;clear:left;font-weight:bold }
+#profile-moddetails span { float:left;display:block }
+
+.profile-page h1 { margin-top:15px }
+
+/* ------------------------------------------------------------------------------
+    A D S
+--------------------------------------------------------------------------------- */
+
+#leader-ad { margin:10px 0px 10px 2px}
+.side-sponsor-ad { margin:10px 10px 20px 10px;text-align:center;padding:4px 1px 6px 1px }
+.side-sponsor-ad legend { margin:0px 0px 0px 10px;display:inline!important }
+
+/* ------------------------------------------------------------------------------
+    P L A C E S   P A G E S   L A Y O U T
+--------------------------------------------------------------------------------- */
+/*ratings*/
+h6 { margin:-10px 0 8px 0;color:black;font-size:11px }
+h6 img { padding:1px 1px 0px 3px }
+
+.area-map { margin:20px 0px 20px 0px }
+.area-avatar { margin:10px 0px 15px 8px;padding:7px }
+.area-avatar legend { margin:0px 0px 0px 8px }
+
+.outdoor-location-map { margin:5px 0px 20px 0px }
+
+.places-list { margin:10px 0px 10px 0px;padding:0 }
+.places-list li { text-align:center;float:left;width:116px;margin-right:5px }
+.places-list b { display:block;margin-bottom:0px;font-size:10px }
+.places-list i { display:block;margin-bottom:6px;font-size:9px;color:gray;height:18px }
+.places-list img { width:100px;margin-bottom:5px }
+.places-list img.stars { width:57px;margin-top:6px;height:10px }
+.places-list .no-img { border:solid 1px #d3d3d3;width:100px;height:65px;font-style:italic;margin:0px auto 30px auto }
+
+/*#places-climbs-list { margin:20px 0px 10px 0px;padding:0 }
+#places-climbs-list li { margin:0px 0px 10px 0px;clear:both }
+#places-climbs-list img { float:left;padding-bottom:20px }
+#places-climbs-list span { float:left;margin:-4px 2px 2px 6px }
+#places-climbs-list b { display:block;font-size:13px }
+#places-climbs-list span img { margin:5px 3px 2px 1px }
+#places-climbs-list label { display:block;font-weight:bold;font-size:16px;float:left;margin-right:8px;width:30px }*/
+
+.mainAddData { font-size:14px;padding:15px 0px 15px 0px }
+.mainAddData p { padding:0px 0px 15px 0px;font-style:italic }
+.mainAddData label { float:left;font-weight:normal;padding:5px 10px 0px 0px }
+.mainAddData .jBtn { float:left;margin-bottom:16px }
+
+#side-top-climbs { }
+#side-top-climbs hr { height:1px }
+#side-top-climbs li { clear:both;padding-bottom:1px }
+#side-top-climbs label { clear:left;display:block;font-size:11px;float:left;margin:-5px 6px 0 -5px;width:22px }
+#side-top-climbs img { float:left }
+#side-top-climbs div { float:left;width:160px;margin:-3px 0px 0px 5px;line-height:15px }
+
+#side-opinions { }
+#side-opinions img { float:left }
+#side-opinions div { float:left;width:200px;margin:-3px 0px 0px 5px;line-height:15px }
+#side-opinions div img { padding:3px 3px 0px 0px }
+
+.main-climb-list { margin:20px 0px 0px 2px;font-size:11px }
+.main-climb-list h2 { padding-bottom:20px }
+.main-climb-list div { float:left;border:dotted 1px #d3d3d3;padding:5px;text-align:center;width:104px;margin:0px 5px 5px 0px }
+.main-climb-list em { margin-top:-2px;display:block;font-weight:bold;height:34px;line-height:1em;font-size:10px }
+.main-climb-list span { display:block;margin:-3px 0px 0px 0px;font-size:9px }
+.main-climb-list span a { display:inline;font-weight:normal }
+.main-climb-list .stars { display:block;margin:6px auto 4px auto }
+.main-climb-list i { display:block;margin:0px auto 0px auto;font-size:9px }
+
+.media-roll {}
+/*.media-roll h4 { float:left;margin-right:10px;padding-top:10px }*/
+.media-roll .thumbs { float:left;margin:0px 0px 0px 0px }
+.media-roll img { margin-right:4px!important;padding:4px;border:solid 1px #d3d3d3;width:48px;height:48px }
+.media-roll p { float:left }
+
+/* ------------------------------------------------------------------------------
+	L O C A T I O N   &   C L I M B    P A G E S
+--------------------------------------------------------------------------------- */
+
+.location-content #info-details { margin:0px;padding:5px 0 10px 0 }
+.location-content #activity { margin-top:10px;padding:5px 0 10px 0;border-top:solid 1px #F3F3F3 }
+.location-content .right { margin-right:10px }
+.location-content .logo { margin:0px 0px 10p 0px;width:220px;border:solid 1px #F3F3F3;padding:3px }
+.location-content .avatar { margin:0px 0px 10px 0px;width:220px;border:solid 1px #F3F3F3;padding:3px  }
+.location-content .climbingTypes { text-align:center }
+.climbing-types div { float:left;width:68px;background:none;text-align:center;padding:2px 0px 6px 0px;margin:10px 0px 1px 1px }
+.climbing-types span { margin:2px auto 4px auto;text-align:center }
+.climbing-types img { border:1px solid #DADADA;padding:5px; }
+
+.climb-content { float:left;width:440px }
+.climb-content label { clear:left;float:left;display:block;width:100px }
+.climb-content span { float:left;display:block;width:300px }
+.climb-avatar { float:right;width:264px;text-align:center }
+.climb-avatar div { border:dotted 1px gray;width:240px;height:320px;margin:auto }
+.climb-avatar p { font-style:italic;margin-top:10px }
+
+/* ------------------------------------------------------------------------------
+    F O O T E R
+--------------------------------------------------------------------------------- */
+
+#latest-media-roll { padding: 0 0 10px 0;margin:0;width:100%;background:url('../ui/footer-line.gif') repeat-x left bottom }
+#latest-media-roll p { padding:36px 0 0 100px }
+#latest-media-roll h3 { font-style:italic;float:left;display:inline;width:60px;margin:25px 5px 0 0;padding:2px 0px 0px 0px;font-size:14px }
+#latest-media-roll div { float:right;display:inline;width:920px;margin:15px 10px 0 0px;padding:0 }
+#latest-media-roll img { position:relative;padding:2px;margin:10px 0px 0px 16px;background:black;border:1px solid #FFCC00;width:50px;height:50px }
+
+/* ------------------------------------------------------------------------------
+    Feed
+--------------------------------------------------------------------------------- */
+
+#col1-homefeed { float:left;width:150px }
+#col2-homefeed { float:left;width:595px }
+#col3-homefeed { float:right;margin:0 3px 0 0;padding:5px 4px 0;width:265px }
+
+#feed-places { width:150px;font-size:.9em;margin:10px 0 20px 0;padding:5px 0 0 0  }
+#feed-places h5 { text-align:right;margin:0 5px 10px 5px;padding:0;color:#555 }
+#feed-places ul { list-style:none;margin:0;padding:0;border-top:1px solid #F1F1F1 }
+#feed-places ul li { list-style:none;border-bottom:1px solid #F1F1F1;padding:3px 6px 3px 4px;margin:0;text-align:right }
+#feed-places ul li i { font-size:8px;display:block;font-style:normal;line-height:10px }
+
+#feed-filters { width:150px;font-size:.9em;margin:5px 0 20px 0;padding:0 }
+#feed-filters h5 { text-align:right;margin:0 5px 10px 5px;padding:0;color:#555 }
+#feed-filters ul { list-style:none;margin:0;padding:0;border-top:1px solid #F1F1F1 }
+#feed-filters ul li { list-style:none;border-bottom:1px solid #F1F1F1;padding:3px 6px 3px 4px;margin:0;text-align:right }
+
+#cffeed-post-options { margin:0;padding:0;height:26px }
+#cffeed-post-options li  { float:left;margin:0;padding:3px 1px 1px 1px;background:white; }
+#cffeed-post-options li.current  { background:#FFCC00; }
+#cffeed-post-options a { height:18px;float:left;margin:0;padding:0 15px 5px 15px;color:black;font:bold 14px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif }
+#cffeed-post-options li.current a { color:black }
+
+#cffeed-post-options { margin:10px 0 0 0 }
+
+#cffeed-checkInForm { padding:2px 0px 0px 0px }
+#cffeed-checkInForm form { padding-bottom:2px }
+#cffeed-checkInForm .where { float:left;width:330px;padding-top:1px }
+#cffeed-checkInForm .where input { float:left;width:310px }
+#cffeed-checkInForm .when { float:left;width:158px }
+#cffeed-checkInForm .when i { font-size:11px }
+#cffeed-checkInForm .when input { float:left;width:50px }
+#cffeed-checkInForm .go { float:left;margin:26px 0 0 0;width:80px }
+#cffeed-checkInForm .go a { display:block;height:17px!important;width:36px!important;text-align:center }
+#checkin-comment-dialog { display:none }
+#checkin-comment-dialog label { margin:10px 0px 5px 0px;display:block }
+
+#cffeed-logClimbsForm { padding:2px 0px 0px 0px }
+#cffeed-logClimbsForm form { padding-bottom:5px }
+#cffeed-logClimbsForm #logClimbsClimbs { padding:0 }
+#cffeed-logClimbsForm .when { float:left;width:357px;padding-top:1px }
+#cffeed-logClimbsForm .when i { float:right;font-size:11px;margin-right:10px }
+#cffeed-logClimbsForm select { width:350px }
+#cffeed-logClimbsForm .go { float:left;margin:21px 0 0 0;width:80px }
+#cffeed-logClimbsForm .go input { width:60px;height:30px!important }
+
+#cffeed-partnerCallForm { padding:2px 0px 0px 0px }
+#cffeed-partnerCallForm form { padding-bottom:7px }
+#cffeed-partnerCallForm .where { float:left;width:390px;padding-top:1px }
+#cffeed-partnerCallForm .where input { float:left;width:370px }
+#cffeed-partnerCallForm .go { float:left;margin:20px 0 0 0;width:80px }
+#cffeed-partnerCallForm .go input { width:60px }
+
+#cffeed-talkForm { padding:2px 0px 0px 0px }
+#cffeed-talkForm label { display:block;clear:both }
+#cffeed-talkForm input { display:block;clear:both }
+#cffeed-talkForm .where { display:block;float:left;height:120px }
+#cffeed-talkForm #TalkComment { height:50px;width:440px;margin-top:10px }
+#cffeed-talkForm .go { width:80px;float:left;padding:101px 0 0 10px }
+
+p.feed-loading { background:url('http://static.climbfind.com/ui/feed-loading.gif') no-repeat bottom center;text-align:center;margin:30px auto 30px auto;height:50px;font-size:11px }
+
+#posts { padding:0;margin:0 }
+#postslist { border-left:solid 1px #d3d3d3;padding:0;margin:0 }
+#postslist li { clear:both;border:solid 1px #F1F1F1;padding-left:10px}
+#postslist li img.usr { float:left;margin:10px 10px 5px 0;width:40px }
+#postslist li div { float:left;margin:5px 0 0 0;width:520px }
+#postslist li label { font-weight:normal;color:#777777;font-size:10px }
+#postslist li .ops { float:right;width:80px;text-align:right }
+#postslist li .actions { font-size:10px;clear:both }
+#postslist li p { font-size:13px;color:Black }
+
+/* ------------------------------------------------------------------------------
+    C O N V E R S A T I O NS
+--------------------------------------------------------------------------------- */
+
+#col1-messages { float:left;width:210px }
+#col2-messages { float:left;width:515px;padding-left:20px }
+#col3-messages { float:right;margin:0 3px 0 0;padding:5px 4px 0;width:265px }
+#conversations { font-size:.9em;margin:10px 0 20px 0;padding:5px 0 0 0  }
+#conversations h5 { text-align:right;margin:0 5px 10px 5px;padding:0;color:#555 }
+#conversations ul { list-style:none;margin:0;padding:0;border-top:1px solid #F1F1F1 }
+#conversations ul li { list-style:none;border-bottom:1px solid #F1F1F1;padding:3px 6px 3px 4px;margin:0;text-align:right;clear:both }
+#conversations ul li i { font-size:10px;display:block;font-style:normal;line-height:10px }
+#conversations ul li p { color:Black;width:152px;letter-spacing:-0.6px;overflow:hidden;height:18px }
+#conversations ul li img { float:right;margin-top:6px }
+#conversations ul li div { float:right;height:42px;margin-right:8px }
+
+#conversation li { margin:10px 0px ;border-top:solid 1px #d3d3d3;padding:10px 0 0 0px }
+#conversation p { color:Black;margin:3px -1px;line-height:14px }
+#conversation img { float:left;margin:4px 10px 0 0 }
+#conversation div { float:left;width:450px }
+#conversation i { float:right }
+
+/* ------------------------------------------------------------------------------
+    C L I M B I N G   H I S T O R Y
+--------------------------------------------------------------------------------- */
+
+#climbing-history { }
+#climbing-history p { color:Black;margin:2px 2px 6px 2px }
+#climbing-history .details { padding-left:20px }
+#climbing-history li { clear:both;border-top:solid 1px #F1F1F1;padding:5px 0px }
+#climbing-history .climbs { float:left;padding:0px 0px 10px 0px }
+#climbing-history .climbs li { clear:left;border:none!important;padding:0 }
+#climbing-history .climbs li img { float:left }
+#climbing-history .climbs li span { float:left;display:block;margin:4px 0px 0px 6px }
+#climbing-history .media { float:right;padding-bottom:10px }
+#climbing-history .media li { float:left;border:solid 1px #F1F1F1!important;max-width:76px;clear:none!important;padding:3px 3px 0 3px!important;margin-right:5px }
+
+/* ------------------------------------------------------------------------------
+    Water mark corrections
+--------------------------------------------------------------------------------- */
+
+#cffeed-talkForm .watermark { height:29px!important;line-height:29px!important }
+#cffeed-partnerCallForm .watermark { height:29px!important;line-height:29px!important }
+#locnew .watermark { height:29px!important;line-height:29px!important }
+#Search .watermark { top:12px!important }
+#addLoggedClimbForm .watermark { top:12px!important }
+#addLoggedClimbForm .watermark { top:12px!important }
+#newcallplace .watermark { top:15px!important }
+
+/* ------------------------------------------------------------------------------
+    M E D I A   P A G E
+--------------------------------------------------------------------------------- */
+
+.mediaPage { padding:18px 5px 20px 5px;min-height:350px }
+.mediaPage h1 { font-size:16px;margin:0px 0px 20px 0px;width:340px;line-height:1.1em }
+.mediaPage h1 span { font-size:24px;display:block;padding-top:8px }
+.mediaPage #gallery { display:none;float:right;width:660px;margin:-28px 14px 0px 0px }
+.mediaPage .pagination a, .mediaPage .pagination span.current, .mediaPage .pagination span.ellipsis {
+	display:block;float:left;margin-right:2px;padding:4px 7px 2px 7px;border:1px solid #ccc }
+.mediaPage .pagination a:hover { background-color:#eee }
+.mediaPage .pagination span.current { font-weight:bold;background-color:#000;border-color:#000;color:#fff }
+.mediaPage .pagination span.ellipsis { border:none;padding: 5px 0 3px 2px; }
+.mediaPage div.navigation a { color:#777;margin-bottom:8px }
+.mediaPage ul.thumbs { clear:both;margin:0;padding:0 }
+.mediaPage ul.thumbs li { float:left;padding:0;margin:0px 5px 4px 0;list-style:none;text-align:center }
+.mediaPage ul.thumbs li.selected a.thumb { border-color:#CB4721; }
+.mediaPage a.thumb { padding:2px;display:block;border:1px solid #ccc;height:80px;overflow:hidden;margin:auto;width:72px }
+.mediaPage a.thumb:focus { outline:none }
+.mediaPage a.thumb i { line-height:12px;font-size:10px;font-style:normal;display:block;padding:0px 0px 2px 0px;margin-top:-2px }
+.mediaPage a.thumb div { width:72px;overflow:hidden;height:66px }
+.mediaPage ul.thumbs img.tm { border:none;display:block;margin:auto;height:70px }
+.mediaPage ul.thumbs img.st { border:none;display:block;margin:0px auto 2px auto }
+.mediaPage div.loader { position:absolute;top:0;left:0;background-image: url('http://static.climbfind.com/ui/loader.gif');background-repeat:no-repeat;background-position:center;width:640px }
+.mediaPage div.slideshow-container { position:relative;clear:both }
+.mediaPage span.image-caption { display:block;position:absolute;width:660px;top:0;left:0 }
+.mediaPage .caption-container { position:relative;clear:left }
+.mediaPage .caption fieldset { padding:0 10px 0 10px;text-align:center }
+.mediaPage .caption fieldset span { font-size:11px;color:#d3d3d3 }
+.mediaPage .caption iframe { margin-top:0px }
+.media-meta { padding:0px 0px 4px 0px }
+.media-meta label { font-weight:normal;font-style:italic }
+.media-meta span { font-weight:bold;color:Gray!important }
+.addMedia fieldset span { display:block;margin:5px auto 50px auto;width:100px;padding-bottom:50px }
+    
+.rated img { padding-top:4px }
+.ratingForm { text-align:left }
+.ratingForm { margin:0 }
+.ratingForm label { width:130px }
+.ratingForm textarea { width:230px }
+.ratingForm .stars-cap { width:80px;float:right }
+.ratings { text-align:left }
+
+/* ------------------------------------------------------------------------------
+    O P I N I O N S
+--------------------------------------------------------------------------------- */
+
+ul.opinions { margin-top:20px }
+ul.opinions img { float:left;margin-right:10px;padding:5px 0 0 0 }
+ul.opinions li { clear:both;border-top:solid 1px #d3d3d3;padding:10px 0px 4px 0px }
+ul.opinions div { float:left;width:640px }
+ul.opinions div img { margin-right:5px!important }
+ul.opinions span { display:block;margin-bottom:2px }
+
+/* ------------------------------------------------------------------------------
+    P A R T N E R  C A L L S
+--------------------------------------------------------------------------------- */
+
+ul.partner-calls { margin-top:20px }
+ul.partner-calls img { float:left;margin-right:10px;padding:5px 0 0 0 }
+ul.partner-calls li { clear:both;border-top:solid 1px #d3d3d3;padding:10px 0px 4px 0px }
+ul.partner-calls li div { float:left;margin-left:5px }
+ul.partner-calls div img { float:none;margin-right:0px }
+ul.partner-calls p { clear:both;padding:10px }
+ul.partner-calls span { font-size:10px }
+ul.partner-calls dt { width:36px;float:left;clear:left }     
+ul.partner-calls dd { color:Black }     
+
+/* ------------------------------------------------------------------------------
+    T A G S
+--------------------------------------------------------------------------------- */
+
+.tags { display:block;padding:4px }
+.tags a { padding:1px 5px 1px 5px;margin-left:3px }
+.tags a span { color:#CB4721!important }
+
+/* ------------------------------------------------------------------------------
+    R A T I N G  F O R M
+--------------------------------------------------------------------------------- */
+
+#modal-placeholder #rating-form { font-size:13px }
+#modal-placeholder #rating-form #score-div { padding-top:8px;height:30px }
+#modal-placeholder #rating-form #stars-cap { font-style:italic;color:orange }
+#modal-placeholder #rating-form label { padding:0;margin:-2px 0 0 20px }
+
+/* ------------------------------------------------------------------------------
+    J Q U E R Y   O V E R R I D E S
+--------------------------------------------------------------------------------- */
+
+.ui-dialog-titlebar { background:black!important;border:none }
+.ui-autocomplete strong { background:yellow }
+.ui-autocomplete i { color:Gray;font-size:8px;font-style:normal;display:block;font-weight:bold;margin:-2px 0 0 22px }
+.ui-autocomplete-loading { background:#EEF8FB url(http://static.climbfind.com/ui/search-loading.gif) left no-repeat!important; }
+.ui-autocomplete-set { background:white url('http://static.climbfind.com/ui/yes.gif') no-repeat 98% 50%!important }
+.ui-autocomplete-unset { background:#FFFFCC!important; }
+
+/* ------------------------------------------------------------------------------
+    A D D  O N S
+--------------------------------------------------------------------------------- */
+
+div.time-picker { position:absolute;height:191px;overflow:auto;background:#fff;border:1px solid #aaa;z-index:99;margin:0;width:62px }
+div.time-picker-12hours { width:6em }
+div.time-picker ul { list-style-type:none;margin:0;padding:0 }
+div.time-picker li { cursor:pointer;height:10px;font: 12px/1 Helvetica, Arial, sans-serif;padding:4px 3px }
+div.time-picker li.selected { background:#0063CE;color:#fff }
+
+.ui-stars-star, .ui-stars-cancel { float: left; display: block;overflow: hidden;text-indent: -999em;cursor: pointer }
+.ui-stars-star a,
+.ui-stars-cancel a { width: 28px; height: 26px;display: block;position: relative;background: url('http://static.climbfind.com/ui/crystal-stars.png') no-repeat 0 0 }
+.ui-stars-star a { background-position: 0 -56px; }
+.ui-stars-star-on a { background-position: 0 -84px; }
+.ui-stars-star-hover a { background-position: 0 -112px; }
+.ui-stars-cancel-hover a { background-position: 0 -28px; }
+.ui-stars-star-disabled, .ui-stars-star-disabled a, .ui-stars-cancel-disabled a { cursor: default !important; }
+
+.jcrop-holder { text-align: left; }
+.jcrop-vline, .jcrop-hline { font-size: 0; position: absolute; background: white url('http://static.climbfind.com/ui/jcrop.gif') top left repeat;}
+.jcrop-vline { height: 100%; width: 1px !important; }
+.jcrop-hline { width: 100%; height: 1px !important; }
+.jcrop-tracker { width: 100%; height: 100%; }
+.jcrop-handle { font-size: 1px;width: 7px !important;height: 7px !important;border: 1px #eee solid;background-color: #333;
+	*width: 9px;
+	*height: 9px;
+}
+.custom .jcrop-vline, .custom .jcrop-hline { background: yellow; }
+.custom .jcrop-handle { border-color: black; background-color: #C7BB00; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+
+/**  * While we're having the loading class set. Removig it, will remove the loading message */
+div#imgloader.loading { background: url('../ui/img-uploading.gif') no-repeat center center; }
+div#imgloader { border: 1px solid #ccc;min-width:300px;min-height:300px }
+
+/* ------------------------------------------------------------------------------
+   Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error { color: #ff0000; }
+.field-validation-valid { display: none; }
+.input-validation-error { border: 1px solid #ff0000;background-color: #ffeeee; }
+.validation-summary-errors { font-weight:bold;color:#ff0000;background-color:#ffeeee;border:0.5px solid red;margin-bottom:10px }
+.validation-summary-errors ul { margin:5px; }
+.validation-summary-valid { display: none; }
+
+/* Styles for bingajax7 map
+-----------------------------------------------------------*/
+
+/*.mapIfo { position:absolute;border:solid 1px black;background-color:White;z-index:1000;padding:3px 5px 2px 5px;max-width:240px;text-align:center }
+.mapIfo strong { display:block;font-size:13px;margin-bottom:4px }*/
+.OverlaysTL > div { background:rgba(255, 255, 255, 0.70)!important }
+.mapInfoBox { background-color:white;min-width:222px;z-index:99999;display:block;text-align:center;padding:5px 0px 0px 0px;line-height:20px }
+.mapInfoBox a, .mapInfoBox a:visited { font-weight:bold;font-size:14px }
+.mapInfoBox b { display:block;max-width:202px!important;padding-left:10px;text-align:center }
+.mapInfoBox img { display:block;padding:0px 2px 2px 2px;margin:5px auto 0px auto;max-width:220px!important }
+.mapInfoBoxClose { position:absolute;height:11px;width:11px;right:2px;top:2px;cursor:pointer;border:solid 1px gray;background:url(http://static.climbfind.com/ui/mapinfoclose.png) white;z-index:999999999999 }
+
+/* Corner radius */
+blockquote { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; }
+blockquote { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; }
+blockquote { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; }
+blockquote { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; }
+blockquote { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: px; -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; }
+blockquote { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; }
+blockquote {  -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; }
+blockquote { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; }
+blockquote { background:url("../ui/oquote.png") no-repeat scroll 12px 12px #FFFCEE!important;-moz-border-radius: 6px; -webkit-border-radius: 6px;
+        border: 1px solid #D3d3d3;color:#434343;font-size:16px;font-style: italic;font-weight:normal;line-height: 1.5em;margin:10px 25px;padding:20px 20px 10px 44px;width:500px }
+blockquote p { font-family:Helvetica, sans-serif; }
+
+/* ------------------------------------------------------------------------------
+    U I   E L E M E N T S 
+--------------------------------------------------------------------------------- */
+
+.alphabetpager a { padding:2px;border:solid 1px #d3d3d3;margin:0px 0px 3px 3px;width:16px;display:block;float:left;text-align:center }
+
+/* Styles for logging climbs
+-----------------------------------------------------------*/
+
+.climbLogInputs { margin-top:4px }
+.climbRating { height:32px }

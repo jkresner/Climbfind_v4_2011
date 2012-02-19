@@ -1,0 +1,10 @@
+﻿@inherits PlacesWebViewPage<List<Location>> 
+
+<div class="sidemenu">
+    <h3>Top outdoor rock walls & boulders in @current.Name</h3>
+    <ol>@foreach (var l in Model) { <li><a href="@l.SlugUrl">@l.Name</a><div style="padding-left:18px">
+    
+    @if (l.Rating.HasValue) { @Html.StarImage(l.Rating) <i>by </i> @l.RatingCount } else { <i>Not yet rated</i> }
+
+    </div></li> } </ol>
+</div>

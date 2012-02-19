@@ -1,0 +1,227 @@
+﻿@model LocationIndoorNewViewModel
+@{  SelectList geoTypeSelectList = ViewBag.GeoTypeDropDownList;
+    Area area = ViewBag.Area;
+    List<Location> existingLocations = ViewBag.ExistingLocations;
+    CfPageTitleMaster.Set("Add a new indoor climbing location to {0}", area.Name);
+    ViewContext.ClientValidationEnabled = true;
+}
+
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script><script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+<script type="text/javascript">
+    var map, pinInfobox = null, infoBoxContents = [];
+
+    function GetMap(latitude, longitude, locationRect) {
+        //TODO move View options up here so only have to load the map once
+
+        if (map == null) {
+
+            map = RenderDefaultCfBing7Map('myMap', 'ArIOaOmY-BqIbbf1Ueo_9McVfA9iTm_WdfX9-Boyeyg_ZuSN1dCeNQ5d1bvxsdgt');
+        }
+
+        var localResult = new Microsoft.Maps.Location(latitude, longitude);
+
+        //-- here we use auto hoping that it will show birdseye
+        map.setView({ center: localResult, zoom: 17, mapTypeId: Microsoft.Maps.MapTypeId.auto })
+
+        //-- remove existing pins (in case they are doing it twice);
+        map.entities.clear();
+
+        var pin = new Microsoft.Maps.Pushpin(localResult, { draggable: true });
+        map.entities.push(pin);
+
+
+        //Wire events for dragging
+        Microsoft.Maps.Events.addHandler(pin, 'dragstart', UpdateLatLong);
+        Microsoft.Maps.Events.addHandler(pin, 'drag', UpdateLatLong);
+        Microsoft.Maps.Events.addHandler(pin, 'dragend', UpdateLatLong);
+    }
+
+    function UpdateLatLong(e) {
+        var loc = e.entity.getLocation();
+        $("#Latitude").val(loc.latitude);
+        $("#Longitude").val(loc.longitude);
+    }
+    
+</script>
+
+<script type="text/javascript">
+
+    var existing, search, thanks, step1;
+    var jsonResult;
+
+    $(document).ready(function () {
+        
+        $("#TypeID").val("@((byte)CfType.CommercialIndoorClimbing)");
+                
+        existing = $("#Existing");
+        search = $("#Search");
+        thanks = $("#ThanksForTrying");
+        step1 = $("#Step1");
+               
+        if (@(existingLocations.Count) == 0) { search.show(); existing.hide(); }
+
+        $('#ajaxSearch input:radio').change(function () {
+
+            var alreadyExists = $("input[name='AlreadyExists']:checked").val();
+
+            if (alreadyExists == 'false') { existing.hide(); search.show(); thanks.hide(); }
+            else { existing.hide(); search.hide(); thanks.show(); }
+        });
+
+        //-- It's a repost from failed validation
+        if ($("#Latitude").val() != '') { goToStep2(); }
+    });
+
+    function backToExisting() { existing.show(); thanks.hide(); }
+
+    function SearchAgain() { $("#LocationFormDiv").hide(); step1.show(); }
+
+    function ShowGeocodeResult(obj)
+    {
+        jsonResult = JSON.parse(obj.responseText);
+
+        if (jsonResult.Success != true) { alert('Your search for '+ $("#locality").val() + ' in @country.Name failed. Please try again'); $('.processFeedback').hide(); $('.SubmitBtn').show(); }
+        else
+        {
+            if (jsonResult.Results.length > 1)
+            {
+//                $('#MultipleResults').show();
+//                var detailsHtml = '<ul>';
+
+//                for (var i=0;i<jsonResult.Results.length;i++)
+//                {
+//                    var resultName = jsonResult.Results[i].Name;
+//                    var func = 'javascript:SetCurrentResult('+i+')';
+//                    detailsHtml += '<li><a href="'+func+'">'+resultName+'</a></li>';   
+//                } 
+//                detailsHtml += '</ul>';
+//                $('#MultipleResultsDetails').html(detailsHtml);
+            }
+            
+            step1.hide();
+            $('.processFeedback').hide();
+            $('.SubmitBtn').show();
+            $("#LocationFormDiv").show();
+            $('#CountryID').val("@country.ID");
+
+            SetCurrentResult(0);   
+        }
+    }
+
+    function SetCurrentResult(index)
+    {
+        currentResult = jsonResult.Results[index];
+
+        $('#Address').val(currentResult.Address);                
+        $('#Latitude').val(currentResult.Lat);
+        $('#Longitude').val(currentResult.Lon);
+
+        GetMap(currentResult.Lat, currentResult.Lon, null);
+    }
+
+    function continueToExisting()
+    {
+        $("#existingAcknowledgeDuplicates").hide();
+        $("#existingList").show();
+    }
+
+    function goToStep2()
+    {
+        step1.hide(); 
+        $("#LocationFormDiv").show(); 
+        GetMap($("#Latitude").val(), $("#Longitude").val(), null);
+    }
+
+</script>
+
+
+
+<div id="Step1">
+@using (Ajax.BeginForm("SearchAreaForNewLocationIndoor", "Places", new AjaxOptions() { HttpMethod = "Post", OnComplete = "ShowGeocodeResult" }, new { id = "ajaxSearch" }))
+{
+    @Html.Hidden("countryUrlPart", country.NameUrlPart)
+    
+    <h1>Add indoor climbing to <a href="@area.SlugUrl">@area.Name</a></h1>    
+    
+    if (existingLocations.Count != 0)
+    {
+        <div id="Existing">
+            <div style="float:left;width:700px;min-height:360px">
+                <div id="existingAcknowledgeDuplicates">
+                    <p class="seriousAttention"><b>It's important our database doesn't contain duplicates!</b><br />
+                       You're new to adding places to Climbfind, welcome aboard! Please read the tips & instructions as you go. 
+                       <i>This message will go away after you've added a few places.</i></p> 
+    
+                    <a href="javascript:continueToExisting();" class="jBtn">kk, I got it!</a>
+                </div>
+    
+                <div id="existingList" style="display:none">
+                    <p>We have the following indoor climbing locations already listed for @area.Name:</p>
+                    <ol style="margin-left:10px">@foreach (var a in existingLocations)
+                        {<li>@a.VerboseDisplayName <b><a href="@a.SlugUrl" target="_blank">view</a></b></li>}</ol>
+                    <div style="font-size:14px;border-top:solid 1px #d3d3d3;margin:30px 0 0 0">
+                    <p><b>Is the location you want to add already in the list above?</b></p>
+                    <p><input value="true" type="radio" name="AlreadyExists" /> Yes it's in the list</p>
+                    <p><input value="false" type="radio" name="AlreadyExists" /> No it is not in the list</p></div>
+                </div>
+                
+            </div>
+
+            <hr />
+        </div>
+
+        @Html.Partial("Partials/ThanksForInterestInAddingContent")
+    
+    }
+    
+    <div id="Search" style="display:none;margin-top:20px;padding:10px 0 0 0;min-height:360px">
+        <div class="editor-label">
+            <label>Enter the ADDRESS of the indoor climbing location</label>
+        </div>
+        <div class="editor-field" style="padding:10px 0 0 0">
+            <input type="text" id="locality" name="locality" title="Address of the climbing facilty" class="long jq_watermark" /> 
+        </div>    
+        <input type="submit" value="Find" class="jBtn" />
+        <p style="color:Green"><b><i>Tip: </i></b> If you're not sure of the address, check on the website of the climbing facility.</p>
+    </div>
+}
+</div>
+
+<div id="LocationFormDiv" style="display:none">
+
+@using (Html.BeginForm())
+{
+    <h1>Add an indoor climbing location to @area.Name</h1>   
+    
+    <hr />
+    
+    <div style="float:left;width:430px">
+        <div class="editor-label">@Html.LabelFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name, "Name required")</div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.Name, new { @class = "long" })</div>
+    </div>
+    <div style="float:left;width:430px">
+        <div class="editor-label">@Html.LabelFor(m => m.Website) @Html.ValidationMessageFor(m => m.Website, "Valid website required (e.g. 'http://www.xxx.com/')")</div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.Website, new { @class = "long" })</div>
+    </div>
+    <hr />
+    <div class="editor-label">@Html.LabelFor(m => m.Address, "Address & location on map") @Html.ValidationMessageFor(m => m.Address, "Address from website required")</div>
+    <div class="editor-field">
+        <p id="MultipleResults" style="display:none">Your search returned multiple results. <span id="MultipleResultsDetails"></span></p>
+        @Html.TextBoxFor(m => m.Address, new { @class = "long" })
+        <p style="float:right"><b>Map incorrect? <a href="javascript:SearchAgain()">Try again</a></b></p>
+
+        <div style="width:100%;float:left"><div id="myMap" style="position:relative; width:100%; height:400px;"></div></div>
+        <hr />
+    </div>    
+
+    @Html.HiddenFor(m => m.Latitude)
+    @Html.HiddenFor(m => m.Longitude)
+    @Html.HiddenFor(m => m.CountryID)
+    @Html.HiddenFor(m => m.TypeID)
+    
+                
+   @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "javascript:SearchAgain()", CancelText = "Back" })
+    <hr />
+}
+
+</div>

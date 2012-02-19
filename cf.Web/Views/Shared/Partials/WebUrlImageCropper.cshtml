@@ -1,0 +1,179 @@
+﻿@model WebUrlCropImageModel
+<script type="text/javascript" src="@Stgs.StaticRt/js/jquery.Jcrop.min.js"></script>
+<script type="text/javascript">
+function resetWebCrop() 
+{ 
+    $("#imgloader").html("");
+    $("#imgloader").addClass("loading");
+    $("#originalImgUrl").val("");
+
+    @if (Model.AllowUpload) { <text>
+    $("#chooseImageSrc").show(); 
+    $("#getImageFromDisk").hide(); 
+    $("#failedUploadDiv").hide(); 
+    $("#getImageFromUrl").hide(); 
+    </text>} else { <text>
+    $("#getImageFromUrl").show(); 
+    </text>}
+    $("#cropAndSaveImage").hide(); 
+    $("#processingImageDiv").hide(); 
+}
+
+function goToCropAndSaveStep() 
+{
+    var url = $("#originalImgUrl").val();       
+    if (url == '') { alert('Please supply a url'); }
+    else 
+    {
+        $("#getImageFromUrl").hide(); 
+        $("#cropAndSaveImage").show();
+        loadImageForCropping('imgloader', 'ImgToCrop', url); 
+    }
+}
+
+function loadImageForCropping(divID, suppliedImgID, url) {
+               
+    var imgLoad = new Image();
+
+    $(imgLoad).load(function () 
+    {
+        //$(this).css('display', 'none'); // .hide() doesn't work in Safari when the element isn't on the DOM already
+        $(this).hide();
+        $(this).attr("id", suppliedImgID);
+        $("#"+divID).removeClass('loading').append(this);
+        $(this).fadeIn();
+
+        checkImageDimensions(suppliedImgID);
+        
+        var displayWidth = @Model.BoxMaxWidth;
+        var imageWidth = document.getElementById(suppliedImgID).clientWidth;
+        var displayHeight = @Model.BoxMaxHeight;
+        var imageHeight = document.getElementById(suppliedImgID).clientHeight;
+                                                            
+        if (imageWidth < displayWidth) { displayWidth = imageWidth; }
+        if (imageHeight < displayHeight) { displayHeight = imageHeight; }
+
+        $(this).parent().width(displayWidth);
+        $(this).parent().height(displayHeight);
+        $(this).parent().append("<hr />");
+    })
+    .error(function () {
+        alert('Failed to load image from url ' + url);
+        $("#cropAndSaveImage").hide(); $("#getImageFromUrl").show();
+    })
+
+    // *finally*, set the src attribute of the new image to our image
+    .attr('src', url);
+}
+
+function checkImageDimensions(suppliedImgID)
+{
+    var suppliedImg = document.getElementById(suppliedImgID);
+    var width = suppliedImg.clientWidth;
+    var height = suppliedImg.clientHeight;
+    if (width < @Model.MinWidth) { resetWebCrop(); alert("The image you provided is under the minimum width of @Model.MinWidth pixels (your image is " + width + " pixels). Please start again and supply a higher resolution image."); }
+    else if (height < @Model.MinHeight) { resetWebCrop(); alert("The image you provided is under the minimum height of @Model.MinHeight pixels (your image is " + height + " pixels). Please start again and supply a higher resolution image."); }
+    else { 
+        $('#ImgToCrop').Jcrop({ boxWidth: @Model.BoxMaxWidth, boxHeight: @Model.BoxMaxHeight , minSize: [@Model.MinWidth, @Model.MinHeight], onChange: setCoords, onSelect: setCoords, setSelect :[ 0, 0, @Model.MinWidth, @Model.MinHeight ] }); 
+    }            
+}
+
+function setCoords(c) { $('#x').val(c.x); $('#y').val(c.y); $('#w').val(c.w); $('#h').val(c.h); }
+
+@if (Model.AllowUpload) {
+<text>
+
+function showDiskUpload() { $("#chooseImageSrc").hide(); $("#getImageFromDisk").show(); }
+function showWebUpload() { $("#chooseImageSrc").hide(); $("#getImageFromUrl").show(); }
+function showUploadChoice() { $("#chooseImageSrc").show(); $("#getImageFromDisk").hide(); $("#getImageFromUrl").hide(); }
+
+function UploadFinished(fileUrl) {
+    $("#getImageFromDisk").hide(); 
+    $("#originalImgUrl").val(fileUrl);
+	goToCropAndSaveStep();
+}
+
+</text>
+}
+
+var imageSaveAjaxPostUrl = "@Model.PostActionUrl";
+
+function SaveCfImage() { 
+    $.post(imageSaveAjaxPostUrl, $("#ResizeForm").serialize(), function (saveImgResult) { 
+        if (saveImgResult.Success)
+        {
+            @(Model.JavascriptSuccessCallback)(saveImgResult);               
+        }
+        else
+        {
+            alert('Server image processing failed: ' + saveImgResult.Error);
+            resetWebCrop();
+        }
+        
+    }, "json"); 
+        
+    $("#cropAndSaveImage").hide();
+    $("#processingImageDiv").show();
+}
+
+</script>
+
+@if (Model.AllowUpload) {
+<div id="chooseImageSrc">
+    <h3 style="margin:20px 0px 30px 0px">Where is the image?</h3>
+    <a href="javascript:showWebUpload()" class="jBtn">On the web</a>
+    <a href="javascript:showDiskUpload()" class="jBtn">On my computer</a>
+</div>
+
+<div id="getImageFromDisk" style="display:none">
+    <h4 style="margin:20px 0px 20px 0px">Select a file to upload</h4>
+    <p style="color:Black;font-weight:bold;margin-bottom:20px">Files must be a minimum width of 220px and height of 120px.</p>
+    <hr />
+    @Html.Partial("Partials/SilverlightClientResizedAzureBlogSingleFileUpload")
+    <hr style="margin-bottom:50px" />
+    <a href="javascript:showUploadChoice()" class="CancelBtn jBtn">Start again</a>
+</div>
+    
+<div id="failedUploadDiv" style="display:none">
+    
+</div>
+}
+
+<form id="ResizeForm" onsubmit="return false;" action="#">
+
+<div id="getImageFromUrl">
+    <h4 style="margin:20px 0px 20px 0px">Copy an image directly from a web page</h4>
+    <div class="editor-label"><label>Paste image address (url)</label></div>
+    <div class="editor-field"><input name="originalImgUrl" id="originalImgUrl" type="text" value="" style="width:500px" /></div>
+    
+    <hr />
+    <a href="javascript:goToCropAndSaveStep()" class="jBtn" style="background:#fdf5ce url(@Stgs.StaticRt/ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x!important;margin-top:2px">Continue</a>
+    @if (Model.AllowUpload) { <a href="javascript:showUploadChoice()" class="CancelBtn jBtn" style="width:100px">Start again</a> }
+</div>
+
+<div id="cropAndSaveImage" style="display:none">
+
+    <h4 style="margin:5px 0px 15px 0px">Crop & save the image</h4>
+    
+    <div id="imgloader" class="loading"></div>
+
+    <input type="hidden" name="imgObjID" id="objID" value="@Model.ObjID"/>
+	<input type="hidden" name="x" id="x"/>
+	<input type="hidden" name="y" id="y"/>
+	<input type="hidden" name="w" id="w"/>
+	<input type="hidden" name="h" id="h"/>
+    <p style="margin:5px 0px 25px 0px">
+        <a href="javascript:SaveCfImage()" class="jBtn" style="padding:10px 20px;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x!important;margin-top:2px">Save cropped image</a>
+        <a href="javascript:resetWebCrop()" class="CancelBtn jBtn" style="width:100px">Start again</a>
+    </p>
+    <hr />
+
+</div>
+
+</form>
+
+<div id="processingImageDiv" style="display:none">
+    <p>Processing image</p>
+    <p><img src="@Stgs.StaticRt/ui/img-uploading.gif" alt="loading" /></p>
+</div>
+

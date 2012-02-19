@@ -1,0 +1,89 @@
+﻿@{ Profile user = ViewBag.User;
+   List<Alert> alerts = ViewBag.Alerts;
+   CfPageTitleMaster.Set("Alerts");
+    }
+
+<div id="col2-left">
+
+<h1>Alert feed</h1>
+
+@if (alerts.Count == 0) { <p style="margin-bottom:10px">No alerts yet...</p><p>Things will start appearing here, when you start interacting with other members and <a href="/my-partner-call-subscriptions">add PartnerCall&trade; Subscriptions.</a></p> } else {
+
+<ul class="archive">
+    @foreach (var a in alerts) {<li><div class="post-title"><label>@a.Utc.GetAgoStringUtc()</label> @Html.Raw(a.Message)</div></li>}
+</ul>
+    
+    }
+
+</div>
+<div id="col2-right">
+
+<div class="sidemenu navOptions">
+    <h3>Options</h3>
+    <ul>
+        <li><b>@(Html.ActionLink<AlertsController>(c => c.SiteSettings(), "Customize site usage alerts"))</b><br />For messaging, comments, media etc.</li> 
+        <li><b>@(Html.ActionLink<PartnerCallsController>(c => c.Subscriptions(), "Customize PartnerCall alerts"))</b><br />Subscribe to places where you want to climb</li> 
+    </ul>
+</div>
+
+<div style="padding:0px 5px 0px 5px">
+<div class="info">
+<hr />
+    <h2>About alerts</h2>
+    <hr />
+    <p>Climbfind gives you the power to keep up with what's going on around you in your climbing community through
+       <i>alerts</i>.</p>
+    <hr />
+    <p>Your <b>Alert feed</b> (this page) is one way to receive and view activity relevant to you. You can also get alerts by Email, directly your phone via <a href="/mobile" target="_blank">Climbfind Mobile</a> or simply turn them off.</p>
+    <hr />
+    <p><b>@(Html.ActionLink<AlertsController>(c => c.SiteSettings(), "Customize your alerts"))</b> to hear as much or little as you want, when & how you want it.</p>
+</div>
+<hr />
+@*<div class="info">
+    <h2>Currently available alerts</h2>
+    <hr />
+    <ul>
+        <li>PartnerCalls&trade;</li>
+        <li>Messages from other users</li>
+        <li>Comments on your posts</li>
+        <li>Comments on your media</li>
+        <li>New climbs set in your gym</li>
+    </ul>
+</div>*@
+
+<div class="info">
+
+@*    <h2>Ways you can get alerts</h2>
+
+    <p>For each type of alert, you can choose to 
+      receiving those alerts piecemeal (in real-time) or part of a daily activity report.</p>
+    
+    <p>You can also choose to receive those alters through one or multiple mediums including.</p>
+    <hr />
+    <ul>
+        <li>Your alert feed</li>
+        <li>RSS</li>
+        <li>Email</li>
+        <li>Mobile Push Notifications</li>
+    </ul>
+*@
+</div>
+
+@Html.Partial("Ads/SideMenu200x200")
+
+
+<fieldset class="side-sponsor-ad"><legend>Sponsor</legend>
+    <script type="text/javascript"><!--
+        google_ad_client = "ca-pub-8929518485692248";
+        /* CF4_Area_Sidemenu */
+        google_ad_slot = "3964784439";
+        google_ad_width = 200;
+        google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+</fieldset>
+
+</div>
+
+</div>

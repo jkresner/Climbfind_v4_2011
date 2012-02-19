@@ -1,0 +1,8 @@
+﻿@inherits PlacesWebViewPage<List<Area>> 
+@{ MvcHtmlString flagImg = Html.FlagImage(country); }
+
+<div class="sidemenu">
+    <h3>Provinces in @country.ShortDisplayName</h3>
+    @if (Model.Count > 0) { <ul>@foreach (var a in Model) { <li>@flagImg <a href="@a.SlugUrl">@a.Name</a></li> } </ul> }
+    else { <ul><li>@flagImg @country.Name has no provinces...</li></ul> }
+</div>

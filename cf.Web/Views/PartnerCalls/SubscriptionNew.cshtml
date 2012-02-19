@@ -1,0 +1,114 @@
+﻿@model NewPartnerCallSubscriptionViewModel
+@{ CfPageTitleMaster.Set("New PartnerCall subscription");
+   var place = AppLookups.GetCacheIndexEntry(Model.ParnterCallPlaceID);
+   string placeType = ViewBag.PlaceType;
+   bool disableIndoorOutdoor = (placeType == "Location");
+   List<Area> intersectingAreas = ViewBag.InterectingAreas;
+   IEnumerable<CfCacheIndexEntry> childLocations = ViewBag.ChildLocations;
+   byte stepNum = 1;
+}
+
+<div style="float:left;width:75%">
+
+@using (Html.BeginForm("SubscriptionNew", "PartnerCalls", new { id = Model.ParnterCallPlaceID }, FormMethod.Post, new { id = "partnerCallForm" }))
+{
+    <h1>Create a PartnerCall&trade; subscription</h1>   
+
+    @Html.HiddenFor(m => m.ParnterCallPlaceID)    
+    
+    <div @if (disableIndoorOutdoor)
+         { <text>style="display:none"></text>}>
+    
+        <div>
+            @if (!disableIndoorOutdoor)
+            { 
+            <div class="editor-label">
+                <label>Step @(stepNum++)) Select if you want to keep tabs on indoor climbing, outdoor climbing or both:</label>
+            </div>}
+            <div style="height:40px;padding-top:6px">
+                <span style="display:block">@Html.CheckBoxFor(m => m.ForIndoor) Indoor climbing</span>
+                <span style="display:block">@Html.CheckBoxFor(m => m.ForOutdoor) Outdoor climbing</span>
+            </div>   
+        </div>   
+    </div>
+   
+    
+    <div class="editor-field">
+        @if (placeType == "Area")
+        { @Html.Partial("AreaMap");
+        }
+        else
+        { @Html.Partial("Maps/Bing7LocationMap", (Bing7MapWithLocationViewModel)ViewBag.LocationMapView);
+        }
+    </div> 
+    
+    <hr />
+    
+    <div style="padding-top:20px">
+        <div class="editor-label">
+            <label>Step @(stepNum++)) Choose PartnerCall&trade; matching logic</label>
+                @if (placeType == "Area") {
+                <p style="width:96%">By default, subscribing to the "@ViewBag.Place.Name" <b>area</b>, means you will be notified when 
+                calls are made for @ViewBag.Place.Name OR intersecting areas OR child locations (listed down the right). 
+                If you prefer to be notified ONLY when others call for @ViewBag.Place.Name specifically
+                and not any of the related places down the right, select "Exact match logic".</p> }
+                else {
+                <p style="width:96%">By default, subscribing to the <b>location</b> @ViewBag.Place.Name, means you will be notified when 
+                calls are made for @ViewBag.Place.Name OR one
+                of the areas that contain @ViewBag.Place.Name (listed on the right). 
+                If you prefer to be notified ONLY when others call for @ViewBag.Place.Name specifically
+                and not the areas down the right, select "Exact match logic".</p>
+                }
+
+        </div>
+        <div style="height:46px;padding-top:6px">
+            <span style="display:block">@Html.RadioButtonFor(m => m.ExactOnly, false, new { style = "padding:4px" }) Climbfind geo-deduction (<i>default & recommended to start with</i>)</span>
+            <span style="display:block">@Html.RadioButtonFor(m => m.ExactOnly, true, new { style = "padding:4px" }) Exact match logic 
+                (<i>useful when you feel you get too many notifications</i>)</span>            
+        </div>   
+    </div>   
+ 
+
+    <hr /><br />
+
+    <div>
+        <div class="editor-label">
+            <label>Step @(stepNum++)) Select if & how you want to receive notifications while you're not on the site</label>
+        </div>
+        <div style="height:40px;padding-top:6px">
+            <span style="display:block">@Html.CheckBoxFor(m => m.EmailRealtime) Email me</span>
+            <span style="display:block">@Html.CheckBoxFor(m => m.MobileRealtime) Send a notification to my phone</span>
+        </div>   
+    </div>   
+    
+    <hr /><br />
+
+   
+    @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "/PartnerCalls/Subscriptions" })
+    <hr />
+}
+</div>
+
+<div style="float:left;width:24%;padding:2px 2px 0px 8px;font-size:10px">
+    <h4>Intersecting areas</h4>
+    @if (placeType == "Area") { <p>The following areas intersect @place.Name. One of them may (or may not) better suit you:</p> }
+    else { <p>@place.Name is a "location" which falls into the "areas" listen below. If you're flexible on where to climb, 
+    rather than only at @place.Name consider clicking on and creating a subscription for one of these areas 
+    instead:</p> }
+    
+    
+    <ul>
+        @foreach (var p in intersectingAreas)
+        { <li><a href="/new-partner-call-subscription/@p.ID">@p.Name</a></li> }
+    </ul>
+    @if (placeType == "Area")
+    {
+    <hr />
+    <h4>Child locations</h4>
+    <p>The following locations fall within @place.Name.:</p>
+    <ul>
+        @foreach (var p in childLocations)
+        { <li><a href="/new-partner-call-subscription/@p.ID">@p.Name</a></li> }
+    </ul>}
+
+</div>

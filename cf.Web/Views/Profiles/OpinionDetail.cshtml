@@ -1,0 +1,19 @@
+﻿@model IOpinion
+@{ var o = Model; }
+
+<div class="item">
+    @Html.UserPicThumb(o.UserID)
+    <div style="float:left;margin-left:20px;width:420px;text-align:left">
+        <div>
+            @Html.UserProfileLink(o.UserID) <span>@o.Utc.GetAgoStringUtc()</span>
+
+            @if (CfIdentity.IsAuthenticated && CfIdentity.UserID == o.UserID) {
+                <div style="float:right;width:50px">@(Html.DeleteLink<MediaController>(c=>c.OpinionDelete(o.ID), "Delete"))</div>
+            }
+        </div>
+                    
+        <div style="height:12px;padding:3px">@Html.StarImage(o.Rating)</div> 
+        <p>@o.Comment</p>
+    </div>
+</div>
+<hr />

@@ -1,0 +1,64 @@
+﻿@{  Area area = current as Area; 
+    List<Location> outdoorLocations = ViewBag.OutdoorLocations; List<Location> indoorLocations = ViewBag.IndoorLocations;
+    List<Area> relatedAreas = ViewBag.RelatedAreas;
+    List<Area> parentAreas = ViewBag.ParentClimbingAreas;
+    Bing7GeoJsonMapViewModel mapModel = ViewBag.MapModel;
+    List<Climb> topClimbs = ViewBag.TopClimbs;
+    List<Area> subAreasWithoutChildren = intersectingClimbingAreas.RemoveAllChildAreas();
+    List<Opinion> latestOpinions = ViewBag.LatestOpinions;
+    CfPageTitleMaster.Set("Rock climbing in {0}, {1} ", area.Name, country.Name);
+}
+
+<div id="col2-left">
+
+    <h1>Rock climbing @area.Name, @country.ShortDisplayName</h1>
+    
+    <h6>@Html.Partial("Partials/MainOpinionSummary", area)</h6>
+        
+    <div style="margin:16px 0 10px 4px">
+        @Html.Partial("Partials/MainMediaRoll", current.SlugUrl)
+    </div>
+
+    @Html.Partial("Partials/MainAreaSummary", area)
+    
+    <p style="font-size:11px">This map of rock climbing around @current.Name, @country.ShortDisplayName 
+    @if (parentAreas.Count > 0) { <span>which is considered a sub climbing area of </span>@Html.PlaceList(parentAreas) }, is a summary showing
+     @if (indoorLocations.Count > 0)
+     { <text>@(current.Name)'s <img src="@Stgs.StaticRt/map/id.png" /> indoor climbing gyms  and </text> } 
+     @current.Name's <img src="@Stgs.StaticRt/map/od.png" /> outdoor rock climbing locations. 
+
+     @if (intersectingClimbingAreas.Count > 0)
+     { <span>If any of @current.Name's outdoor climbing falls within one of
+         @current.Name's <img src="@Stgs.StaticRt/map/ca.png" /> sub climbing areas, including </span> 
+         @Html.PlaceList(subAreasWithoutChildren) 
+     }
+         <span>click through to that sub area to see individual @current.Name boulders & @current.Name 
+         outdoor rock walls in that area.</span></p>
+
+    <div class="area-map">@{Html.RenderPartial("Maps/Bing7GeoJsonMap", mapModel);}</div>
+
+    @Html.Partial("Partials/MainSubClimbingAreasList", subAreasWithoutChildren)
+
+    <hr />
+
+    @Html.Partial("Partials/MainLocationOutdoorList", outdoorLocations)
+ 
+    @if (indoorLocations.Count > 0 || !area.NoIndoorConfirmed)
+    {
+        @Html.Partial("Partials/MainLocationIndoorList", indoorLocations)
+    }
+</div>
+
+<div id="col2-right">
+
+    @Html.Partial("Partials/SideMenuOptions", relatedAreas)
+    
+    @if (area.HasAvatar)
+    { <img id="areaImg" src="@(Stgs.ImgsRt + area.AvatarRelativeUrl)" alt="Rock Climbing @area.Name" class="area-avatar" />}
+
+    
+    @Html.Partial("Partials/SideAreaTopClimbsList", topClimbs)
+
+    @Html.Partial("Partials/SideOpinionsList", new SideOpinionsListModel(area, latestOpinions))
+
+</div>

@@ -1,0 +1,52 @@
+﻿@model cf.Web.Models.Bing7GeoJsonMapViewModel
+@{ Bing7MapViewOptionsViewModel mapView = Model.ViewOptions;
+   bool hasMapView = (mapView != null && !string.IsNullOrWhiteSpace(mapView.MapTypeId));
+   bool hasHeading = (mapView != null && !string.IsNullOrWhiteSpace(mapView.Heading));
+   string mapTypeId = Model.MapTypeId;
+   if (hasHeading && mapView.Heading != "0") { mapTypeId = "birdseye"; }
+   bool mapIsBirdsEye = (mapTypeId == "birdseye");
+   bool mapNotSupported = (Request.Browser.Browser == "IE" && Request.Browser.MajorVersion < 9);
+   bool unauthenticated = !User.Identity.IsAuthenticated;
+}           
+
+@if (unauthenticated) { <p style="font-weight:bold;padding:150px;border:solid 1px red"><a href="/login" class="jBtn" rel="nnofollow">Login</a> to get access to and browse using Climbfind maps.</p> }
+else if (mapNotSupported) { <p style="font-weight:bold;color:Red;padding:40px;border:solid 1px red">Climbfind area maps are not compatible with Internet Explorer 6, 7 & 8. Please update to Internet Explorer 9 or switch to Firefox, Chrome or Safari.</p>}
+else {
+<div id="@Model.MapID" style="position:relative;width:@(Model.Width)px; height:@(Model.Height)px" ></div>
+    
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script><script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+<script type="text/javascript">
+    var map, pinInfobox = null, infoBoxContents = [];
+    var layer;
+   
+    function GetMap() 
+    {        
+        map = RenderDefaultCfBing7Map('@Model.MapID', '@Model.Credentials', Microsoft.Maps.MapTypeId.@(mapTypeId));
+        
+        var polylineOptions = { fillColor: new Microsoft.Maps.@Model.DefaultPolygonStrokeColor };
+        var polygonOptions = { fillColor: new Microsoft.Maps.@Model.DefaultPolygonColor, strokeColor: new Microsoft.Maps.@Model.DefaultPolygonStrokeColor };
+        layer = new GeoJsonLayer('@Model.MapID', map, '@Stgs.StaticRt/map', '@Stgs.ImgsRt/places', polylineOptions, polygonOptions);
+ 
+        var url = '/Utility/RequestProxy?url=' + '@Model.GeoJsonUrl';
+        layer.LoadGeo(url, function (items) {
+            map.entities.push(items);
+
+            layer.SetCustomView();
+
+            @if (hasMapView)
+            { <text>
+            var mapCenter = new Microsoft.Maps.Location('@mapView.MapCenterLatitude', '@mapView.MapCenterLongitude');
+            var viewOpt = { center : mapCenter, zoom : @mapView.Zoom };
+
+            @if (hasHeading)
+            {<text> viewOpt.heading = parseInt(@mapView.Heading); </text>}
+
+            map.setView(viewOpt);
+            </text>} 
+        });
+    }
+
+    $(document).ready(function () { GetMap(); });
+
+</script>
+}

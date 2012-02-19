@@ -1,0 +1,51 @@
+﻿@{ List<Location> indoorLocations = ViewBag.IndoorLocations;
+   List<Location> outdoorLocations = ViewBag.OutdoorLocations;
+   List<Location> topOutdoorLocations = ViewBag.TopOutdoorLocations;
+   Area area = current as Area;
+   List<Area> biggestAreas = intersectingClimbingAreas.RemoveAllChildAreas();
+   List<Area> subAreas = intersectingClimbingAreas.Where( a => !biggestAreas.Contains(a) ).ToList();
+   CfPageTitleMaster.Set("Climbing around {0}, {1}", current.Name, country.Name);
+   var id = (ViewBag.Current as Area).ID;
+   List<Opinion> latestOpinions = ViewBag.LatestOpinions;
+   }
+
+<div id="col2-left">
+    
+    <h1>Rock climbing @current.Name, @country.Name</h1>
+    <h6>@Html.Partial("Partials/MainOpinionSummary", area)</h6>
+    
+
+    @Html.Partial("Partials/MainAreaSummary", area)
+
+    <p style="font-size:11px">This map of rock climbing around @current.Name, @country.ShortDisplayName is a summary showing @current.Name's 
+     @if (indoorLocations.Count > 0) { <text> <img src="@Stgs.StaticRt/map/id.png" /> indoor climbing walls and </text> } 
+     the biggest categorization of <img src="@Stgs.StaticRt/map/ca.png" /> outdoor rock climbing areas around @current.Name
+      
+     @if (biggestAreas.Count > 0)
+     { <span>which includes </span> @Html.PlaceList(biggestAreas) }.
+    
+     @if (biggestAreas.Count != intersectingClimbingAreas.Count) { 
+    <span>You can also explore @current.Name's sub climbing areas of the bigger ones including @Html.PlaceList(subAreas).</span> }
+    </p>
+
+    <div class="area-map">@{Html.RenderPartial("Maps/Bing7GeoJsonMap", (Bing7MapViewModel)ViewBag.MapModel);}</div>
+
+    @if (indoorLocations.Count > 0 || !area.NoIndoorConfirmed)
+    {
+        @Html.Partial("Partials/MainLocationIndoorList", indoorLocations)
+    }
+            
+    @Html.Partial("Partials/MainClimbingAreasList", intersectingClimbingAreas)
+
+</div>
+
+<div id="col2-right">
+
+    @Html.Partial("Partials/SideMenuOptions")
+
+    @if (area.HasAvatar) { <fieldset class="area-avatar"><legend>@current.Name</legend><img src="@(Stgs.ImgsRt + area.AvatarRelativeUrl)" alt="Rock Climbing @area.Name" /></fieldset>}
+
+    @Html.Partial("Partials/SideAreaTopOutdoorLocationsList", topOutdoorLocations)
+
+    @Html.Partial("Partials/SideOpinionsList", new SideOpinionsListModel(area, latestOpinions))
+</div>

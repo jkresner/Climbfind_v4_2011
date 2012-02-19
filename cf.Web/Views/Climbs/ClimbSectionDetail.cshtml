@@ -1,0 +1,80 @@
+﻿@inherits cf.Web.Views.Places.PlacesWebViewPage
+@{  LocationIndoor location = ViewBag.Current;
+    LocationSection sec = ViewBag.Section;
+    List<LocationSection> sections = ViewBag.Sections;
+    List<Climb> climbsInSection = ViewBag.Climbs;
+    //List<Climb> climbsSimilar = ViewBag.OtherClimbsSimilar;
+    //List<LoggedClimb> recentSends = ViewBag.RecentSends;
+    //List<Opinion> latestOpinions = ViewBag.LatestOpinions;
+    CfPageTitleMaster.Set("Section {0} at {0}", sec.Name, current.Name); }
+    
+<div id="col2-left">
+        
+    <h1>@sec.Name</h1>
+    <h6>@@ <b><a href="@location.SlugUrl">@location.Name</a></b></h6>
+
+    <img src="@Stgs.StaticRt/partners/pgsfboulder.JPG" style="float:left" />
+
+    <div style="float:left;margin-left:20px">
+        <h3>Setters with climbs on @sec.Name</h3>
+
+        <div class="setter">
+            
+            <h6>Jonathon Kresner (J.K)</h6>
+        </div>
+    </div>
+
+    <hr />
+    @*@Html.Partial("Partials/MainMediaRoll", climb.SlugUrl)*@
+        
+@*    <div class="climb-content">
+        @if (climb.SectionID.HasValue) {<label>Section: </label><span>@climb.LocationSection.Name</span>}
+        @if (!string.IsNullOrWhiteSpace(climb.LineNumber)) {<label>Line #: </label><span>@climb.LineNumber</span>}
+       <label>Type: </label><span>@((ClimbType)climb.ClimbTypeID)</span>
+        <label>Grade: </label><span>@climb.GradeLocal (level @climb.GradeCfNormalize)</span>
+        @if (climb.MarkingType.HasValue && !string.IsNullOrWhiteSpace(climb.MarkingColor))
+        { <label>Marking: </label><span>@climb.MarkingColor (@if (climb.MarkingType == 1) {<i>holds</i>} else {<i>tape</i>})</span> }
+         @if (climb.SetDate.HasValue) { <label>Set on: </label><span>@climb.SetDate.Value.ToString("dd MMM")</span>}
+        @if (climb.DiscontinuedDate.HasValue) { <div style="color:Red"><label style="color:Red">Pulled down: </label><span>@climb.DiscontinuedDate.Value.ToString("dd MMM")</span></div>}
+        @if (!climb.SetterAnonymous && climb.SetterID.HasValue) {<label>Setter: </label><span>@climb.Setter.Initials</span>}
+        <label>Tags: </label><span>@climb.ClimbTags.GetCategoriesString()</span>
+        <label>Description: </label><span>@if (!string.IsNullOrWhiteSpace(climb.Description)) { @climb.Description.GetHtmlParagraph() } else { <i>None given</i> }</span>    
+    </div>
+
+    <div class="climb-avatar">
+        @if (climb.HasAvatar) { <img src="@(Stgs.ImgsRt + @climb.AvatarRelativeUrl)" />}
+        else { <div><p>No pic for this climb yet.<br /></p><img src="@Stgs.StaticRt/ui/AddMedia.png" /></div> }
+    </div>
+*@    
+    <hr /> 
+    <div style="width:33%;float:left">
+        <h3>Latest sends</h3>
+        <h6>(climbers who finished climbs)</h6>
+@*        @Html.Partial("Partials/MainColumnSendsList", recentSends)*@
+        <hr />
+    </div>              
+    
+    <div style="width:33%;float:left"><h3>Newest climbs</h3>
+        <h6>Most recently set here</h6>
+        @Html.Partial("Partials/MainColumnClimbsList", climbsInSection.OrderByDescending(c => c.Denorm_AddedUtc).ToList())
+        <hr />
+    </div>              
+    }
+    
+    <div style="width:33%;float:left"><h3>Top 10 climbs</h3>              
+        <h6>Best climbs on @sec.Name</h6>
+        @Html.Partial("Partials/MainColumnClimbsList", climbsInSection.OrderByDescending(c => c.Rating).ToList())
+    <hr />       
+    
+    </div>
+</div>
+
+<div id="col2-right">
+
+    @*@Html.Partial("Partials/SideMenuClimbOptions")
+
+    @Html.Partial("Partials/SideOpinionsList", new SideOpinionsListModel(climb, latestOpinions))*@
+
+</div>
+
+

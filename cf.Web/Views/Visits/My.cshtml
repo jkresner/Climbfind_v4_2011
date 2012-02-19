@@ -1,0 +1,115 @@
+﻿@{ CheckIn current = ViewBag.CheckIn;
+   ViewBag.Title = "My visit";
+   CfCacheIndexEntry location = AppLookups.GetCacheIndexEntry(current.LocationID);
+   List<CheckIn> recentCI = ViewBag.RecentCheckIns;
+   List<CheckIn> closestCI = ViewBag.ClosestCheckIns;
+   List<LoggedClimb> loggedClimbs = ViewBag.Loggedclimbs;
+   bool notGivenOpinion = ViewBag.NotGivenOpinion;
+}
+
+@if (notGivenOpinion) { 
+    <div class="takeaction">
+        <p>How was your experience with @location.ShortestName()?
+         <a class="opinion jBtn" href="#@location.ID">Share your opinion</a> </p>
+    </div>    
+}
+
+<style type="text/css">
+    .options { margin-top:16px }
+    blockquote { margin:10px } 
+    #myloggedclimbs li { float:left;margin-right:16px }
+    dl { margin:2px 10px 10px 0;width:320px }
+    dt { float:left;width:50px;margin:0px 10px 0 0 }
+    dt img { float:left }
+    dd { float:left;width:250px }
+    dd i { font-size:10px }
+    .delLC { color:Red;font-weight:bold;width:10px;float:right } 
+    ul.thumbs { clear:both;margin:0;padding:0 }
+    ul.thumbs li { float:left;padding:0;margin:0px 5px 4px 0;list-style:none;text-align:center }
+</style>
+
+<div id="col2-left">
+   
+<h1>Visit to @Html.PlaceLinkShortName(current.LocationID)</h1>
+<h5 style="height:25px;margin-bottom:5px">On @String.Format("{0:yyyy ddd dd MMM @ htt}", current.Utc)</h5>
+<h6 style="height:25px;margin-bottom:5px">Visible to @if (current.IsPrivate) { <i>no one.</i> } else { <i>Anyone </i>}
+  | @if (current.Latitude.HasValue && current.Longitude.HasValue) { <span>(Verified @current.Latitude, @current.Longitude)</span> } else { <span>(Historical)</span> }
+</h6>
+
+
+<fieldset>
+    <legend>Comment, shout out, opinion or epiphany [<a href="#" class="upd-comment">edit</a>]</legend>
+    <div id="current-comment">
+        @if (string.IsNullOrWhiteSpace(current.Comment)) {
+            <a href="#" class="jBtn upd-comment">Add my thoughts</a>
+        }
+        else
+        { <blockquote>@current.Comment</blockquote> }
+    </div>
+    
+    @Html.Partial("UpdateComment", new cf.Web.Views.CheckIns.UpdateCommentViewModel() { ID = current.ID, Comment = current.Comment })
+</fieldset>
+
+<fieldset>
+    <legend>Photos & movies associated with check-in [@(Html.ActionLink<VisitsController>(c=>c.AddMedia(current.ID), "add"))]</legend>
+    
+    @if (current.Media.Count == 0) { @(Html.ActionCssLink<VisitsController>(c => c.AddMedia(current.ID), "Add new media", "jBtn")) }
+    else {
+    <div><ul class="thumbs">@foreach (var m in current.Media) { <li>@Html.Raw(m.RenderThumb())
+        @(Html.ActionLink<MediaController>(c => c.Edit(m.ID), "e"))
+        @(Html.ActionCssLink<VisitsController>(c => c.DeleteVisitMedia(current.ID, m.ID, this.Request.RawUrl), "x", "delete"))
+    </li> }</ul></div> }
+</fieldset>
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        $("a.delLC").click(function () {
+            var id = $(this).attr("id");
+            $.post("/Visits/DeleteLoggedClimb/@current.ID?loggedClimbID=" + id, function (data) {
+                $("#"+id).parent().parent().parent().fadeOut(500, function() { $(this).remove(); });
+            });
+        });
+    });
+
+</script>
+
+
+<fieldset>
+    <legend>Climbs I tried on this visit to @location.Name [<a id="addloggedclimblkn" href="javascript:logClimb()">add</a>]</legend>
+    @if (loggedClimbs.Count == 0) { <a id="addloggedclimbbtn" href="javascript:logClimb()" class="jBtn">Add some climbs to this visits</a> }
+     
+    <ul id="myloggedclimbs"> @foreach (var l in loggedClimbs) { <li>@Html.Partial("Partials/LoggedClimbDetail", l)</li> } </ul>
+    <hr />
+        
+    @Html.Partial("AddLoggedClimb", new ClimbLogViewModel())
+      
+</fieldset>
+
+
+</div>
+
+<div id="col2-right">
+
+    <div class="sidemenu navOptions">
+    <h3>Options</h3>
+        <ul>
+            <li><b>@(Html.ActionLink<VisitsController>(c => c.Detail(current.ID), "Preview this visit"))</b></li>
+            <li>@(Html.ActionLink<VisitsController>(c => c.ListUser(current.UserID), "My climbing history"))</li>
+            <li>@(Html.ActionLink<VisitsController>(c => c.ListLocation(current.LocationID), "Check-ins at this location"))</li>
+            <li>@(Html.ActionLink<VisitsController>(c => c.Delete(current.ID), "Delete this visit"))</li>
+        </ul>
+    </div>
+
+    <div class="sidemenu">
+        <h3>Others around that time</h3>
+        @Html.Partial("Partials/SideMenuCheckInList", closestCI)
+    </div>
+
+    <div class="sidemenu">
+        <h3>Recent @@ @location.Name</h3>
+        @Html.Partial("Partials/SideMenuCheckInList", recentCI)
+    </div>
+
+</div>

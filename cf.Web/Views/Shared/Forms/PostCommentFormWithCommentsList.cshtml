@@ -1,0 +1,94 @@
+﻿@model NewCommentWithCommentsListViewModel
+@{ Post post = ViewBag.Post;
+   if (post != null) { Model.PostID = post.ID; } }
+
+@if (post != null)
+{
+    <style type="text/css">
+        .comments-list { border-top:solid 1px black;margin:10px 0;padding-bottom:10px; }
+        .comments-list li { padding-top:10px;clear:both }
+        .comments-list li img { float:left;margin-right:10px;padding-top:3px }
+        .comments-list li div { float:left;margin-top:-2px }
+        .comments-list li p { margin-top:2px;width:656px }
+        .comments-list li a { font-weight:bold }
+        .comments-list li i { font-style:normal;font-size:9px }
+        .comments { margin:10px 0 }
+        #no-comments { padding:20px 10px 10px 10px }
+        a.del { float:right;margin-right:10px;font-weight:bold }
+    </style>    
+
+<div class="comments-list">
+
+    @if (post.PostComments.Count == 0)
+    { <div id="no-comments"><p>No one has left a comment here yet :( ... </p></div> }
+    
+    <ul class="comments">
+        @foreach (var o in post.PostComments.OrderBy(c => c.Utc))
+        { <li>@Html.UserPicThumb(o.UserID) 
+                <div>@Html.UserProfileLink(o.UserID) <i>@o.Utc.GetAgoStringUtc()</i> <p>@o.Message</p></div>
+                @if (post.UserID == CfIdentity.UserID || o.UserID == CfIdentity.UserID || CfPrincipal.IsGod()) {
+                <a href="#" id="@o.ID" class="del">x</a>}</li> }
+    </ul>
+    
+    <hr />
+</div>
+<hr />
+    
+using (Html.BeginForm("NewComment", "Posts", FormMethod.Post, new { id = "comment-form" }))
+{        
+    @Html.HiddenFor(m => m.PostID)
+    
+    <div class="editor-label">@Html.LabelFor(m => m.Comment, "Comment")</div>
+    <div>@Html.ValidationMessageFor(m => m.Comment, "Comment required")</div>
+    <div class="editor-field">
+        @Html.TextAreaFor(m => m.Comment, 4, 94, new { style = "width:600px;height:50px" })        
+    </div>
+    
+    <input type="submit" value="Post" class="jBtn" style="margin:5px 0px;padding:6px 20px" />    
+}
+    
+<div id="newComment" style="display:none">
+    @Html.UserPicThumb(CfIdentity.UserID) <div>@Html.UserProfileLink(CfIdentity.UserID) <i>just now</i> <p></p></div><a href="#" id="" class="del">x</a>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#comment-form").submit(function () {
+
+            var actionUrl = $("#comment-form").attr("action");
+            $.post(
+                actionUrl,
+                $("#comment-form").serialize(),
+                function (data) {
+                    var com = $("#Comment").val();
+                    $("#newComment").find("p").html(com);
+                    $("#newComment").find(".del").attr("id", data.ID);
+                    $(".comments").append("<li>" + $("#newComment").html() + "</li>");
+                    $('.comments').children(':last').hide().fadeIn(500, function () { $(this).show(); });
+                                        
+                    attachedDeleteEvent();
+
+                    if ($("#no-comments").length > 0) { $("#no-comments").remove(); }
+
+                    $("#Comment").val("");
+                }
+            );
+            return false;
+        });
+
+        attachedDeleteEvent();
+    });
+
+    function attachedDeleteEvent() {
+        $("a.del").click(function () {
+            var id = $(this).attr("id");
+            $.post(
+                "/Posts/DeleteComment/@post.ID?commentID=" + id,
+                function (data) { $("#" + id).parent().fadeOut(500, function() { $(this).remove(); });  }
+            );
+            return false;
+        });
+    }
+</script>
+    
+}

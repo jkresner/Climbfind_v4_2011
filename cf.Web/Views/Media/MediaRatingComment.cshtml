@@ -1,0 +1,4 @@
+﻿@model MediaOpinion
+
+<p><b> @Html.UserPicThumb(Model.UserID) @Html.UserProfileLink(Model.UserID) @Model.Utc.GetAgoStringUtc()</b></p>
+<p>@Html.StarImage(Model.Rating) @Model.Comment</p>

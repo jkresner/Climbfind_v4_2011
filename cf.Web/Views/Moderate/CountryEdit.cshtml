@@ -1,0 +1,87 @@
+﻿@model cf.Web.Views.Moderate.CountryEditViewModel
+@{ Country country = ViewBag.Country;
+   ViewBag.Title = "Mod Country " + country.Name;
+    Layout = "~/Views/Moderate/_LayoutModerate.cshtml"; }
+
+
+@using (Html.BeginForm()) {
+
+<h1>Mod: @country.Name</h1>
+ 
+    @Html.Partial("Maps/Bing7GeoJsonMap", (Bing7MapViewModel)ViewBag.MapModel)
+    
+    <div style="float:left;width:230px;margin:5px">
+        LatLong:
+        <br />
+        <input type="text" id="LatTx" style="width:160px" />
+        <input type="text" id="LonTx" style="width:160px" />
+        <input type="text" id="LatLongTx" style="width:320px" />
+        <a href="javascript:setToTextBoxLatLong()">Set center</a>
+    </div>
+    
+    <hr style="clear:both" />
+    
+            <div class="editor-label">
+                @Html.LabelFor(m => m.GeoReduceThreshold)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.GeoReduceThreshold)
+                @Html.ValidationMessageFor(m => m.GeoReduceThreshold)
+            </div>
+                        
+            <div class="editor-label">
+                @Html.LabelFor(m => m.WKT)
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(m => m.WKT, 30, 150, null)
+                @Html.ValidationMessageFor(m => m.WKT)
+            </div>
+            
+            <p><input type="submit" value="Save" /></p>
+        }
+
+
+<script type="text/javascript">
+
+    var latLongTrackHandlerId;
+
+    function toggleTrackLatLong() 
+    {
+        if (latLongTrackHandlerId == null) {
+            latLongTrackHandlerId = Microsoft.Maps.Events.addHandler(map, 'click', displayLatLong);
+        }
+        else 
+        {
+            Microsoft.Maps.Events.removeHandler(latLongTrackHandlerId);
+            latLongTrackHandlerId = null;
+        }
+    }
+
+    function displayLatLong(e) {
+        var l;
+        var point
+        if (e.targetType == 'map') {
+            point = new Microsoft.Maps.Point(e.getX(), e.getY());
+            l = e.target.tryPixelToLocation(point);
+        }
+
+        if (e.targetType == 'polygon') {
+            point = new Microsoft.Maps.Point(e.getX(), e.getY());
+            l = map.tryPixelToLocation(point);
+        }
+
+
+        $('#LatTx').val(l.latitude)
+        $('#LonTx').val(l.longitude)
+        $('#LatLongTx').val(l.latitude + ', ' + l.longitude)
+    }
+
+
+    function setToTextBoxLatLong() {
+        alert('setting: ' + $('#LatTx').val() + ' ' + $('#LonTx').val());
+        var loc = new Microsoft.Maps.Location($('#LatTx').val(),  $('#LonTx').val());
+        map.setView({center:loc,zoom:4});
+    }
+
+</script>
+

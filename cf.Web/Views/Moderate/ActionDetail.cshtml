@@ -1,0 +1,69 @@
+﻿@{  Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   ModProfile modProfile = ViewBag.ModProfile;
+   ModAction action = ViewBag.ModAction;
+   ObjectModMeta place = ViewBag.ModPlace;
+   string displayData = action.Data.Replace(@""""",""", "<br />").Replace(@""",""", "<br />").Replace(@""" : """, ": ");
+   displayData = displayData.Substring(2, displayData.Length - 4);
+}
+
+<style type="text/css"> 
+    .dashSetA { float:left;width:420px;margin-right:10px }
+    .dashSetB { float:left;width:570px }
+    table {margin:5px 0px 0px 0px} table td { padding:2px }  table th { padding:2px } 
+    fieldset label { float:left;display:block;clear:left;width:130px;font-weight:normal }
+    fieldset span { float:left;display:block;color:Black }
+    #placesIModerate td { line-height:14px }
+</style>
+
+<div style="margin:20px">
+
+<div class="dashSetA">
+
+<fieldset><legend>Action by mod</legend>
+
+<label>User</label> <span>@Html.UserProfileLink(modProfile.ID)</span>
+<label>Mod Level</label> <span>@modProfile.Role.Replace("Mod", "") (@modProfile.Reputation)</span>
+<label>Moderator Since</label> <span>@modProfile.ModeratorSinceUtc.ToString("dd MMM yyyy")</span>
+<label>Last Activity</label> <span>@modProfile.LastActivityUtc.ToString("dd MMM yyyy")</span>
+<label>Points this month</label> <span>@ViewBag.PointThisMonth</span>
+<label>Places Added</label> <span>@modProfile.PlacesAdded</span>
+<label>Climbs Added</label> <span>@modProfile.ClimbsAdded</span>
+<label>Verified Edits</label> <span>@modProfile.VerifiedEdits</span>
+
+</fieldset>
+
+<fieldset><legend>Action on @place.Name</legend>
+
+<label>Created</label> <span>@place.CreatedUtc.GetAgoStringUtc() by @Html.UserProfileLink(place.CreatedByUserID)</span>
+@if (place.DetailsLastChangedUtc.HasValue) {
+<label>Details last edited</label> <span>@place.DetailsLastChangedUtc.Value.GetAgoStringUtc() by @Html.UserProfileLink(place.DetailsLastChangedByUserID.Value)</span>}
+@*<label>Moderator Since</label> <span>@modProfile.ModeratorSinceDateTime.ToString("dd MMM yyyy")</span>
+<label>Last Activity</label> <span>@modProfile.LastActivityDateTime.ToString("dd MMM yyyy")</span>
+<label>Points this month</label> <span>@ViewBag.PointThisMonth</span>
+<label>Places Added</label> <span>@modProfile.PlacesAdded</span>
+<label>Climbs Added</label> <span>@modProfile.ClimbsAdded</span>
+<label>Verified Edits</label> <span>@modProfile.VerifiedEdits</span>
+*@
+
+
+</fieldset>
+
+</div>
+
+<div class="dashSetB">
+
+    <fieldset><legend>Mod Action Details</legend>
+            
+          <label>On </label><span>@Html.PlaceLinkWithBlank(action.OnObjectID) </span>
+          <label>Points </label><span> + @action.Points</span>
+          <label>Type </label><span>@action.Type</span>
+          <label>Occurred </label><span> @action.Utc.GetAgoStringUtc()</span>
+          <label>Description </label><span><p style="width:340px;padding:0;margin:0">@action.Description</p></span>   
+          <label>Changes </label>
+          <label style="color:black;padding-left:20px;width:100%">@Html.Raw(displayData)</label>
+    
+    </fieldset>
+
+</div>
+
+</div>

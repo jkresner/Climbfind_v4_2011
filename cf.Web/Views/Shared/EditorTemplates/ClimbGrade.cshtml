@@ -1,0 +1,4 @@
+﻿@model string
+@{ var list = new SelectList(cf.Entities.Enum.CfEnumExtensions.GetGrades(), Model); }           
+
+@Html.DropDownListFor(m => m, list)

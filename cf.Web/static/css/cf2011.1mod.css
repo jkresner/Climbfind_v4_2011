@@ -1,0 +1,157 @@
+/* import stylesheets and hide from IE/Mac \*/
+@import url("reset.css");
+@import url("jquery-ui.css"); 
+
+/* Basics
+----------------------------------------------------------*/
+body { font:12px/170% 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;color:#777;margin:0;padding:0 }
+hr { border:none;width:0px;clear:both }
+strong { font-weight: bold; }
+
+a:link, a:visited { text-decoration: none; color:#CB4721; }
+a:hover { color:black; }
+a:link.more, a:visited.more { float:left;margin-top:20px;margin-right:5px;padding:6px 8px;border:1px solid #2177A5;background-color:black;text-decoration:none;font-weight:bold;color: #fff; }
+a:hover.more { border:1px solid #FF2B95;background-color:#CB4721 }
+
+/* ------------------------------------------------------------------------------
+    T O P   S E A R C H
+--------------------------------------------------------------------------------- */
+
+.ui-dialog-titlebar { background:black!important;border:none }
+.ui-autocomplete strong { background:yellow }
+.ui-autocomplete i { color:Gray;font-size:8px;font-style:normal;display:block;font-weight:bold;margin:-2px 0 0 22px }
+
+/* ------------------------------------------------------------------------------
+    B U T T O N S
+--------------------------------------------------------------------------------- */
+
+.jBtn { font-size:14px;padding:4px 7px 4px 7px;border:1px solid #fbcb09;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;font-weight:bold;color:#CB4721!important }
+.jBtn:hover { color:Green;background:#E6F0E6;cursor:pointer;border: 1px solid green }
+a.jBtn  { padding:5px 11px 5px 11px }
+.SubmitBtn { font-size:18px;padding:5px 12px 5px 12px;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x!important;font-weight:bold;color:#c77405; }
+.SubmitBtn:hover { color:Green;background:#E6F0E6;cursor:pointer;border: 1px solid green }
+.DeleteBtn { border:1px solid #FF9999;font-weight:normal }
+.DeleteBtn:hover { border:1px solid red;color:red!important;background:#fdf5ce url(../ui/jquery/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x; }
+.CancelBtn { font-weight:normal;border: 1px solid #CCCCCC;background: url("../ui/jquery/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6!important; }
+.CancelBtn:hover { border:1px solid black; }
+
+.ButtonNextToTextBox { margin-top:2px;padding-top:4px;padding-bottom:5px;float:none!important }
+
+/* Forms
+----------------------------------------------------------*/
+
+form { margin:0;padding:12px 12px 0px 12px;background:#F3F4F5;border: 1px solid #E2E4E7 }
+form h1 { margin:4px 0px 10px 0px;font-weight:bold;font-size:1.5em;text-decoration:underline }
+form p { padding: 12px 0 5px 0;	margin: 0;color: #2C76A6 }
+
+label { font-weight: bold;color: #666666 }
+fieldset { border:1px solid #ddd;padding:1.4em;margin:0 0 0.5em 0 }
+legend { font-size:1.2em;font-weight:bold;color:Black }
+
+form .short { width:180px!important }
+form .long { width:400px!important }
+form .vlong { width:600px!important }
+form .description { width:624px!important;height:80px!important }
+form input[type='text'] { width:300px }
+form input[type='radio'] { border:none }
+
+form .options { background:transparent;border-top:solid 1px #d3d3d3;margin:30px 0px 0px 0px;padding:5px 0px 5px 5px }
+form .options label { display:block;font-size:10px;font-weight:normal;font-style:italic;margin-left:1px;color:black;margin-bottom:14px }
+
+input, select, textarea { margin:5px 0;padding:7px 6px;color:#6A6969;border-width:1px;
+	border-style:solid;border-color:#D4D4D4 #EBEBEB #EBEBEB #D4D4D4;font: 11px 'Lucida Grande', Verdana, Helvetica, sans-serif }
+input:focus, select:focus, textarea:focus { color:#19465D;background:#EEF8FB }
+input.button { font: bold 12px Arial, Sans-serif;height:30px;margin:0;padding:2px 3px;
+	color: #FFF;background:#2C76A6;border-width:1px;border-style:solid;border-color:#86BBDF #245F86 #245F86 #86BBDF;cursor:pointer }
+
+.formImageUpload { float:right;width:280px;margin-right:0px;text-align:center }
+.formImageUpload fieldset { padding:1px;margin:0px }
+.formImageUpload legend { margin:0px auto 0px 20px }
+.formImageUpload div { display:none }
+.formImageUpload img { margin:7px 2px 8px 2px}
+.formEditLatLong { float:right;width:280px;margin-right:0px }
+.formEditLatLong legend { margin:0px auto 0px 20px; }
+
+.mod-guide { float:right;width:320px;background:none repeat scroll 0 0 white;border:1px solid #D3D3D3;float:right;padding:5px;text-align:justify }
+.mod-guide h4 { font-weight:bold }
+.mod-guide ol { margin-left:0px;margin-right:0px;padding-right:0px;font-size:10px }
+/*
+.Moderation .listContent { margin:20px 30px 0px 30px }*/
+
+
+/* ------------------------------------------------------------------------------
+    L A Y O U T
+--------------------------------------------------------------------------------- */
+
+#top-bar { background:#FFCC00!important }
+#nav-wrap { position:relative;margin:0 auto;width:1064px;padding:5px 0px 5px 0px;height:33px }
+
+#nav-wrap img { float:left;margin-top:-1px }
+#nav-wrap form { padding:0;margin:0;float:right;width:230px;background:transparent;border:none }
+#nav-wrap form input { padding:0;margin:1px 0 0 0;float:right;width:228px;height:28px }
+#nav { width:780px;margin:2px 0px 0px 4px;padding:6px 0px 0px 0px;float:left }
+#nav li { float:left;margin:0;padding:0 }
+#nav a { float:left;margin:0;padding:0 15px 5px 15px;color:black;font:bold 14px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif }/*color:#baa7a7*/
+#nav li a:hover, #nav-wrap #nav li a:active { border:none;color:white }
+
+#nav input { /* color:#FFCC00 */ }
+
+/* content */
+#content-wrap { clear:both;margin:0;padding:0;background:#fff;width:100%;float:left }
+#content { width:1064px;margin:0 auto;padding:10px 10px 20px 10px }
+
+/* mod-header */
+#mod-header-wrap { float:left;height:54px;width:100%;background:black }
+#mod-header { position:relative;margin:0 auto;width:1004px }
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error { color: #ff0000; }
+.field-validation-valid { display: none; }
+.input-validation-error { border: 1px solid #ff0000;background-color: #ffeeee; }
+.validation-summary-errors { font-weight:bold;color:#ff0000;background-color:#ffeeee;border:0.5px solid red;margin-bottom:10px }
+.validation-summary-errors ul { margin:5px; }
+.validation-summary-valid { display: none; }
+
+#dialog-upload-image form { margin:0px;background:transparent;padding:0px;border:none }
+.dialog-upload-image form { margin:0px;background:transparent;padding:0px;border:none }
+.dialog-upload-image p { margin:2px 0px 2px 0px; }
+
+.seriousAttention { color:Red;background-color: #ffeeee;border:1px solid red;padding:7px }
+
+/* ------------------------------------------------------------------------------
+    J Q U E R Y   O V E R R I D E S
+--------------------------------------------------------------------------------- */
+
+.ui-dialog-titlebar { background:black!important;border:none }
+
+/* ------------------------------------------------------------------------------
+    J C R O P
+--------------------------------------------------------------------------------- */
+.jcrop-holder { text-align: left; }
+.jcrop-vline, .jcrop-hline { font-size: 0; position: absolute; background: white url('http://static.climbfind.com/ui/jcrop.gif') top left repeat;}
+.jcrop-vline { height: 100%; width: 1px !important; }
+.jcrop-hline { width: 100%; height: 1px !important; }
+.jcrop-tracker { width: 100%; height: 100%; }
+.jcrop-handle { font-size: 1px;width: 7px !important;height: 7px !important;border: 1px #eee solid;background-color: #333;
+	*width: 9px;
+	*height: 9px;
+}
+.custom .jcrop-vline, .custom .jcrop-hline { background: yellow; }
+.custom .jcrop-handle { border-color: black; background-color: #C7BB00; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+
+
+/* Styles for bingajax7 map
+-----------------------------------------------------------*/
+
+/*.mapIfo { position:absolute;border:solid 1px black;background-color:White;z-index:1000;padding:3px 5px 2px 5px;max-width:240px;text-align:center }
+.mapIfo strong { display:block;font-size:13px;margin-bottom:4px }*/
+.OverlaysTL > div { background:rgba(255, 255, 255, 0.70)!important }
+.mapInfoBox { background-color:white;min-width:222px;z-index:99999;display:block;text-align:center;padding:5px 0px 0px 0px;line-height:20px }
+.mapInfoBox a, .mapInfoBox a:visited { font-weight:bold;font-size:14px }
+.mapInfoBox b { display:block;max-width:202px!important;padding-left:10px;text-align:center }
+.mapInfoBox img { display:block;padding:0px 2px 2px 2px;margin:5px auto 0px auto;max-width:220px!important }
+.mapInfoBoxClose { position:absolute;height:11px;width:11px;right:2px;top:2px;cursor:pointer;border:solid 1px gray;background:url(http://static.climbfind.com/ui/mapinfoclose.png) white;z-index:999999999999 }
+
+/*other stuff*/
+p.no-claims { margin:6px;color:Red }

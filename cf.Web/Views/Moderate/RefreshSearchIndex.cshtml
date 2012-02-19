@@ -1,0 +1,47 @@
+﻿@{ ViewBag.Title = "Refresh search index";
+    Layout = "~/Views/Moderate/_LayoutModerate.cshtml"; }
+<script src="@Stgs.StaticRt/js/jquery-stopwatch.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var refresLink = $("#refresLink");
+        refresLink.click(function() {
+
+            $("#time").val("");  
+            t = new Stopwatch(function (runtime) { $("#time").val("" + runtime); });
+            t.startStop();
+            
+            $.post("/Moderate/RebuildSearchIndex", null, function(data) {
+                  if (data[0].Title  == "Success")
+                    {
+                        t.startStop();
+                        $("#results").text(data[0].Score + ' entries successfully index.');          
+                    }
+                    else
+                    {
+                        t.startStop();
+                        alert('Refreshing search failed: ' + data[0].Excerpt);
+                    }
+                }, "json");  
+  
+            });              
+    });
+
+</script>
+
+
+<form action="#">
+
+    <h1>Refresh Search Index</h1>
+
+    <p>Use the button below to refresh the search after you've added or edited a place and you want it to start showing up in the search results.</p>
+
+    
+    <div id="results" style="color:Green"></div>
+
+    <input id="refresLink" class="jBtn" type="submit" value="Refresh search index" />
+    <input id="time" type="text" style="width:44px" disabled="disabled" />ms
+
+    <hr />
+
+</form>

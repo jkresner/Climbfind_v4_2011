@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Message>
+@{ List<Message> sortedMessages = new List<Message>(Model).OrderByDescending(m=>m.Utc).ToList(); }
+
+<ul id="conversation">
+@foreach (var m in sortedMessages)
+{
+    var messageStatus = m.MessagePartyStatus.Where(mps => mps.PartyID == CfIdentity.UserID).Single();
+    if (messageStatus.ShouldShow) {
+    <li class="@((MessageStatus)messageStatus.Status)">
+        @Html.UserPicThumb(m.SenderID)
+        <div><i>@m.Utc.GetHappenedStringUtc()</i>
+        @Html.UserProfileLink(m.SenderID)
+        <p>@Html.Raw(m.Content.GetHtmlParagraph())</p></div>
+        <hr />
+    </li>} 
+    }
+</ul>           

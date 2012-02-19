@@ -1,0 +1,45 @@
+﻿@model cf.Web.Views.Media.AddViewModel
+@{ List<Media> usersMedia = ViewBag.MyMedia;
+   int i = 0; }
+
+<style type="text/css">
+    .tagged { border:solid 1px yellow }
+</style>
+
+<h6>Click to tag media with @Model.ObjectName</h6>
+<ul class="thumbs">
+    @foreach (var m in usersMedia)
+    {
+        if (i % 6 == 0) {<hr />} i++;   
+        <li><div><img id="@m.ID" src="@m.ThumbUrl()" @if (m.ObjectMedias.Where(o => o.OnOjectID == Model.ObjectId).Count() > 0) {<text>class="tagged"</text>} /></div></li>
+    }
+</ul>
+
+<script type="text/javascript">
+function attachedClickTag() {
+        
+    $("ul.thumbs img").click(function () {
+        var isTagged = $(this).hasClass("tagged");
+        var id = $(this).attr("id");
+
+        if (isTagged) {
+            $.post("/Media/RemoveMediaTag?id=" + id + "&onObjectID=@Model.ObjectId",
+                function (data) { $("#" + id).removeClass("tagged"); });
+        } else {
+            $.post("/Media/AddMediaTag?id=" + id + "&onObjectID=@Model.ObjectId",
+                function (data) { $("#" + id).addClass("tagged"); });
+        }
+    }); 
+}
+
+jQuery(document).ready(function () {
+    attachedClickTag();
+
+    $("#TypeMy").click(function () {
+        hideAll(); setFeildSetTitle("Tag from my media library");
+        var checked = $(this).attr("checked", "checked");
+        if (checked) { $("#medialibrary-select").show(); }
+    });
+});
+
+</script>

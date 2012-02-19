@@ -1,0 +1,251 @@
+﻿@model LocationOutdoorNewViewModel
+@{  Area area = ViewBag.Area;
+    List<Location> existingLocations = ViewBag.ExistingLocations;
+    CfPageTitleMaster.Set("Add a new outdoor climbing location to {0}", area.Name);
+    MapItem mapItemsArea = ViewBag.MapItemsArea;
+    System.Collections.ObjectModel.Collection<MapItem> mapItemsLocations = ViewBag.MapItemsLocations;
+    ViewContext.ClientValidationEnabled = true;
+}
+
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+<script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+
+<script type="text/javascript">
+
+    var existing, search, thanks, step1, step2;
+    var jsonResult;
+
+    $(document).ready(function () {
+                
+        existing = $("#Existing");
+        search = $("#Search");
+        thanks = $("#ThanksForTrying");
+        step1 = $("#Step1");
+        step2 = $("#LocationFormDiv");
+                
+        if (@(existingLocations.Count) == 0) { GoToStep2(); }
+
+        $('#ExitingForm input:radio').change(function () {
+
+            var alreadyExists = $("input[name='AlreadyExists']:checked").val();
+
+            if (alreadyExists == 'false') { GoToStep2(); }
+            else { existing.hide(); search.hide(); thanks.show(); }
+        });
+        
+        //-- It's a repost from failed validation
+        if ($("#Latitude").val() != '') { GoToStep2(); }
+    });
+    
+    function continueToExisting()
+    {
+        $("#existingAcknowledgeDuplicates").hide();
+        $("#existingList").show();
+    }
+
+    function backToExisting() { existing.show(); thanks.hide(); }
+
+    function SearchAgain() { $("#LocationFormDiv").hide(); step1.show(); }
+
+    function showLatLonInput() { $("#latLonInputs").show(); }
+    function hideLatLonInput() { $("#latLonInputs").hide(); }
+        
+</script>
+
+<div id="Step1">
+
+<form id="ExitingForm" action="#">
+    <h1>Add an outdoor climbing location to <a href="@area.SlugUrl">@area.Name</a></h1>    
+    
+    @if (existingLocations.Count != 0)
+    {
+        <div id="Existing">
+            <div style="float:left;width:700px;min-height:360px">
+                <div id="existingAcknowledgeDuplicates">
+                    <p class="seriousAttention"><b>It's important our database doesn't contain duplicates!</b><br />
+                       You're new to adding places to Climbfind, welcome aboard! Please read the tips & instructions as you go. 
+                       <i>This message will go away after you've added a few places.</i></p> 
+    
+                    <a href="javascript:continueToExisting();" class="jBtn">kk, I got it!</a>
+                </div>
+    
+                <div id="existingList" style="display:none">
+                    <p>We have the following outdoor climbing locations already listed for @area.Name:</p>
+                    <ol style="margin-left:10px">@foreach (var a in existingLocations)
+                        {<li>@a.VerboseDisplayName <b><a href="@a.SlugUrl" target="_blank">view</a></b></li>}</ol>
+                    <div style="font-size:14px;border-top:solid 1px #d3d3d3;margin:30px 0 0 0">
+                    <p><b>Is the location you want to add already in the list above?</b></p>
+                    <p><input value="true" type="radio" name="AlreadyExists" /> Yes it's in the list</p>
+                    <p><input value="false" type="radio" name="AlreadyExists" /> No it is not in the list</p></div>
+                </div>
+                
+            </div>
+
+            <hr />
+        </div>
+
+        @Html.Partial("Partials/ThanksForInterestInAddingContent")
+    
+    }
+ 
+    </form>       
+
+</div>
+
+<div id="LocationFormDiv" style="display:none">
+
+@using (Html.BeginForm())
+{
+    <h1>Add an outdoor climbing location to <a href="@area.SlugUrl">@area.Name</a></h1>   
+           
+    <div style="float:left;width:430px"> 
+    <div class="editor-label">@Html.LabelFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name)</div>
+    <div class="editor-label">@Html.TextBoxFor(m => m.Name, new { @class = "long" })</div>
+    </div>
+    <div style="float:left;width:430px">
+    <div class="editor-label"><label>Type</label> @Html.ValidationMessageFor(m => m.Type, "Selection required")</div>
+    <div class="editor-label">@Html.DropDownListFor(m => m.Type, SelectLists.OutdoorLocationTypeSelectList, "--- select ---")</div>
+    </div>
+    <hr />
+    <div class="editor-label"><label>Location</label><p>To set the location: Either zoom in, center the map and then
+        <a href="javascript:hideLatLonInput(); plotCenter();" class="jBtn">Plot location at center</a> or
+        alternatively you can <a href="javascript:showLatLonInput()" class="jBtn">enter the latitude & longitude</a></p></div>
+    <div class="editor-field">
+        
+        <div id="latLonInputs" style="display:none">
+            <div style="float:left;width:520px">Latitude @Html.TextBoxFor(m => m.Latitude, new { @class="short" }) &nbsp
+            Longitude @Html.TextBoxFor(m => m.Longitude, new { @class = "short" })</div>
+            <div style="float:left;width:100px;margin-top:-4px"><hr /><a href="javascript:plotLatLong()" class="more ButtonNextToTextBox">Plot lat/long</a></div>
+            <hr />
+        </div>
+
+        <div style="width:100%">
+            @Html.EditorFor(m => m.ViewOptions, "Bing7MapViewOptions")
+            <div id="myMap" style="position:relative; width:100%; height:420px;margin-top:10px"></div>
+        </div>
+        <hr />
+    </div>    
+    
+    @Html.HiddenFor(m => m.CountryID)
+    
+                 
+    @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "javascript:SearchAgain()", CancelText = "Back" })  
+    
+    <hr />
+}
+
+</div>
+
+<script type="text/javascript">
+
+    @ViewBag.MapItemsJson;
+
+    var areaLayer;
+
+    function GoToStep2() {
+        step1.hide();
+        $("#LocationFormDiv").show();
+        $('#CountryID').val("@country.ID");
+
+        initalizeMap();
+    }
+
+    var buttonsLoaded = false;
+
+    var map = null;
+    var areaLayer = null;
+
+    function initalizeMap()
+    {
+        map = RenderDefaultCfBing7Map('myMap', 'ArIOaOmY-BqIbbf1Ueo_9McVfA9iTm_WdfX9-Boyeyg_ZuSN1dCeNQ5d1bvxsdgt');
+        
+        areaLayer = new Microsoft.Maps.EntityCollection();
+        var polygonCoordinates = parse2dPolygonCoords('@mapItemsArea.C');
+        areaLayer.push(new Microsoft.Maps.Polygon(polygonCoordinates, EditPolygonViewOptions));
+        map.entities.push(areaLayer);
+
+        var areaBoundingBox = GetPolygonBoundingLocationRect(polygonCoordinates);
+        map.setView({ bounds: areaBoundingBox });
+        
+        //-- putting locations on top of area means we can hover over them
+        addLocationsToMap();
+    }
+
+    function addLocationsToMap()
+    {
+        var locationLayer = new Microsoft.Maps.EntityCollection();
+        var wtf = new GeoJsonLayer('myMap', map, '@Stgs.StaticRt/map', '@Stgs.ImgsRt/map', EditPolylineViewOptions, EditPolygonViewOptions);
+        @foreach (var item in mapItemsLocations)
+        {<text>
+        var mapItemJson = JSON.parse('@Html.Raw(item.ToJson())');
+        wtf.AddJsonMapItem(locationLayer, mapItemJson);
+        </text>
+        }
+
+        map.entities.push(locationLayer);
+    }
+
+    function GetViewDetails()
+    {
+        var mapCenter = map.getCenter() ;
+        var pinLocation = pin.getLocation() ;
+        
+        $("#Latitude").val(pinLocation.latitude);
+        $("#Longitude").val(pinLocation.longitude);
+
+        $("#ViewOptions_Zoom").val(map.getZoom());
+        $("#ViewOptions_Latitude").val(mapCenter.latitude);
+        $("#ViewOptions_Longitude").val(mapCenter.longitude);
+        $("#ViewOptions_Heading").val(map.getHeading());
+        $("#ViewOptions_MapTypeId").val(map.getMapTypeId());
+        $("#ViewOptions_Bounds").val(map.getBounds());        
+    }
+    
+    var pin;
+    var pushpinLayer;
+    
+    function SetDraggablePin(location)
+    {
+        if (pushpinLayer == null)
+        {
+            pushpinLayer = new Microsoft.Maps.EntityCollection();
+            areaLayer.push(pushpinLayer);
+        }
+        else
+        {
+            pushpinLayer.clear();
+        }
+        
+        // Add a pin to the center of the map
+        pin = new Microsoft.Maps.Pushpin(location, { text: '1', draggable: true });
+        Microsoft.Maps.Events.addHandler(pin, 'dragend', function() { GetViewDetails(); });
+        pushpinLayer.push(pin);
+        
+        GetViewDetails();
+    }
+
+    function plotCenter()
+    {
+        // Retrieve the location of the map center 
+        var center = map.getCenter();
+        SetDraggablePin(center);
+    }
+
+    function plotLatLong()
+    {
+        var lat = $("#Latitude").val();
+        var lon = $("#Longitude").val();
+
+        var location = new Microsoft.Maps.Location(lat, lon);
+
+        if (location.latitude == null || location.latitude == '' || location.longitude == null || location.longitude == '') 
+        { 
+            alert('You did not enter a valid lat / long. Lat long must be a decimal number.'); 
+        }
+        else 
+        {
+            SetDraggablePin(location);
+        }
+    }
+
+</script>

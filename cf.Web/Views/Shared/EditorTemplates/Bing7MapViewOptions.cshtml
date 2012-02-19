@@ -1,0 +1,33 @@
+﻿@model Bing7MapViewOptionsViewModel
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".SubmitBtn").click(function () {
+            updateMapViewInputs(); 
+        }); 
+    });
+
+    function updateMapViewInputs()
+    {        
+        var mapCenterLocation = map.getCenter()
+        $("#@Html.IdFor(m => m.MapCenterLatitude)").val(mapCenterLocation.latitude);
+        $("#@Html.IdFor(m => m.MapCenterLongitude)").val(mapCenterLocation.longitude);
+        $("#@Html.IdFor(m => m.Heading)").val(map.getHeading());
+        $("#@Html.IdFor(m => m.MapTypeId)").val(map.getMapTypeId());
+        $("#@Html.IdFor(m => m.Zoom)").val(map.getZoom());
+        $("#@Html.IdFor(m => m.Bounds)").val(map.getBounds());
+    }
+
+</script>
+
+@Html.HiddenFor(model => model.ID)
+@Html.HiddenFor(model => model.Bounds)
+@Html.HiddenFor(model => model.CenterOffset)
+@Html.HiddenFor(model => model.Heading)
+@Html.HiddenFor(model => model.MapCenterLatitude)
+@Html.ValidationMessageFor(model => model.MapCenterLatitude, "Map location not working out.")
+@Html.HiddenFor(model => model.MapCenterLongitude)
+@Html.HiddenFor(model => model.MapTypeId)
+@Html.HiddenFor(model => model.Zoom)
+

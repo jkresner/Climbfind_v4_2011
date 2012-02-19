@@ -1,0 +1,102 @@
+﻿@inherits PlacesWebViewPage<List<Area>>
+@{ var userIsAdvanced = CfPrincipal.IsGod();
+    IEnumerable<Area> parentsClimbingAreas = ViewBag.ParentClimbingAreas;
+    IEnumerable<Area> nearbyAreas = ViewBag.NearbyClimbingAreas;
+    IEnumerable<Location> closestLocations = ViewBag.ClosestLocations;
+}                
+
+<div class="sidemenu navOptions">
+    <h3>Options</h3>
+    <ul>
+
+        <li>Improve page 
+         @(Html.ActionLink<ModerateController>(c => c.ClaimPage(new Guid(current.IDstring)), "Claim page", new { style = "float:right" }))
+         <dl>
+            
+            @if (current.Type.ToPlaceCateogry() == PlaceCategory.Area)
+            {
+            <dd>@(Html.ActionLink<PlacesController>(c => c.PlaceNew(country.NameUrlPart, current.NameUrlPart), "Add place", new { style = "font-weight:bold" }))</dd>
+            }
+            else if (current.Type.ToPlaceCateogry() == PlaceCategory.OutdoorClimbing ||
+
+              current.Type.ToPlaceCateogry() == PlaceCategory.IndoorClimbing)
+            {
+            <dd>
+                    @(Html.ActionLink<ClimbsController>(c=>c.ClimbNew(new Guid(current.IDstring)), "Add climb, route/problem", new {style="font-weight:bold"}))
+                </dd>
+            }
+            
+            <dd><a href="javascript:alert('Flagging bad content coming in a future version')">Flag bad content</a></dd>            
+            <dd>@(Html.ActionLink<ModerateController>(c => c.Edit(new Guid(current.IDstring)), "Edit or delete page"))</dd>            
+         </dl>
+
+        </li> 
+       <li>Navigate to <a href="/world-rock-climbing" style="float:right;font-weight:normal">All countries</a>
+        <dl>
+            
+            <dd><a href="@country.SlugUrl">@country.Name</a></dd>
+
+            @if (current.Type != CfType.Province)
+            {
+                foreach (var pl in intersectingProvinces)
+                { <dd class="pad25"><a href="@pl.SlugUrl">@pl.Name</a></dd> }
+            }
+
+            @if (current.Type == CfType.ClimbingArea || current.Type.ToPlaceCateogry() != PlaceCategory.Area)
+            {
+                foreach (var c in intersectingCities)
+                { <dd class="pad40"><a href="@c.SlugUrl">@c.Name</a></dd> }
+            }
+            @if (parentsClimbingAreas != null)
+            {
+                foreach (var c in parentsClimbingAreas.OrderByDescending(a=>a.ShapeArea))
+                { <dd class="pad55">@*@Math.Round(c.ShapeArea,0) *@<a href="@c.SlugUrl">@c.Name</a></dd> }
+            }
+        </dl>
+
+        </li>
+        
+        @if (nearbyAreas != null) {
+                 
+        <li>Areas within 2.5 hours
+        
+        @if (parentProvince != null) {
+        @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, parentProvince.NameUrlPart), "Add area ", new { style = "float:right;font-weight:normal" })) 
+        }
+            
+        @if (nearbyAreas.Count() == 0)
+        { <p>Climbfind doesn't know of any areas within 2.5 hours of @current.Name.</p>
+        }
+        else
+        {
+        
+            <dl>
+               @foreach (var p in nearbyAreas)
+               { <dd><a href="@p.SlugUrl">@p.Name</a></dd> }
+               
+            </dl>
+        }</li>           }
+              
+        @if (closestLocations != null)
+        {         
+        <li>Closest climbing locations
+        
+            <dl>
+               @foreach (var p in closestLocations)
+               { <dd><a href="@p.SlugUrl">@p.Name</a></dd> }         
+            </dl>
+        </li>
+        }
+
+        @if (CfIdentity.IsAuthenticated) {
+        <li>Things to do
+            <dl>
+               <dd>@(Html.ActionLink<PartnerCallsController>(c=>c.New(new Guid(current.IDstring)), "Post a PartnerCall for "+current.Name))</dd>
+               @*<dd>@(Html.ActionLink<PartnerCallsController>(c=>c.SubscriptionNew(new Guid(current.IDstring)), "Subscribe to partners here"))</dd>*@
+
+            </dl>
+        </li>
+        }
+ 
+    </ul>
+</div>

@@ -1,0 +1,91 @@
+﻿@model NewOpinionWithCommentsListViewModel
+@{ bool alreadyCommented = false;
+   if (CfIdentity.IsAuthenticated) { alreadyCommented = (Model.Opinions.Where(o => o.UserID == CfIdentity.UserID).Count() > 0); }    
+}
+
+@* Here we don't want to let users leave opinions on their own media *@
+@if (!CfIdentity.IsAuthenticated)
+{
+    <p style="color:Red;margin:10px 0px">Please <a href="/" target="_blank">sign in</a> to rate media and participate in the competition.</p>
+    
+    <div id="login"><a href="/login" class="jBtn">Log on now!</a></div>
+    
+}
+else if (Model.TargetOwnerID != Guid.Empty && Model.TargetOwnerID != CfIdentity.UserID && !alreadyCommented)
+{
+    using (Html.BeginForm(Model.ActionName, Model.ControllerName, new { ID = Model.TargetID }, FormMethod.Post, new { id = "opinion-form" }))
+    {        
+        @Html.ValidationSummary(true)
+    
+        <div class="editor-label">
+            @Html.LabelFor(m => m.Rating, "Rate")
+            @Html.ValidationMessageFor(m => m.Rating) <span class="stars-cap" style="color:darkorange"></span>
+        </div>
+        <div class="editor-field" id="score-div">
+            <div class="stars-wrapper" style="width:180px;margin:auto;height:30px;margin-top:10px">
+                @Html.DropDownListFor(m => m.Rating, SelectLists.RatingSelectList, "rate", null) 
+            </div>
+        </div>
+    
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.Comment, "Thoughtful comment explaining rating")
+        <span style="font-size:9px;color:Gray">(People read these, so you don't want to sound like a douche)</span></div>
+        <div>@Html.ValidationMessageFor(m => m.Comment, "Comment required")</div>
+        <div class="editor-field">
+            @Html.TextAreaFor(m => m.Comment, 4, 94, new { style = "width:500px" })
+            
+        </div>
+
+        <div class="options">
+            <input type="submit" value="Submit" class="jBtn" style="margin:10px 0px;padding:6px 20px;font-size:22px" />
+        </div>
+    }
+}
+
+<div class="opinions-list">
+
+    @if (Model.Opinions.Count == 0)
+    {
+        <div id="no-opinions"><p>No one has left an opinion on this piece of media :( ... </p>   
+        <br /><p>Share this media to help get it some attention!</p></div>
+    }
+    else
+    {
+        foreach (var o in Model.Opinions)
+        { @Html.Partial("OpinionDetail", o) }
+    }
+    
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $(".stars-wrapper").stars({ inputType: "select", captionEl: $(".stars-cap") });
+
+        //-- Make sure our validation fires!
+        var rt = $(".stars-wrapper input");
+        rt.removeAttr("disabled")
+        rt.attr("data-val-range-min", "1");
+        rt.attr("data-val-range-max", "5");
+        rt.attr("data-val-range", "rating required");
+        rt.attr("data-val", "true");
+
+        $(".jBtn").button();
+
+        $("#opinion-form").submit(function () {
+            var actionUrl = $("#opinion-form").attr("action");
+
+            $.post(
+                actionUrl,
+                $("#opinion-form").serialize(),
+                function (data) {
+                    alert("Opinion saved!");
+                    if ($("#no-opinions").length > 0) { $("#no-opinions").hide(); }
+                    $("#opinion-form").hide();
+                    $(".opinions-list").prepend(data);
+                }
+            );
+            return false;
+        });
+    });
+</script>
+

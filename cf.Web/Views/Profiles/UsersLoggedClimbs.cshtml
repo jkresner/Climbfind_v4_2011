@@ -1,0 +1,11 @@
+﻿@{  Profile user = ViewBag.User;
+    List<LoggedClimb> logs = ViewBag.LoggedClimbs;
+    ViewBag.Title = user.DisplayName+"'s logged climbs";
+}
+
+<h1>@user.DisplayName's logged climbs</h1>
+
+@foreach (var l in logs)
+{
+    <p>@l.Utc @l.ClimbName</p>
+}

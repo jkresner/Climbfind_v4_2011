@@ -1,0 +1,42 @@
+﻿@model List<int>
+@{ ILocation parent = ViewBag.Location;
+   ViewBag.CategoryIDs = Model; }           
+@functions{
+    protected string IsChecked(ClimbTagCategory type) { int id = (int)type; return Model.Contains(id) ? "checked='checked' " : ""; }
+}
+
+<label>Type:</label> 
+@if (parent.Type.ToPlaceCateogry() == PlaceCategory.IndoorClimbing)
+{
+<span><input id="CatIndoor" type="radio" name="Categories" value="@((int)ClimbTagCategory.Indoor)" checked="checked" /> Indoor</span>
+}
+else
+{
+<span><input id="CatOutdoorRock" type="radio" name="Categories" value="@((int)ClimbTagCategory.OutdoorRock)" @IsChecked(ClimbTagCategory.OutdoorRock)/> Rock</span>
+<span><input id="CatIce" type="radio" name="Categories" value="@((int)ClimbTagCategory.Ice)"  @IsChecked(ClimbTagCategory.Ice)/> Ice</span>
+<span><input id="CatMixed" type="radio" name="Categories" value="@((int)ClimbTagCategory.Mixed)"  @IsChecked(ClimbTagCategory.Mixed)/> Mixed</span>
+<span><input id="CatSummit" type="radio" name="Categories" value="@((int)ClimbTagCategory.Summit)"  @IsChecked(ClimbTagCategory.Summit)/> Summit</span>
+}
+<hr />
+<label>Style:</label> 
+<span><input id="CatBoulder" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Boulder)" @IsChecked(ClimbTagCategory.Boulder)/> Boulder</span>
+<span><input id="CatTopRope" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.TopRope)" @IsChecked(ClimbTagCategory.TopRope)/> Top Rope</span>
+<span><input id="CatSport" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Sport)" @IsChecked(ClimbTagCategory.Sport)/> Sport (Lead)</span>
+<span><input id="CatTrad" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Trad)" @IsChecked(ClimbTagCategory.Trad)/> Trad (w gear)</span>
+<span><input id="CatSolo" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Solo)" @IsChecked(ClimbTagCategory.Solo)/> Solo</span>
+<span><input id="CatWaterSolo" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.WaterSolo)"  @IsChecked(ClimbTagCategory.WaterSolo)/> Water Solo</span>
+<span><input id="CatAid" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Aid)"  @IsChecked(ClimbTagCategory.Aid)/> Aid</span>
+<span><input id="CatDryTool" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.DryTool)"  @IsChecked(ClimbTagCategory.DryTool)/>  Dry Tool</span>
+<span><input id="CatMultiPitch" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Multipitch)"  @IsChecked(ClimbTagCategory.Multipitch)/>  Multi-pitch</span>
+<hr />
+<label>Angle:</label> 
+<span><input id="CatVertical" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Vertical)"  @IsChecked(ClimbTagCategory.Vertical)/> Vertical</span>
+<span><input id="CatOverhang" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Overhang)"  @IsChecked(ClimbTagCategory.Overhang)/> Overhang</span>
+<span><input id="CatSlab" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Slab)"  @IsChecked(ClimbTagCategory.Slab)/> Slab</span>
+<span><input id="CatTraverse" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Traverse)"  @IsChecked(ClimbTagCategory.Traverse)/> Traverse</span>
+<span><input id="CatTopOut" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.TopOut)"  @IsChecked(ClimbTagCategory.TopOut)/> Top Out</span>
+<hr />
+<label>Holds:</label> 
+<span><input id="CatJugs" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Jugs)"  @IsChecked(ClimbTagCategory.Jugs)/> Jugs</span>
+<span><input id="CatCrimps" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Crimps)"  @IsChecked(ClimbTagCategory.Crimps)/> Crimps</span>
+<span><input id="CatSlopers" type="checkbox" name="Categories" value="@((int)ClimbTagCategory.Slopers)"  @IsChecked(ClimbTagCategory.Slopers)/> Slopers</span>

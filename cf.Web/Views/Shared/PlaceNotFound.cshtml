@@ -1,0 +1,31 @@
+﻿@{ ViewBag.Title = "Resource Not Found";  }
+
+<div id="col2-left">
+
+    <h1>Oooops!?</h1>
+ 
+    <p>We can't find the place you've requested.</p>
+
+    <p>Want to add it to Climbfind?</p>
+
+</div>
+
+
+
+<div id="col2-right">
+
+    <div class="sidemenu">
+        <h3>Options</h3>
+        <ul>
+            <li>@(Html.ActionLink<PlacesController>(c=>c.Countries(), "Browse climbing by country"))</li>
+            <li><a href="/rock-climbing-usa">United States Rock Climbing</a></li>
+            <li><a href="/rock-climbing-canada">Canadian Rock Climbing</a></li>
+            <li><a href="/rock-climbing-england">English Rock Climbing</a></li>
+            <li><a href="/rock-climbing-australia">Australian Rock Climbing</a></li>
+            <li><a href="/rock-climbing-germany">German Rock Climbing</a></li>
+            @*<li>@(Html.ActionLink<PlacesController>(c=>c.CountryDetail( country.NameUrlPart), "Back to "+  country.Name))</li>
+            <li>@(Html.ActionCssLink<ModerateController>(c=>c.AreaEdit(area.ID), "Moderate "+  area.Name, "Moderate"))</li>*@
+        </ul>
+    </div>
+
+</div>

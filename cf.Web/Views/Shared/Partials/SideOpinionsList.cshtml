@@ -1,0 +1,32 @@
+﻿@model SideOpinionsListModel 
+
+<div class="sidemenu">
+
+    @{ int r = 1; }                    
+
+    <h3>Opinions</h3>
+
+    @if (Model.Object.RatingCount > 0) {
+        <p style="margin-left:10px">Showing @Model.Opinions.Count of
+            <a href="@Url.Action("ListObject", "Opinions", new { id = Model.Object.ID })">@Model.Object.RatingCount opinions</a></p> }
+    
+    @if (Model.Opinions.Count == 0)
+    { <ul><li><p>No one has given us their two cents about @Model.Object.Name... <a href="#">be the first!</a></p></li></ul> }
+    else
+    {       
+        <ul id="side-opinions">
+        @foreach (var c in Model.Opinions)
+        {
+            <li>
+                @Html.UserPicThumb(c.UserID)
+                <div>@Html.StarImage(c.Rating) <b>@Html.UserProfileLink(c.UserID)</b>
+                     <p>@c.Comment</p>
+                </div>
+                <hr />
+            </li> 
+        }
+        </ul>
+    }
+    <hr />
+
+</div>

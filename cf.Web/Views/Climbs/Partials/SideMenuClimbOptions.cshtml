@@ -1,0 +1,55 @@
+﻿@inherits PlacesWebViewPage<List<Area>>
+@{ IEnumerable<Area> parentsClimbingAreas = ViewBag.ParentClimbingAreas;
+   Guid climbID = (ViewBag.Climb as Climb).ID;
+   List<LocationSection> sections = ViewBag.LocationSections; }                
+
+<div class="sidemenu navOptions">
+    <h3>Options</h3>
+    <ul>
+
+        <li>Improve page 
+            @(Html.ActionLink<ModerateController>(c => c.ClaimPage(climbID), "Claim page", new { style = "float:right" }))
+         <dl>
+            <dd><b>@(Html.ActionLink<ModerateController>(c => c.ClimbEdit(climbID), "Add, edit or delete page content"))</b></dd>
+            <dd><a href="javascript:alert('To contribute your opinion on a climb, you must log that you have climbed it.')" class="opinion">Rate this climb</a></dd>                         
+            <dd><a href="javascript:alert('Flagging bad content coming in a future version')">Flag bad content</a></dd>            
+         </dl>
+         
+        </li> 
+       <li>Navigate to <a href="/world-rock-climbing" style="float:right;font-weight:normal">All countries</a>
+        <dl>
+            <dd><a href="@country.SlugUrl">@country.Name</a></dd>
+
+            @if (current.Type != CfType.Province)
+            {
+                foreach (var pl in intersectingProvinces)
+                { <dd class="pad25"><a href="@pl.SlugUrl">@pl.Name</a></dd> }
+            }
+
+            @if (current.Type == CfType.ClimbingArea || current.Type.ToPlaceCateogry() != PlaceCategory.Area)
+            {
+                foreach (var c in intersectingCities)
+                { <dd class="pad40"><a href="@c.SlugUrl">@c.Name</a></dd> }
+            }
+            @if (parentsClimbingAreas != null)
+            {
+                foreach (var c in parentsClimbingAreas.OrderByDescending(a => a.ShapeArea))
+                { <dd class="pad55"><a href="@c.SlugUrl">@c.Name</a></dd> }
+            }
+            @if (current != null)
+            {
+                <dd class="pad70"><a href="@current.SlugUrl">@current.Name</a></dd>
+            }
+        </dl>
+
+        </li> 
+            @if (sections != null)
+            {
+                <li>Sections in @current.Name 
+                    <dl>@foreach (var s in sections.OrderBy(i=>i.DefaultClimbTypeID)) { 
+                            <dd><a href="/section/@s.NameUrlPart/@current.IDstring">@s.Name</a> <i style="font-size:9px">@((ClimbType)s.DefaultClimbTypeID)</i></dd> } 
+                    </dl>
+                </li>      
+            }
+    </ul>
+</div>

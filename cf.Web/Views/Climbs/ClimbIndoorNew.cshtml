@@ -1,0 +1,32 @@
+﻿@model ClimbIndoorNewViewModel
+@{ CfCacheIndexEntry parent = ViewBag.Location;
+   CfPageTitleMaster.Set("Add new climb"); }
+
+
+<div id="col2-left">
+
+
+@using (Html.BeginForm("ClimbIndoorNew", "Climbs", new { id = parent.ID }, FormMethod.Post , null))
+{
+    <div style="height:550px">
+        <h1>Adding & editing climbs for <a href="@parent.SlugUrl">@parent.Name</a></h1> 
+    
+        <p>Only management at @parent.Name can add and edit climbs.</p>
+
+        <p>If there are no climbs listed for @parent.Name and you haven't noticed QR codes (bar codes)
+        popping up around your gym, they are probably not set up to participate in climb logging through Climbfind.</p>
+    
+        <p style="color:Red;font-weight:bold">Tell your climbing gym to get in touch with us at contact@climbfind.com to set your gym up!</p>
+    </div>
+    
+    <hr />
+}
+
+</div>
+
+<div id="col2-right">
+
+    <h3>Climbfind mobile</h3>
+        <p style="width:100%">Use Climbfind Mobile to log climbs, share opinions & beta, find partners & keep track of your local community all while on the go.</p>
+        <img src="@Stgs.StaticRt/screenshots/iphone/Share-Opinions.png" style="width:220px;margin:10px 5px" alt="log climbs with Climbfind mobile" />
+</div>

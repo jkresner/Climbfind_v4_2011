@@ -1,0 +1,69 @@
+﻿@{ ViewBag.Title = "World Rock Climbing Database"; }
+
+<style type="text/css"> #col1 p {font-size:13px } </style>
+
+<div id="col1">
+
+<div id="col1-content">
+
+<h1>World Rock Climbing Database</h1>
+
+<p>Since 2008 users from over 170 countries have been adding content and climbing places to Climbfind's rock climbing database, 
+so that members can find a place and a partner to climb with anywhere in the world!</p>
+
+<p>Climbfind's newly rebuilt (2011) climbing database is 'geographically aware & intelligent' leveraging powerful spatial mathematics
+to provide the most sophisticated rock climbing search and navigation available on the internet today. You can browse the database top down using
+the <a href="/world-rock-climbing" target="_blank">World Rock Climbing by Country</a> index, or use our
+<b><a href="/rock-climbing-search-engine" target="_blank">Rock climbing search engine</a></b> to instantaneously
+navigate to any city with climbing, climbing area, indoor climbing gym, outdoor rock wall or boulder.
+</p>
+
+<h2>Rock Climbing Maps</h2>
+<p>The Climbfind climbing database has also grown out of maps, not just names. 
+Search by city, climbing area, single rock wall, boulder or indoor climbing destination in the search box up to top, 
+or browse and search by map to find climbs in your own backyard 
+or far across the globe. Simply start at 
+<a href="/rock-climbing-usa" target="_blank">The Country Level</a>, browse down to
+<a href="/rock-climbing-usa/california" target="_blank">The Province / State</a>, then to 
+<a href="/rock-climbing-usa/san-francisco" target="_blank">The City</a>, followed by
+<a href="/rock-climbing-usa/sutrobath-boulders" target="_blank">The Climbing Area</a> and finally
+<a href="/rock-climbing-usa/sutrobath-boulders" target="_blank">The Location (rock wall or boulder)</a>.
+</p>
+
+<a href="/rock-climbing-usa/san-francisco" target="_blank"><img src="@Stgs.StaticRt/screenshots/help/ClimbingMapsSanFrancisco.JPG" style="width:440px;border:solid 1px #d3d3d3;padding:2px;margin-right:20px" /></a>
+<a href="/rock-climbing-usa/sutrobath-boulders" target="_blank"><img src="@Stgs.StaticRt/screenshots/help/ClimbingMapsAnvilBoulder.JPG" style="width:480px;border:solid 1px #d3d3d3;padding:2px" /></a>
+
+<hr />
+
+<h2>Cities with rock climbing & indoor climbing</h2>
+<p>Climbfind has the most complete listing of climbing gyms on the internet (born out of the road tripping of the Australian
+founders through the UK, Canada, USA, Argentina, and many other international destinations) and our users keep adding indoor 
+and outdoor locations the whole world over!</p>
+
+<p>Climbfind let's anyone add cities with indoor rock climbing and outdoor climbing locations to our database. You can also
+browse existing cities like <a href="/rock-climbing-canada/vancouver" title="Rock Climbing, Vancouver, Canada">Vancouver</a>,
+ <a href="/rock-climbing-usa/new-york-city" title="Rock Climbing, New York City, USA">New York City</a>, 
+ <a href="/rock-climbing-usa/boulder" title="Rock Climbing, Boulder, Colorado, USA">Boulder, Colorado</a> and many more.
+
+<h2>User generated climbing database</h2>
+
+<p>If climbing you know of is not in our system, you can add photos, videos, directions, the location on the map, access issues, 
+all the details to let other climbers know the amazing opportunities that exist all around the globe!</p>
+
+
+</p>
+
+
+
+
+@if (!User.Identity.IsAuthenticated)
+{
+<p>At this point, if you know why you're here, you probably should just:</p>
+
+<div style="height:228px;height:60px;margin:80px 0px 0px 255px">
+    <div id="login"><a href="/login" class="jBtn" style="padding:20px 44px 20px 44px;font-size:34px">Sign in</a></div>
+</div>
+}
+</div>
+
+</div>

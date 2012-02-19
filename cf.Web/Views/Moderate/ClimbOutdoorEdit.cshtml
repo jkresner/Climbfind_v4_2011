@@ -1,0 +1,172 @@
+﻿@model ClimbOutdoorEditViewModel
+@{ ClimbOutdoor climb = ViewBag.Climb; Country country = AppLookups.Country(climb.CountryID);
+   ViewBag.Title = "Climb outdoor edit";
+   Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   bool HasClimbingImage = ViewBag.ClimbingImageToDisplayUrl != Stgs.DefaultMapInfoImage; 
+}
+
+
+<style type="text/css">
+    #optionaldetails { width:506px;margin-left:10px;float:left }
+    #optionaldetails select { width:110px;height:29px;font-size:10px }
+</style>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        
+        @if (!HasClimbingImage)
+        { <text>$("#NoClimbingImageDiv").show();</text> }
+        else
+        {
+        <text>$("#HasClimbingImageDiv").show(); </text> }
+
+        $("#dialog-upload-image").dialog({ autoOpen: false, width:820, height:620, modal: true });
+        $(".openDialogue").click(function() { openUploadDialog(this); return false; });
+
+        $("#CatMultipitch").click(function () {
+            if ($('#CatMultipitch').is(':checked')) { $("#pitches").show(); } else { $("#pitches").hide(); $("#NumberOfPitches").val("1"); } 
+        });
+
+        if ($('#CatMultipitch').is(':checked')) { $("#pitches").show(); }
+    });
+
+    
+    var currentUploadImage;
+    function openUploadDialog(link)
+    {
+        //-- In case we want to use it again.
+        resetWebCrop(); 
+        
+        currentUploadImage = link.id;
+        imageSaveAjaxPostUrl = '@Url.Action("SaveClimbClimbingImageFromWebUrl", (string)"Moderate")';
+    
+        $("#dialog-upload-image").dialog("open");
+        ShowUploadChoice();
+    }
+
+    function setResultImg(jsonResult) 
+    {
+        //-- In case we want to use it again.
+        resetWebCrop(); 
+        
+        if (currentUploadImage == 'Climbing')
+        {
+           $("#ClimbingImg").attr("src", jsonResult.SavedImgUrl);
+           $("#HasClimbingImageDiv").show();
+           $("#NoClimbingImageDiv").hide(); 
+        }
+
+        $("#dialog-upload-image").dialog("close");         
+    }
+
+</script>
+
+
+@using (Html.BeginForm("ClimbOutdoorEdit", "Moderate", new { id = climb.ID }, FormMethod.Post, null))
+{
+    <h1>Mod: <a href="@climb.SlugUrl">@climb.Name</a></h1>
+    
+    @Html.ValidationSummary(true)
+    
+    <div style="width:450px;float:left">
+    
+         <fieldset><legend>Required</legend>
+        
+            <div style="float:left;width:120px">
+                <div class="editor-label">@Html.LabelFor(m => m.ClimbTerrainID, "Terrain")</div>
+                <div class="editor-field">@Html.DropDownListFor(m => m.ClimbTerrainID, SelectLists.ClimbTerrainTypeSelectList)</div>
+            </div>
+        
+            <div style="float:left;width:160px">
+                <div class="editor-label">@Html.LabelFor(m => m.ClimbTypeID, "Climb type")  @Html.ValidationMessageFor(m => m.ClimbTypeID, "Select type")</div>
+                <div class="editor-field">@Html.DropDownListFor(m => m.ClimbTypeID, SelectLists.IndoorClimbTypeSelectList, "--- select ---", null)</div>
+            </div>
+    
+            <hr />
+            
+            <div class="editor-label">@Html.LabelFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name, "Name required. Type 'Unknown' if not sure")</div>
+            <div class="editor-label">@Html.TextBoxFor(m => m.Name, new { @class = "long" })</div>
+
+            <div class="editor-label">@Html.LabelFor(m => m.NameUrlPart, "Url part") @Html.ValidationMessageFor(m => m.NameUrlPart)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.NameUrlPart)</div> 
+
+            <div class="editor-label">@Html.LabelFor(m => m.NameShort, "Abbreviated name") @Html.ValidationMessageFor(m => m.NameShort)</div>
+            <div class="editor-field">@Html.EditorFor(m => m.NameShort)</div> 
+
+            <div class="editor-label">@Html.LabelFor(m => m.GradeLocal, "Grade") <i>Use 'Safety rating' for trad safety part</i> @Html.ValidationMessageFor(m => m.GradeLocal, "Select grade")</div>
+            <div class="editor-label">@Html.DropDownListFor(m => m.GradeLocal, SelectLists.GradeSelectList, "--- select ---", null)</div>    
+        
+            @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = climb.SlugUrl, DeleteUrl = Url.Action("ClimbDelete", new { id = Model.ID }) }) 
+        </fieldset>
+    
+        <div class="formImageUpload" style="width:100%">
+            <fieldset style="margin-top:20px"><legend>Climbing image [<a id="Climbing" href="#" class="openDialogue">edit</a>]</legend>
+                <div id="NoClimbingImageDiv">
+                    <p>@Model.Name has no climbing image!</p>
+                    <p><b><a id="Climbing" href="#" class="openDialogue">Upload one now...</a></b></p>               
+                </div>
+                <div id="HasClimbingImageDiv">
+                    <img id="ClimbingImg" src="@ViewBag.ClimbingImageToDisplayUrl" alt="logo image" />
+                </div>
+            </fieldset>
+        </div>      
+    </div>
+    
+    
+    <fieldset id="optionaldetails"><legend>Optional</legend>
+    
+        <div id="method" class="editor-label">
+            @Html.EditorFor(m => m.Categories, "ClimbOutdoorMethods")
+        </div>
+        
+        <div id="pitches" style="display:none">
+            <div class="editor-label">@Html.LabelFor(m => m.NumberOfPitches, "# of pitches")</div>
+            <div class="editor-label">@Html.TextBoxFor(m => m.NumberOfPitches)</div>
+        </div>
+
+        <hr /><hr />
+        <div class="editor-label">@Html.LabelFor(m => m.HeightInMeters, "Height") <i>to nearest meter</i></div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.HeightInMeters)</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.Description) <i>optional</i></div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.Description, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.SafetyRating, "Safety rating") <i>HS, R/X YDS system etc. </i></div>
+        <div class="editor-label">@Html.TextBoxFor(m => m.SafetyRating)</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionSafety, "Safety & warnings")</div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionSafety, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionWhere, "Where") <i>how to locate the climb at the crag</i></div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionWhere, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionStart, "Start description") <i>how identify the start of the climb</i></div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionStart, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div class="editor-label">@Html.LabelFor(m => m.DescriptionGear, "Gear needed") <i># of bolts, pads, rack etc.</div>
+        <div class="editor-label">@Html.TextAreaFor(m => m.DescriptionGear, new { style = "width:490px;height:50px" })</div>
+        <hr />
+        <div id="categories" class="editor-label">
+            @Html.EditorFor(m => m.Categories, "ClimbOutdoorCategories")
+        </div>
+    </fieldset>
+    
+    <hr />   
+    @Html.HiddenFor(m => m.ID)
+   
+}
+
+<div id="dialog-upload-image" title="Upload image for @climb.Name">
+           
+   @Html.Partial("Partials/WebUrlImageCropper", new WebUrlCropImageModel()
+{
+    PostActionUrl = "/Moderate/SaveClimbClimbingImageFromWebUrl",
+    ObjID = climb.ID.ToString(),
+    MinWidth = 220,
+    MinHeight = 120,
+    AllowUpload = true,
+    JavascriptSuccessCallback = "setResultImg"
+})
+    
+</div>

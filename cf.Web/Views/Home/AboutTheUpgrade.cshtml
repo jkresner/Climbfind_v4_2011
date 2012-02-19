@@ -1,0 +1,148 @@
+﻿@{ ViewBag.Robots = "noindex,nofollow";
+   ViewBag.Title = "The upgrade form CF3 to CF4"; }
+
+<div id="col1">
+
+<div id="col1-content">
+
+<h1>The Upgrade from CF3 to CF4</h1>
+
+<p>The new Climbfind - in its entirety - was coded by a single coder. The site (+ mobile app next month) took 11 months to write and is a work in progress.
+It is a much bigger site than the previous version and may take a bit of getting used to. We all
+love Climbfind and that's why you may be concerned if something on the new site doesn't feel perfect or you don't figure it out immediately. Please be proactive by
+writing in to contact@climbfind.com with feedback and suggestions. We listen carefully and move on things quickly. We're psyched about the new
+site - it is more complicated, but also exponentially richer and more powerful. If you loved CF3, we promise you will grow to love CF4 
+a lot more. With that in mind, here's some context:</p>
+
+<hr />
+<h2>Short falls of CF3</h2>
+<p>CF3 was a proof of concept. Before we invested insane amounts of time an energy trying to fully realize our vision to help you
+ "Find someone to climb with on any given day, anywhere around the world", we basically built and grassroots promoted 
+ a really nice prototype. It turned out that you responded really well to our idea and vision:</p>
+
+<img src="@Stgs.StaticRt/screenshots/traffic/cf3-growth.png" />
+<hr />
+<p>Whilst the growth is impressive, the user engagement (time on site) and returning visits were not. CF3 basically did its job in
+partner matching too well in high population density areas. By matching people so efficiently, it did not retain user attention or foster repeat usage - once
+you made climbing friends, you stopped participating in the Climbfind vision until you needed another partner. 
+At the same time Climbfind did poorly in less dense areas and most outdoor climbing areas because the database was inadequately structured and 
+lacked 'spatial intelligence'.
+
+The most significant short fall of CF3 is that it only works when 2 people in the same area both
+need a partner at the same time. Our vision is to help you hook up and climb with others even when they are not in the
+position where they need a partner - but they understand in the future they might - so they take you climbing based on "CF Karma"
+which they understand will come back to them in the future.</p>
+<hr />
+<p>Thus we had to solve 2 problems. (1) Get people to spend time on Climbfind, even when they are not 'desperately seeking'. 
+(2) Improve the probability of getting replies to PartnerCalls by growing a much bigger community by also appealing to climbers that
+are not in need of a climbing partner.</p>
+
+<hr />
+<h2>New features</h2>
+<p>We have gone about solving these hurdles by adding new features. It will take you multiple visits to the new site to become familiar with and 
+appreciate the extend of much of the coolness in the new version.</p>
+
+<h5>Check-in, visits & climbing history</h5>
+<p>The most notable and obvious new feature is "Check-in" from the climbing feed (and very shortly Climbfind Mobile). In CF3, you used to
+state on your profile where you have climbed. This was troublesome as (1) most users only did it once, and then it stayed stagnant,
+not accurately reflecting your climbing history as you visit new places (2) there was no time component, so we had no way to more actively
+start to suggest and introduce you to you other climbers who were actually active and hanging out at the
+same places. Enter "Check-in" and your "Climbing History". Each time you <i>check in</i> a visit gets added your
+<a href="/history" target="_blank">Climbing History</a>. Here is
+<a href="/history/a9646cc3-18cb-4a62-8402-5263ba8b3476" target="_blank"> an example of climbing history including
+photos & climbs begin logged</a>. Not only will you be able to track your progress and easily recall and enjoy memories of the
+places you've climbed, when
+<a href="/visit/5bf6a371-ae01-4e24-ac59-00a1c91cb5de" target="_blank"> you view a visit</a> you will notice down the right 
+Climbfind shows you others that were climbing at the same location around the same time. This helps your become familiar
+with your local community as you can see who climbs where you climb and even take interest in what climbs others are trying.
+</p>
+
+<h5>PartnerCalls & PartnerCall Subscriptions for AREAS (multiple destinations)</h5>
+<p>Another short falls of CF3 was that you had to be familiar with a climbing place before you could find a partner there.
+This is simple for an indoor rock climbing gym - but with outdoor climbing or if you want to climb somewhere foreign, 
+it is VERY limiting. In CF4 you can
+say something like "I want to go climbing anywhere in my city" without even knowing the outdoor spots, and someone else
+who wants to go to a particular outdoor boulder that you've never heard about, will receive your call and can show you new climbing there. 
+The advantages of this
+scenario while wanting to climb when travelling or if you're new to climbing is amplified greatly. Put one way, CF effectively teaches you about climbing
+geography while you use it. If you are also flexible on where to climb, it also means you can post a single call instead of a call for each place
+you'd be happy to go to.</p>
+
+<h5>Logging climbs & adding climbs to our database</h5>
+<p>Adding climbs to our database was a tremendous increase in complexity that trickled all the way up to how places were stored 
+in our database. Ultimately the way CF3 was structured was completely inadequate and the quality of content poor. 2 years of thought
+went into CF4 in an attempt to make it the foundation for a comprehensive world climbing database which you will be able to 
+accesse on the go through CF Mobile. CF4 is a little complicated at first but when you appreciate the 
+<a href="/help#AreasVsLocations" target="_blank"> differences between "Areas" and "Locations"</a> and begin to browse around
+a few places and notice things on the right like navigation hierarchy and "areas within 2 and a half hours" 
+(<a href="/rock-climbing-canada/vancouver" target="_blank">see an example of Vancouver, Canada</a>) you'll start to
+appreciate the breadth of data and the power you have to navigate through right from the country level down
+to a single climb.
+</p>
+
+<h5>Opinions</h5>
+<p>You can read <a href="/opinions" target="_blank">a detailed explanation about opinions</a>, but in short, Climbfind aggregates
+ community opinions and uses them to 'bubble up' higher rated content/places & climbs to push you things that the community 
+ feels are the best quality.</p>
+
+<h5>The CF4 Climbing Feed</h5>
+<p>With these new features, much more content is hitting the feed compared to the old CF3 feed. To get the most out of
+the climbing feed, you should spend a couple of minutes understanding <a href="/help#ClimbingFeed" target="_blank">how to customize the feed</a>
+so you can quickly access the exact information you want and tailor it to your locale.</p>
+
+<hr />
+<h2>What we could not carry over and why</h2>
+
+<hr />
+<h5>Places you've climbed on your profile</h5>
+<p>Because the places database has completely changed and many places have been "lost" in the transition from CF3 to CF4 (and
+need to be re-added) we could not carry over "places on your profile". We feel that the 
+<a href="/history" target="_blank">CF4 Climbing history</a> feature is a much richer
+and powerful expression of the same concept and encourage you to start retroactively logging places you've visited throughout your
+climbing life. Within minutes and minimal effort your will have something more valuable than the old "list" on your CF3 profile.
+It's worth pointing out, as soon as you add a photo/movie to your visit Climbfind automatically adds this photo/movie to the place profile
+page of the place you visited. We are hoping this will quickly populate the database with media tagged to specific destinations,
+greatly enhancing the 'where to climb' research application of the website for other users.</p>
+
+<hr />
+<h5>Your partner calls subscriptions</h5>
+<p>Again, because the places database has changed we could not carry over your subscriptions. With the power to now create an
+area subscription as opposed to many single locations - it should only take a few minutes to set up you CF4 subscriptions.
+We have put together screen cast walking you through <a href="/help#PartnerCallSubscriptions" target="_blank"><b>PartnerCall Subscriptions</b></a> 
+and explaining the process.</p>
+
+<hr />
+<h5>Your extended profile (Questions & Answers)</h5>
+<p>Put simply, we ran out of time and this fell of the list. The data is still available and in the foreseeable future we may
+migrate this to your new profile.</p>
+
+<hr />
+<h5>Your CF3 messages</h5>
+<p>The CF3 messaging system was horrible... We received many complaints over the years and we are the first to admit we didn't invest enough
+ time as we had no way of knowing Climbfind was going to grow so big. We have since invested the due effort and rebuilt it to be much more fluid 
+and easy to use in CF4. You will see that you like using it both through the site & on Climbfind Mobile.
+</p>
+
+
+<hr />
+<h2>We apologize for the CF4 'Slow Boil'</h2>
+<p>Because a lot of the data is not carried over, it's possible that data may not be available for something that you are personally interested in,
+for example partner calls in a specific area... within a few weeks we expect CF4 to shadow CF3 in terms of content it is generating. The first few days
+live are already showing the data produced by each user is significantly greater. The website is not "Broken" it just needs someone to re-start 
+the conversation. Please go ahead and make posts, or add climbing places to the database in your area if necessary.</p>
+
+<hr />
+<h2>Why there is still a link to CF3 and the site remains accessible</h2>
+<p>We left CF3 up in case you do need to track someone down, refer to old messaging or look up some information. The messaging and email
+system remains intact - but please do not post new PartnerCalls&trade; on the old site.</p>
+
+<hr />
+<h2>Thanks for stopping by</h2>
+<p>We appreciate you taking the time to familiarize yourself with the changes. We're positive once you become familiar with the
+new site you will enjoy it and gain much more value from it than CF3.</p>
+<p>We look forward to seeing you on the new site,</p>
+<p>The Climbfind Team</p>
+
+
+</div>
+</div>

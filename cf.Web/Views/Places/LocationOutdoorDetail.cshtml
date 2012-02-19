@@ -1,0 +1,49 @@
+﻿@{  LocationOutdoor location = current as LocationOutdoor;
+    List<Climb> climbs = ViewBag.Climbs;
+    List<PostRendered> feedPosts = ViewBag.Posts;
+    List<Location> tenClosest = new List<Location>();
+    Bing7MapWithLocationViewModel mapView = ViewBag.MapView;
+    CfPageTitleMaster.Set("{0} outdoor rock climbing", current.Name);
+}
+    
+
+<div id="col2-left">
+    <h1>Rock climbing on @location.Name 
+        
+        @if (!location.Name.ToLower().Contains("boulder")) {
+        @location.Type.ToFriendlyString() }
+    
+    </h1>
+
+    <h6>@Html.Partial("Partials/MainOpinionSummary", location)</h6>
+
+    @if (location.AccessClosed) { <p class="seriousAttention" style="width:90%;margin-bottom:5px;font-weight:bold">Access to @current.Name is currently CLOSED.</p>}
+
+    @if (location.HasDescription) {<p>@location.Description</p>}
+    @if (!string.IsNullOrWhiteSpace(location.Approach)) {<p>@location.Approach</p>}
+    @if (!string.IsNullOrWhiteSpace(location.AccessIssues)) {<p>@location.AccessIssues</p>}
+    @if (!string.IsNullOrWhiteSpace(location.Cautions)) {<p>@location.Cautions</p>}        
+    <hr />    
+                
+        <div style="padding-top:4px">@Html.Partial("Partials/MainMediaRoll", current.SlugUrl)</div>
+              
+        <div class="outdoor-location-map">@Html.Partial("Maps/Bing7LocationMap", mapView)</div>
+        
+        @Html.Partial("Partials/MainClimbsSummary", climbs)
+
+        <hr />
+
+        <div id="activity">
+            @Html.Partial("Partials/FeedPostList", new FeedPostListViewData() { FeedPosts = feedPosts, UserHasDeletePostRights = CfPrincipal.IsGod() })
+        </div>
+</div>
+
+<div id="col2-right">
+
+    @Html.Partial("Partials/SideMenuOptions")
+
+    @if (location.HasAvatar) {<img class="area-avatar" src="@(Stgs.ImgsRt + @location.AvatarRelativeUrl)" />}
+
+</div>
+
+

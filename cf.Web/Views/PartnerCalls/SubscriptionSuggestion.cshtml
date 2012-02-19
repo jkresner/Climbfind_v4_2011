@@ -1,0 +1,42 @@
+﻿@{ CfPageTitleMaster.Set("New PartnerCall subscription");
+   var place = ViewBag.Place; 
+   //string placeType = ViewBag.PlaceType;
+   //List<Area> intersectingAreas = ViewBag.InterectingAreas;
+}
+
+<div style="float:left;width:75%">
+
+@using (Html.BeginForm("SubscriptionNew", "PartnerCalls", FormMethod.Get, new { id = "partnerCallForm" }))
+{
+    <div style="height:500px">
+    
+    <h1>You should create a PartnerCall&trade; subscription!</h1>   
+
+    <p style="margin:20px 0px 20px 0px;color:Green;background:white;border:solid 1px green;padding-top:5px;width:310px">
+        <img src="@Stgs.StaticRt/ui/yes.gif" style="float:left;padding:2px 4px 0px 8px" />Your PartnerCall has successfully been posted</p>
+    
+    <p>Posting a PartnerCall is a good way to find a partner... But, if you want to drastically increase your chances and meet
+    many more climbers, the best way is to use <b>PartnerCall&trade; Subscriptions</b>.</p>
+    
+    <p>PartnerCall&trade; Subscriptions put Climbfind to work for you. 
+        Instead of having to come back and check the website regularly when others post for @place.Name, Climbfind automatically tells you 
+        when someone is climbing there.</p>
+    
+    
+    <hr /><br />
+        <input type="submit" value="Show me more" class="SubmitBtn jBtn" style="font-size:24px;padding:10px 50px 10px 50px" /> 
+    <hr />
+
+    
+    </div>
+    
+    
+
+    //Answer 2: 'Help Climbfind find you last minute partners' on the same day you post.
+
+//How it works: If there are more than 20 people subscribed to your local climbing gym, when you post a call in the morning, 20 people get an email saying you are looking. It is very probable at least 1/20 will be able to climb with you that evening! Pretty cool huh? Be one of those 20 people!
+    
+    
+    
+}
+</div>

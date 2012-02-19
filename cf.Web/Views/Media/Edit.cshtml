@@ -1,0 +1,84 @@
+﻿@model cf.Web.Views.Media.EditViewModel
+@{ Media media = ViewBag.Media;
+   ViewBag.Title = "Edit media"; }
+
+@using (Html.BeginForm("Update", "Media", FormMethod.Post))
+{
+    <div style="float:left;width:66%">
+    
+        <h1>Edit media</h1>    
+    
+        @Html.Raw(media.RenderMediaHtml()) 
+    
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.ReturnUrl)
+
+        <br /><br />
+    
+        <div class="editor-label">@Html.LabelFor(m => m.Title) @Html.ValidationMessageFor(m => m.Title)</div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.Title, new { @class = "long" })              
+        </div>
+    
+        <div class="editor-label">@Html.LabelFor(m => m.Description) @Html.ValidationMessageFor(m => m.Description)</div>
+        <div class="editor-field">
+            @Html.TextAreaFor(m => m.Description, new { @class = "description" })              
+        </div>
+            
+        @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = Model.ReturnUrl,
+            DeleteUrl = Url.Action("Delete", new { id = Model.ID, returnUrl = Model.ReturnUrl } ) })
+
+    </div>
+
+    <div style="float:left;width:34%">
+        
+        <h1>Tags</h1>
+
+        <ul id="mediatags">
+            @foreach (var o in media.ObjectMedias)
+            {
+                <li>@Html.CfLink(o.OnOjectID) <a id="@o.OnOjectID" href="#" class="deletetag">x</a></li>
+            }
+        </ul>
+        
+        <label>Add new tag</label>
+        <input class="tbox jq_watermark" id="tagAsearch" type="text" name="asearch" title="Type name of area, climbing gym or outdoor location" style="width:320px!important" />
+        
+    </div>
+        
+    <hr />
+}
+
+<style type="text/css">
+    #mediatags { margin:-2px 0px 20px 0px }
+    .deletetag { font-weight:bold;color:red!important }
+</style>
+
+<script type="text/javascript">
+
+    /* Climbfind functions */
+    jQuery(document).ready(function () {
+        attachedDeleteTagEvent();
+
+        placeAllTypesAutocomplete("#tagAsearch", function (item) {
+            if (item.id != null) {
+                $.post("/Media/AddMediaTag?id=@media.ID&onObjectID=" + item.id,
+                function (data) {
+                    var htm = "<li><a href='" + item.url + "' target='_blank'>" + item.value + "</a> <a id='" + item.id + "' href='#' class='deletetag'>x</a></li>";
+                    $("#mediatags").append(htm);
+                    attachedDeleteTagEvent();
+                    $("#tagAsearch").val("");
+                });
+            }
+        });
+    });
+
+    function attachedDeleteTagEvent() {
+        $("#mediatags .deletetag").click(function () {
+            var id = $(this).attr("id");
+            $.post("/Media/RemoveMediaTag?id=@media.ID&onObjectID=" + id,
+                function (data) { $("#" + id).parent().remove(); })
+        });
+    }
+
+</script>

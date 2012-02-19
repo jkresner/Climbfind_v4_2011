@@ -1,0 +1,97 @@
+﻿@{ Area area = ViewBag.Place;
+   Country country = AppLookups.Country(area.CountryID);
+    MapItem mapItemsArea = ViewBag.MapItemsArea;
+    System.Collections.ObjectModel.Collection<MapItem> mapItemsLocations = ViewBag.MapItemsLocations;
+    Bing7GeoJsonMapViewModel mapModel = ViewBag.MapModel;
+    Bing7MapViewOptionsViewModel mapView = ViewBag.MapModel.ViewOptions;
+    bool hasMapView = (mapView != null && !string.IsNullOrWhiteSpace(mapView.MapTypeId));
+    bool hasHeading = (mapView != null && !string.IsNullOrWhiteSpace(mapView.Heading));
+    string mapTypeId = mapView.MapTypeId ?? "auto";
+    if (hasHeading && mapView.Heading != "0") { mapTypeId = "birdseye"; }
+    bool mapIsBirdsEye = (mapTypeId == "birdseye");
+}
+
+<div style="text-align:right;padding-right:10px;"><i>Does this <b><a id="improve-area-lnk" href="#">area look incomplete or incorrect?</a></b></i></div>
+<hr />
+<div id="myMap" style="position:relative;height:400px;float:left;width:732px;clear:both"></div>
+
+<div id="improve-area" style="display:none;padding-top:30px" title="Help improve the @area.Name area">
+   <h2 style="margin-bottom:20px">Help us improve content on Climbfind!</h2>
+
+   <p>If you know of indoor climbing facilities that are not appearing on the map.</p>
+   <p style="padding:10px 20px 20px 20px">> @(Html.ActionLink<PlacesController>(c => c.LocationIndoorNew(country.NameUrlPart, area.NameUrlPart), "Add indoor climbing to " + @area.Name, new { target = "_blank" }))</p>
+   
+   <p>If you know of any outdoor rock walls or boulders that are not appearing on the map</p>
+   <p style="padding:10px 20px 20px 20px">> @(Html.ActionLink<PlacesController>(c => c.LocationOutdoorNew(country.NameUrlPart, area.NameUrlPart), "Add outdoor climbing to " + @area.Name, new { target = "_blank" }))</p>
+   
+   <p>If you think the area boundaries are incorrect and you know this area intimately</p>
+   <p style="padding:10px 20px 20px 20px">> @(Html.ActionLink<ModerateController>(c => c.AreaEdit(area.ID), "Edit area boundaries of " + @area.Name, new { target = "_blank" }))</p>
+
+   <p>If you are generally interested in helping us maintain the Climbfind database</p>
+   <p style="padding:10px 20px 20px 20px">> <a href="/moderators-project" target="_blank">Check out the Moderators Project</a></p>
+
+</div>
+
+<hr />
+
+
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script><script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+<script type="text/javascript">
+    var map, pinInfobox = null, infoBoxContents = [];
+
+    function GetMap()
+    {
+        map = RenderDefaultCfBing7Map('myMap', 'ArIOaOmY-BqIbbf1Ueo_9McVfA9iTm_WdfX9-Boyeyg_ZuSN1dCeNQ5d1bvxsdgt', 
+            Microsoft.Maps.MapTypeId.@mapTypeId);
+        
+        var areaLayer = new Microsoft.Maps.EntityCollection();
+        var polygonCoordinates = parse2dPolygonCoords('@mapItemsArea.C');
+        areaLayer.push(new Microsoft.Maps.Polygon(polygonCoordinates, EditPolygonViewOptions));
+        map.entities.push(areaLayer);
+
+        var areaBoundingBox = GetPolygonBoundingLocationRect(polygonCoordinates);
+        var areaCenter = new Microsoft.Maps.Location('@area.Latitude', '@area.Longitude');
+        map.setView({ bounds: areaBoundingBox });
+
+        //-- putting locations on top of area means we can hover over them
+        addLocationsToMap();
+    }
+
+    function addLocationsToMap()
+    {
+        var locationLayer = new Microsoft.Maps.EntityCollection();
+        var wtf = new GeoJsonLayer('myMap', map, '@Stgs.StaticRt/map', '@Stgs.ImgsRt/places', EditPolylineViewOptions, EditPolygonViewOptions);
+        @foreach (var item in mapItemsLocations)
+        {<text>
+        var mapItemJson = JSON.parse('@Html.Raw(item.ToJson())');
+        wtf.AddJsonMapItem(locationLayer, mapItemJson);
+        </text>
+        }
+
+        map.entities.push(locationLayer);
+    }
+
+    function showHideIndoor() { $('[src*="@Stgs.StaticRt/map/id.png"]').toggle(); }
+    function showHideOutdoor() { $('[src*="@Stgs.StaticRt/map/od.png"]').toggle(); }
+    function intializeShowHideIndoorOutdoor() 
+    { 
+        var indoorSelected = $('#ForIndoor').is(':checked');
+        var outdoorSelected = $('#ForOutdoor').is(':checked');
+        if ( !indoorSelected ) { $('[src*="@Stgs.StaticRt/map/id.png"]').hide(); } 
+        if ( !outdoorSelected ) { $('[src*="@Stgs.StaticRt/map/od.png"]').hide(); }
+    }
+
+    
+    $(document).ready(function () {
+        intializeShowHideIndoorOutdoor();
+
+        $("#ForIndoor").click(function () { showHideIndoor(); });
+        $("#ForOutdoor").click(function () { showHideOutdoor(); });    
+
+        $("#improve-area").dialog({ autoOpen: false, width:520, height:440, modal: true });
+        $("#improve-area-lnk").click(function() { $("#improve-area").dialog("open"); return false; });
+
+        GetMap();
+    });
+
+</script>

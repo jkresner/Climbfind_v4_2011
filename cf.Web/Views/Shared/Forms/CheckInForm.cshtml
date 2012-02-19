@@ -1,0 +1,68 @@
+﻿@model NewHistoricalCheckInViewModel
+
+@using (Html.BeginForm("CreateHistorical", "Visits", FormMethod.Post, new { id = "checkInForm" })) {
+  
+    <div class="where">
+        <label>Where </label>@Html.ValidationMessageFor(m => m.CheckLocationID) <br />
+        <input class="tbox jq_watermark" id="checkInLsearch" type="text" name="lsearch" title="Type climbing gym or outdoor place" style="width:208px" />
+        @Html.HiddenFor(m => m.CheckLocationID) 
+        @Html.HiddenFor(m => m.CheckInComment) 
+    </div>
+    
+    <div class="when">
+        <label>When </label> @Html.ValidationMessageFor(m => m.CheckInDate) @Html.ValidationMessageFor(m => m.CheckInTime)<br />
+        @Html.TextBoxFor(m => m.CheckInDate, new { @class = "jq_watermark", title = "Date", @readonly="readonly" })
+        @Html.HiddenFor(m => m.CheckInTime)
+    </div>
+    
+    <div class="go"><a id="checkIn" href="#" class="jBtn">Add</a></div>    
+    <hr />
+}
+
+<script type="text/javascript">
+
+    /* Climbfind functions */
+    jQuery(document).ready(function () {
+        var ckForm = $("#checkInForm");
+                
+        $("#CheckLocationID").val("");
+        $("#CheckInDate").datepicker({ minDate: new Date(1980, 1 - 1, 1), 
+            maxDate: new Date(@DateTime.Now.Year, @DateTime.Now.Month - 1, @DateTime.Now.Day), dateFormat: 'D dd M yy' });
+
+        $("#checkIn").click(function (e) {
+            var formValid = ckForm.valid();
+            if (formValid) { ckForm.submit(); } 
+            else {
+                if ($("#CheckLocationID").val() == "") { $("#checkInLsearch").addClass("input-validation-error");
+                    $("#checkInLsearch").change(function (e) { 
+                        $("#checkInLsearch").removeClass("input-validation-error");
+                    });
+                } 
+            }
+         });
+
+        locationAutocomplete("#checkInLsearch", function (item) {
+            if (item.id == null) { document.location = '/rock-climbing-database/add-climbing-location'; }
+            else { 
+                $("#@Html.IdFor(m => m.CheckLocationID)").val(item.id); 
+                $("#checkInLsearch").addClass('ui-autocomplete-set');
+            }
+        });
+
+        $("#checkInLsearch").change(function (e) { 
+            $("#@Html.IdFor(m => m.CheckLocationID)").val("");
+            $("#checkInLsearch").removeClass('ui-autocomplete-set');
+        });
+
+
+        $("#CheckInDate").unbind('keydown');
+    });
+
+</script>
+
+
+<style type="text/css">
+    #CheckInDate { width:124px!important;background:white url('@Stgs.StaticRt/ui/calendar24.png') no-repeat!important;background-position:107px 2px!important }
+    .when { padding-top:1px!important;width:145px!important }
+    .go { width:76px!important }
+</style>

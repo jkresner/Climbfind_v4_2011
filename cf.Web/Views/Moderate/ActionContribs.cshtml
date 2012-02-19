@@ -1,0 +1,47 @@
+﻿@{ Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   }
+
+
+<div style="margin:20px">
+
+<div class="dashSetA">
+
+<fieldset><legend>Highest contribs this month</legend>
+    <p>Coming very soon</p>
+
+</fieldset>
+
+</div>
+
+<div class="dashSetB">
+
+    <fieldset><legend>Highest contribs last month</legend>
+    <p>Coming very soon</p>
+       
+
+    </fieldset>
+
+
+    <fieldset><legend>Highest overall contributors</legend>
+          <p>Coming very soon</p>
+
+    </fieldset>
+
+    
+
+    <fieldset><legend>Lead moderators</legend>
+          
+          <p>Should you wish to get more invovled and talk to someone about the 
+            <a href="/moderators-project" target="_blank">Climbfind Moderators Project</a> the following folk would be more than excited
+            to here from you:</p>
+
+            <div style="text-align:center;width:80px;padding:10px">
+            @Html.UserPicThumb(new Guid("8837cd56-08f9-412c-a79e-7aeaa25df0c7"))<br />
+            @Html.UserProfileLink(new Guid("8837cd56-08f9-412c-a79e-7aeaa25df0c7"))
+            </div>
+
+    </fieldset>
+
+</div>
+
+</div>

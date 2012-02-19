@@ -1,0 +1,9 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage
+
+<fieldset id="profile-admin">
+<legend>Admin</legend>
+
+    @(Html.ActionCssLink<GodController>(c=>c.UserDelete(user.ID), "Delete user", "delete"))
+    <br />
+
+</fieldset>

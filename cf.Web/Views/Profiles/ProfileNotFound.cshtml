@@ -1,0 +1,29 @@
+﻿@{ ViewBag.Title = "Resource Not Found";  }
+
+
+<div id="col2-left">
+    
+    <h1>Oooops!?</h1>
+ 
+    <p>We can't find the person you've requested.</p>
+
+    <p>Most likely they deleted there account...</p>
+
+</div>
+
+<div id="col2-right">
+
+<div id="sidebar">
+
+    <div class="sidemenu">
+        <h3>Nav options</h3>
+        <ul>
+            <li>@(Html.ActionLink<PlacesController>(c=>c.Countries(), "Browse world climbing"))</li>
+            @*<li>@(Html.ActionLink<PlacesController>(c=>c.CountryDetail( country.NameUrlPart), "Back to "+  country.Name))</li>
+            <li>@(Html.ActionCssLink<ModerateController>(c=>c.AreaEdit(area.ID), "Moderate "+  area.Name, "Moderate"))</li>*@
+        </ul>
+    </div>
+
+</div>
+
+</div>

@@ -1,0 +1,52 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage
+@{ ViewBag.Title = "My climber profile";
+   IEnumerable<CheckIn> latestCheckIns = ViewBag.LatestCheckIns;
+   IEnumerable<PartnerCall> latestPartnerCalls = ViewBag.LatestPartnerCalls;
+   ModProfile modProfile = ViewBag.ModProfile;
+   UsersPersonalityMediaCollection personality = ViewBag.PersonalityMedia;
+   List<Opinion> opinions = ViewBag.LatestOpinions;
+   List<Location> indoorLocs = ViewBag.IndoorClimbedAt;
+   bool userHasDeletePostRights = true;
+   List<PostRendered> posts = ViewBag.Posts;
+   var mediaUrl = user.SlugUrl;
+   if (!personality.HasPersonality) { mediaUrl = "/personality/" + user.IDstring; }
+}
+
+<div id="profile-col-left">
+@*
+@if (posts.Count == 0)
+{
+    <div class="takeaction">
+        <p>Next step, log a visit to your local climbing gym or crag
+         &nbsp @(Html.ActionCssLink<PostsController>(c => c.MyFeed(), "Go to feed to check in", "jBtn")) </p>
+    </div>
+} else if (opinions.Count == 0) {
+    <div class="takeaction">
+        <p>We're interested in hearing your thoughts. Try
+         &nbsp @(Html.ActionCssLink<HomeController>(c => c.AboutOpinions(), "Leave an opinion", "jBtn")) </p>
+    </div>
+}  
+*@
+<div id="latest-media">
+    @Html.Partial("Partials/MainMediaRoll", mediaUrl)
+</div>
+
+<div id="feed">
+    @if (!user.PrivacyShowFeed) { <p style="margin:100px 220px;font-style:italic">Personal feed has been disabled by this user.</p> }
+    else {
+        @Html.Partial("Partials/FeedPostList", new FeedPostListViewData() { FeedPosts = posts, UserHasDeletePostRights = userHasDeletePostRights }) }
+</div>
+
+</div>
+
+<div id="profile-col-right">
+
+    @Html.Partial("Partials/ProfileSummary", user)
+    @Html.Partial("Partials/ProfilePersonality", personality)
+    @Html.Partial("Partials/ProfileOpinions", opinions)
+    @Html.Partial("Partials/ProfileRecentHistory", latestCheckIns)
+    @Html.Partial("Partials/ProfilePartnerCalls", latestPartnerCalls)
+    @Html.Partial("Partials/ProfileGyms", indoorLocs)
+    @Html.Partial("ProfileWidgets/ModDetails", modProfile)      
+
+</div>

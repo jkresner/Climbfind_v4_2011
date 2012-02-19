@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+		<title>@ViewBag.Title</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="author" content="Climbfind Inc." />
+		<meta name="description" content="@ViewBag.MetaDescription" />
+		<meta name="keywords" content="@ViewBag.MetaKeywords" />
+		<meta name="robots" content="@if (ViewBag.Robots==null) {<text>index,follow</text>}else{@ViewBag.Robots}" />
+		<link rel="apple-touch-icon" href="http://static.climbfind.com/apple/icon.png"/>
+		<link href="@Stgs.StaticRt/css/cf2011.11.css" rel="stylesheet" type="text/css" />
+		<script src="@Stgs.StaticRt/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+		<script src="@Stgs.StaticRt/js/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="@Stgs.StaticRt/js/jquery-cf-v1.js" type="text/javascript"></script>
+		<script src="@Stgs.StaticRt/js/jquery.validate.min.js" type="text/javascript"></script>
+		<script src="@Stgs.StaticRt/js/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+		<script src="@Stgs.StaticRt/js/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+		<script src="@Stgs.StaticRt/js/jquery.ui.stars.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="top">
+		<a href="/" id="logo"><img src="@Stgs.StaticRt/ui/climbfind.jpg" title="Climbfind - Rock Climbing Network" alt="Climbfind logo" /></a>
+
+		<div id="quick-search"><div><input id="qsearch" class="tbox jq_watermark" type="text" name="qsearch" title="Search cities, areas, destinations, climbs" /></div></div>
+
+		@if (CfIdentity.IsAuthenticated) {
+		<ul>
+				<li><a href="/alerts">Alerts</a> - </li>
+				<li><a href="/my-partner-call-subscriptions">Subscriptions</a> - </li>
+				<li><a href="http://heroes.climbfind.com/">Heroes blog</a></li>
+		</ul>
+		}
+</div>
+		
+<div id="nav-section">
+<div id="nav-wrap">
+
+		<ul id="nav">
+				@if (CfIdentity.IsAuthenticated) {<li id="current"><a href="/" title="Rock climbing feed">Feed</a></li>}
+				<li id="current"><a href="/climbing-partners" title="Find rock climbing partners">Partners</a></li>
+				<li>@(Html.ActionLink<PlacesController>(c=>c.Countries(), "Places"))</li>
+				<li>@(Html.ActionLink<VisitsController>(c => c.ListMy(), "Logbook"))</li>
+				<li>@(Html.ActionLink<ProfilesController>(c=>c.Me(), "Me"))</li>
+				<li><a href="/messages">Messages</a></li>
+		</ul>
+
+		<ul id="options">      
+			<li><a title="Facebook" href="http://www.facebook.com/pages/Climbfind/40120560277" rel="nofollow"><img alt="Facebook" title="Facebook" src="@Stgs.StaticRt/ui/facebook_32.png" /></a></li>
+			<li><a title="Twitter" href="http://twitter.com/climbfind" rel="nofollow"><img alt="Twitter" title="Twitter" src="@Stgs.StaticRt/ui/twitter_32.png" /></a></li>
+		</ul>
+</div>
+</div>
+<div id="content-wrap" class="clear">
+	 <div id="content">   
+				@RenderBody()
+				<hr style="height:0px;margin:0" />
+	 </div>
+</div>
+
+
+@Html.Partial("Footer")
+
+<div id="modal-placeholder"></div>
+
+@Html.Partial("Partials/QR")
+
+@if (!Stgs.IsDevelopmentEnvironment) {
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>           
+<script type="text/javascript">
+		_uacct = "UA-1693127-4";
+		urchinTracker();
+</script>
+}
+<script type="text/javascript">
+		var uvOptions = {};
+		(function () {
+				var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+				uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/IwnEfNfg5HcEEmnaX9Y4Jw.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+		})();
+</script>    
+
+
+</body>
+</html>

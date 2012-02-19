@@ -1,0 +1,47 @@
+﻿@{ List<Location> indoorLocations = ViewBag.IndoorLocations;
+   List<Location> outdoorLocations = ViewBag.OutdoorLocations;
+   MvcHtmlString flagImg = Html.FlagImage(country);
+   CfPageTitleMaster.Set("Rock climbing around {0}, {1}", current.Name, country.Name);
+   var id = (ViewBag.Current as Area).ID;
+   List<Opinion> latestOpinions = ViewBag.LatestOpinions;
+   }
+
+<div id="col2-left">
+
+    @*@Html.Partial("Ads/HeaderLeaderBoard")*@
+
+    <h1>Rock climbing @current.Name, @country.ShortDisplayName</h1>
+ 
+    <h6>@Html.Partial("Partials/MainOpinionSummary", current as Area)</h6>
+
+    @Html.Partial("Partials/MainAreaSummary", current as Area)
+
+    <p style="font-size:11px">This map of rock climbing around @current.Name, @country.ShortDisplayName is a summary showing @current.Name's indoor climbing walls 
+    and the major outdoor rock climbing areas of @current.Name.
+    This page does not show individual locations for outdoor climbing in @current.Name. To explore @current.Name's 
+    outdoor rock climbing locations and see sub areas of the major @current.Name climbing areas click through to one of the
+    @current.Name outdoor climbing areas listed on this page or one of its cities.</p>
+
+    <div class="area-map">@{Html.RenderPartial("Maps/Bing7GeoJsonMap", (Bing7MapViewModel)ViewBag.MapModel);}</div>
+ 
+    @Html.Partial("Partials/MainCitiesList", intersectingCities)
+    <br />
+    @Html.Partial("Partials/MainLocationIndoorList", indoorLocations)
+    
+    @Html.Partial("Partials/MainClimbingAreasList", intersectingClimbingAreas)
+
+    @*@Html.Partial("Partials/MainTo20ClimbsList")*@
+
+</div>
+
+<div id="col2-right">
+
+@Html.Partial("Partials/SideMenuOptions")
+
+@Html.Partial("Ads/SideMenu200x200")
+
+@Html.Partial("Partials/SideMenuProvincesList", intersectingProvinces)
+
+@Html.Partial("Partials/SideOpinionsList", new SideOpinionsListModel(current as Area, latestOpinions))
+
+</div>

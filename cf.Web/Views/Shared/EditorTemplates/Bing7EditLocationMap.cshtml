@@ -1,0 +1,61 @@
+﻿@model Bing7MapWithLocationViewModel
+        
+<div id="mymap" style="position:relative;width:@(Model.Width)px;height:@(Model.Height)px" ></div>
+
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script><script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+<script type="text/javascript">
+    var map;    
+
+    $(document).ready(function () { GetMap(); });
+        
+    function GetMap() 
+    {
+        map = RenderLatLongEditorCfBing7Map('@Model.MapID', '@Model.Credentials');
+
+        var mapCenter = new Microsoft.Maps.Location('@Model.ViewOptions.MapCenterLatitude', '@Model.ViewOptions.MapCenterLongitude');
+
+        var viewOpt = {
+            center : mapCenter, 
+            mapTypeId : Microsoft.Maps.MapTypeId.@Model.ViewOptions.MapTypeId,
+            zoom : @Model.ViewOptions.Zoom };
+
+        map.setView(viewOpt);
+
+        var pushpinLayer = new Microsoft.Maps.EntityCollection();
+
+        var locationCenter = new Microsoft.Maps.Location('@Model.LocationOriginalLatitude', '@Model.LocationOriginalLongitude');
+                                                                                        
+        // Add a pin to the center of the map
+        pin = new Microsoft.Maps.Pushpin(locationCenter, { draggable: true });
+        
+        //Wire events for dragging
+        Microsoft.Maps.Events.addHandler(pin, 'drag', updateLocationLatLong);
+        Microsoft.Maps.Events.addHandler(pin, 'dragend', updateLocationLatLong); 
+
+        pushpinLayer.push(pin);
+        map.entities.push(pushpinLayer);
+
+        setTimeout('trySetHeading(@Model.ViewOptions.Heading);', 600);
+        setTimeout('trySetHeading(@Model.ViewOptions.Heading);', 1500);
+    }
+
+    function updateLocationLatLong()
+    {
+        var pinLocation = pin.getLocation();
+        
+        //-- update the parent object lat long and the map view lat long
+        $("#Latitude").val(pinLocation.latitude);
+        $("#Longitude").val(pinLocation.longitude);
+    }
+
+    function trySetHeading(hd)
+    {
+        if (map.getHeading() != hd) 
+        {
+            map.setView({heading : parseInt(hd)});
+        }
+    }
+
+</script>
+
+@Html.EditorFor(m =>m.ViewOptions, "Bing7MapViewOptions")

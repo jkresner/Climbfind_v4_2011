@@ -1,0 +1,29 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{ ViewBag.Title = "Error"; }
+
+<style type="text/css">
+    h5 { margin-left:20px;color:Orange;font-weight:bold;font-size:18px }
+</style>    
+
+<div id="main">
+    <div class="post">
+        <div class="right">
+            <h4 style="margin-left:20px;margin-top:2px;padding:0">Oops our bad...</h4>
+            <h5>Climbfind lost balance and slipped</h5>
+            
+            <p style="font-size:14px;font-weight:bold;font-style:italic">Error details: @ViewBag.Msg</p>
+            
+        </div>
+        <div class="left">
+            <div class="post-meta">
+                <h4>Help us</h4>
+                <ul>
+                    <li>Blah blah</li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

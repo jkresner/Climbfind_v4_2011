@@ -1,0 +1,169 @@
+﻿@model LocationOutdoorEditViewModel
+@{ LocationOutdoor location = ViewBag.Location; Country country = AppLookups.Country(location.CountryID);
+   ViewBag.Title = "Edit " + location.Name;
+    Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   bool HasClimbingImage = ViewBag.ClimbingImageToDisplayUrl != Stgs.DefaultMapInfoImage; 
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {       
+        @if (!HasClimbingImage)
+        { <text>$("#NoClimbingImageDiv").show();</text> }
+        else
+        {
+        <text>$("#HasClimbingImageDiv").show(); </text> }
+
+        $("#dialog-upload-image").dialog({ autoOpen: false, width:820, height:620, modal: true });
+        $(".openDialogue").click(function() { openUploadDialog(this); return false; });
+    });
+
+    
+    var currentUploadImage;
+    function openUploadDialog(link)
+    {
+        //-- In case we want to use it again.
+        resetWebCrop(); 
+        
+        currentUploadImage = link.id;
+        imageSaveAjaxPostUrl = '@Url.Action("SaveLocationAvatarFromWebUrl", (string)"Moderate")';
+    
+        $("#dialog-upload-image").dialog("open");
+        ShowUploadChoice();
+    }
+
+    function setResultImg(jsonResult) 
+    {
+        //-- In case we want to use it again.
+        resetWebCrop(); 
+        
+        if (currentUploadImage == 'Climbing')
+        {
+           $("#ClimbingImg").attr("src", jsonResult.SavedImgUrl);
+           $("#HasClimbingImageDiv").show();
+           $("#NoClimbingImageDiv").hide(); 
+        }
+
+        $("#dialog-upload-image").dialog("close");         
+    }
+
+</script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    
+    <div style="float:left;width:65%">
+                 
+<div style="float:left;width:50%">   
+        <h1>Mod: <a href="@location.SlugUrl">@location.Name</a></h1>
+    
+        @Html.HiddenFor(model => model.ID)
+        
+        <div class="editor-label">@Html.LabelFor(m => m.Type) @Html.ValidationMessageFor(m => m.Type)</div>
+        <div class="editor-field">@Html.DropDownListFor(m => m.Type, SelectLists.OutdoorLocationTypeSelectList)</div>   
+
+        <div class="editor-label">@Html.LabelFor(model => model.Name, "Name") @Html.ValidationMessageFor(model => model.Name)</div>
+        <div class="editor-field">@Html.EditorFor(model => model.Name)</div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.NameUrlPart) @Html.ValidationMessageFor(model => model.NameUrlPart)</div>
+        <div class="editor-field">@Html.EditorFor(model => model.NameUrlPart)</div> 
+
+        <div class="editor-label">@Html.LabelFor(model => model.NameShort) @Html.ValidationMessageFor(model => model.NameShort)</div>
+        <div class="editor-field">@Html.EditorFor(model => model.NameShort)</div>
+        
+        @*Put up here to stop the map surface covering the image on the right*@                
+        <div class="editor-label">@Html.LabelFor(model => model.ShadeMorning, "Shade morning / midday / afternoon")</div>
+        <div class="editor-field">@Html.DropDownListFor(model => model.ShadeMorning, SelectLists.YesNoList, "----") 
+            / @Html.DropDownListFor(model => model.ShadeMidday, SelectLists.YesNoList, "----")
+            / @Html.DropDownListFor(model => model.ShadeAfternoon, SelectLists.YesNoList, "----")
+        </div>
+
+        <div@if (!CfPrincipal.IsSeniorMod){<text> style="display:none"</text>}>
+            <label>Lat</label>
+            <div class="editor-field">@Html.EditorFor(model => model.Latitude)</div> <label>Lon</label>
+            <div class="editor-field">@Html.EditorFor(model => model.Longitude)</div>     
+        </div>
+
+        <div class="editor-label"><label>Map</label></div>
+        <div class="editor-field">@Html.EditorFor(m => m.MapView, "Bing7EditLocationMap")<hr /></div>                     
+
+        <div class="editor-label">@Html.LabelFor(model => model.ClimbingWinterAM, "Climb winter AM / PM") <i>i.e. snow effect climbing</i></div>
+        <div class="editor-field">@Html.DropDownListFor(model => model.ClimbingWinterAM, SelectLists.YesNoList, "----") 
+            / @Html.DropDownListFor(model => model.ClimbingWinterPM, SelectLists.YesNoList, "----")
+        </div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.ClimbingSummerAM, "Climb summer AM / PM") <i>i.e. sun effect climbing</i></div>
+        <div class="editor-field">@Html.DropDownListFor(model => model.ClimbingSummerAM, SelectLists.YesNoList, "----") 
+            / @Html.DropDownListFor(model => model.ClimbingSummerPM, SelectLists.YesNoList, "----")
+        </div>       
+
+        </div>
+
+        <div class="formImageUpload">
+           <fieldset style="margin-top:20px"><legend>Climbing image [<a id="Climbing" href="#" class="openDialogue">edit</a>]</legend>
+                <div id="NoClimbingImageDiv">
+                    <p>@Model.Name has no climbing image!</p>
+                    <p><b><a id="Climbing" href="#" class="openDialogue">Upload one now...</a></b></p>               
+                </div>
+                <div id="HasClimbingImageDiv">
+                    <img id="ClimbingImg" src="@ViewBag.ClimbingImageToDisplayUrl" alt="logo image" />
+                </div>
+            </fieldset>
+        </div>      
+
+        <hr />       
+         
+        <div class="editor-label">@Html.LabelFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)</div>
+        <div class="editor-field">@Html.TextAreaFor(model => model.Description, new { @class = "description" })</div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.Approach) @Html.ValidationMessageFor(model => model.Approach)</div>
+        <div class="editor-field">@Html.TextAreaFor(model => model.Approach, new { @class = "description" })</div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.AccessIssues, "Access issues") @Html.ValidationMessageFor(model => model.AccessIssues)</div>
+        <div class="editor-field">@Html.TextAreaFor(model => model.AccessIssues, new { @class = "description" })</div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.AccessClosed, "Access closed") @Html.ValidationMessageFor(model => model.AccessClosed)</div>
+        <div class="editor-field">@Html.CheckBoxFor(model => model.AccessClosed)</div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.Cautions) <i>e.g. bugs, dangerous wildlife, hostile locals, weather considerations etc.</i> @Html.ValidationMessageFor(model => model.Cautions)</div>
+        <div class="editor-field">@Html.TextAreaFor(model => model.Cautions, new { @class = "description" })</div>
+
+        <div class="editor-label">@Html.LabelFor(model => model.SearchSupportString) @Html.ValidationMessageFor(model => model.SearchSupportString)</div>
+        <div class="editor-field">@Html.EditorFor(model => model.SearchSupportString)
+        </div>
+
+        @Html.Partial("Partials/FormOptions", new FormOptionsViewModel
+        {
+            CancelUrl = location.SlugUrl,
+            DeleteUrl = Url.Action("LocationOutdoorDelete", new { id = Model.ID })
+        })
+
+           </div>
+        <div class="mod-guide">
+            <h4>Mod guidelines for crags:</h4>
+            <span>Supplementary mod knowledge @@ <a href="http://wiki.climbfind.org/index.php/Moderators_Project" target="_blank">The CF Wiki</a></span>
+            <ol>
+                <li>Include a photo of the climbing location that shows the typical climbing style there</li>
+                <li>The map view should be the best angle to see the climbing location and zoomed out as far as the photo will go. The user can always zoom in from the default map view</li>
+                <li>Search terms should be words that do NOT appear anywhere else on the page (like misspellings of the area or local abbreviations).</li>
+            </ol>
+        </div>
+            
+        <hr />
+}
+
+<div id="dialog-upload-image" title="Upload a map image for @location.Name">
+           
+   @Html.Partial("Partials/WebUrlImageCropper", new WebUrlCropImageModel()
+{
+    PostActionUrl = "/Moderate/SaveLocationOutdoorClimbingImageFromWebUrl",
+    ObjID = location.ID.ToString(),
+    MinWidth = 220,
+    MinHeight = 120,
+    AllowUpload = true,
+    JavascriptSuccessCallback = "setResultImg"
+})
+    
+</div>

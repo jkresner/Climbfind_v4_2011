@@ -1,0 +1,49 @@
+﻿@model cf.Web.Models.Bing7MapWithLocationViewModel
+@{ Bing7MapViewOptionsViewModel mapView = Model.ViewOptions;
+   bool hasMapView = (mapView != null && !string.IsNullOrWhiteSpace(mapView.MapTypeId));
+   bool hasHeading = (mapView != null && !string.IsNullOrWhiteSpace(mapView.Heading));
+   string mapTypeId = Model.MapTypeId;
+   if (hasHeading && mapView.Heading != "0") { mapTypeId = "birdseye"; }
+   bool mapIsBirdsEye = (mapTypeId == "birdseye"); }     
+         
+<div id="@Model.MapID" style="position:relative;width:@(Model.Width)px; height:@(Model.Height)px" ></div>
+
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script><script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+<script type="text/javascript">
+    var map, pinInfobox = null, infoBoxContents = [];   
+
+    function GetMap() 
+    {
+        map = RenderDefaultCfBing7Map('@Model.MapID', '@Model.Credentials', Microsoft.Maps.MapTypeId.@(mapTypeId));
+
+        var mapCenter = new Microsoft.Maps.Location('@Model.ViewOptions.MapCenterLatitude', '@Model.ViewOptions.MapCenterLongitude');
+
+        var viewOpt = { center : mapCenter, 
+            mapTypeId : Microsoft.Maps.MapTypeId.@mapTypeId,
+            bounds : new Microsoft.Maps.LocationRect.fromString('@Model.ViewOptions.Bounds'),
+            zoom : @Model.ViewOptions.Zoom};
+
+        @if (hasHeading) { <text> viewOpt.heading = parseInt(@mapView.Heading); </text> }
+
+        map.setView(viewOpt);
+
+        var pushpinLayer = new Microsoft.Maps.EntityCollection();
+     
+        // Retrieve the location of the map center 
+        var cragcenter = new Microsoft.Maps.Location('@Model.LocationOriginalLatitude', '@Model.LocationOriginalLongitude');
+        var pin = new Microsoft.Maps.Pushpin(cragcenter);
+
+        @if (!string.IsNullOrWhiteSpace(Model.InfoBoxImageRelativeUrl)){
+        <text>
+        infoBoxContents[cragcenter] = '@(Html.Raw(string.Format(@"<img src=""{0}{1}""/>", Stgs.ImgsRt, Model.InfoBoxImageRelativeUrl)))';
+        Microsoft.Maps.Events.addHandler(pin, 'mouseover', pinMouseOver);
+        </text>
+        }
+
+        map.entities.push(pin);        
+    }
+           
+    $(document).ready(function () { GetMap(); });
+
+</script>
+

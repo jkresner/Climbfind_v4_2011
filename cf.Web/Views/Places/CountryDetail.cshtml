@@ -1,0 +1,47 @@
+﻿@{ List<Area> provinces = ViewBag.Provinces;
+   string countryName = country.Name;
+   if (countryName == "United States") { countryName = "The United States"; }
+   CfPageTitleMaster.Set("Rock Climbing {0}, Indoor Climbing & Outdoor Climbing in & around {0}", countryName);
+   IList<Climb> topClimbs = ViewBag.TopClimbs;
+   List<Location> topLocations = ViewBag.TopLocations;
+   }
+
+<div id="col2-left">
+
+    @*@Html.Partial("Ads/HeaderLeaderBoard")*@
+
+    <h1>Rock Climbing in @countryName</h1>
+ 
+    <p>This map of rock climbing in @countryName is a summary of the biggest cities in @country.ShortDisplayName with climbing & outdoor rock climbing areas 
+    around @countryName.
+    This page does not show individual indoor rock climbing gyms in @countryName or specific outdoor climbing spots. To explore @countryName's 
+    rock climbing locations in more detail including @countryName's indoor climbing walls, outdoor rock walls and bouldering 
+    start exploring climbing by province on the right.</p>
+
+    <div class="area-map">@{Html.RenderPartial("Maps/Bing7GeoJsonMap", (Bing7MapViewModel)ViewBag.MapModel);}</div>
+
+     @Html.Partial("Partials/MainCitiesList", intersectingCities)
+
+     @Html.Partial("Partials/MainClimbingAreasList", intersectingClimbingAreas)
+
+     <br />
+     @Html.Partial("Partials/MainAreaTopClimbsList", topClimbs)
+
+</div>
+
+
+<div id="col2-right">
+
+    @*Note our partial 'SideMenuOptions' doesn't support the CountryDetail page, as Moderate/Edit does not support the Country Entity*@
+    <div class="sidemenu topsidemenu">
+        <h3>Options</h3>
+        <ul>
+            <li>@(Html.ActionLink<PlacesController>(c => c.Countries(), "Up to countries"))</li>
+        </ul>
+    </div>
+
+    @Html.Partial("Partials/SideMenuProvincesList", provinces)
+
+    @Html.Partial("Partials/SideAreaTopLocationsList", topLocations)
+
+</div>

@@ -1,0 +1,91 @@
+﻿@model EditPlacePreferencesViewModel
+@{ ViewBag.Title = "Edit profile"; }
+
+<style type="text/css">
+    .optionaldetails { width:506px;margin-left:10px;float:left }
+    .optionaldetails select { width:110px;height:29px;font-size:10px }
+    fieldset { padding-top:8px }
+    #basic-details input[type='text'] { width:340px!important }
+    #place-preferences input[type='text'] { width:310px!important }
+    .jq_watermark { font-size:10px!important }
+    .validation-summary-errors { width:410px!important;margin-right:0px!important }
+    .field-validation-error { display:block }
+</style>
+
+@using (Html.BeginForm("UpdatePlacePreferences", "Profiles", null, FormMethod.Post, null))
+{
+    <h1>Update my feed</h1>
+
+@* <p style="padding-top:0px;margin-top:0px;font-size:11px;width:800px">Climbfind intelligently feeds you information & activity based on your 
+        place preferences AND where you've most recently posted PartnerCalls&trade;, visited and left opinions on. After 
+        you save your place preferences, start posting to the feed - the more you post, the smarter Climbfind gets!</p>
+    <hr />
+    
+    if (Model.PlaceCount < 2) 
+    {
+    <object id="scPlayer"  width="720" height="400" type="application/x-shockwave-flash" data="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/d5890654-79f4-4646-b7cf-bc02bbdb0f5e/scplayer.swf" ><param name="movie" value="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/d5890654-79f4-4646-b7cf-bc02bbdb0f5e/scplayer.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#FFFFFF" /><param name="flashVars" value="thumb=http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/d5890654-79f4-4646-b7cf-bc02bbdb0f5e/FirstFrame.png&containerwidth=800&containerheight=450&autohide=true&autostart=false&loop=false&showendscreen=true&showsearch=false&showstartscreen=true&tocdoc=left&xmp=sc.xmp&content=http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/d5890654-79f4-4646-b7cf-bc02bbdb0f5e/climbingfeed.mp4&blurover=false" /><param name="allowFullScreen" value="true" /><param name="scale" value="showall" /><param name="allowScriptAccess" value="always" /><param name="base" value="http://content.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/d5890654-79f4-4646-b7cf-bc02bbdb0f5e/" /><iframe type="text/html" frameborder="0" scrolling="no" style="overflow:hidden;" src="http://www.screencast.com/users/climbfind/folders/CF4%20Screencasts/media/d5890654-79f4-4646-b7cf-bc02bbdb0f5e/embed" height="400" width="720" ></iframe></object> }
+   *@
+    <hr /><hr />
+    
+    <fieldset class="optionaldetails" id="place-preferences"><legend>Choose places you'd like to see in your feed</legend>
+    
+        <div style="width:64%;float:left">
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceHome, "Home") @Html.ValidationMessageFor(m => m.PlaceHome)</div>
+            <div class="editor-field"> @Html.HiddenFor(m => m.PlaceHome) @Html.TextBoxFor(m => m.PlaceHomeName, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite1, "Optional favorite 1") @Html.ValidationMessageFor(m => m.PlaceFavorite1)</div>
+            <div class="editor-field"> @Html.HiddenFor(m => m.PlaceFavorite1) @Html.TextBoxFor(m => m.PlaceFavorite1Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite2, "Optional favorite 2") @Html.ValidationMessageFor(m => m.PlaceFavorite2)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite2) @Html.TextBoxFor(m => m.PlaceFavorite2Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite3, "Optional favorite 3") @Html.ValidationMessageFor(m => m.PlaceFavorite3)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite3) @Html.TextBoxFor(m => m.PlaceFavorite3Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite4, "Optional favorite 4") @Html.ValidationMessageFor(m => m.PlaceFavorite4)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite4) @Html.TextBoxFor(m => m.PlaceFavorite4Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+@*            <hr />
+            <div class="editor-label">@Html.LabelFor(m => m.PlaceFavorite5, "Optional favorite 5") @Html.ValidationMessageFor(m => m.PlaceFavorite5)</div>
+            <div class="editor-field">@Html.HiddenFor(m => m.PlaceFavorite5) @Html.TextBoxFor(m => m.PlaceFavorite5Name, new { @class = "tbox jq_watermark", title = "Type area, city, climbing gym, rock wall or boulder" })</div> 
+        *@
+            @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "/climber/my-profile", CancelText = "I'll do this later…" }) 
+        </div>
+        <div style="width:32%;float:right">
+            <p style="color:Gray"><span style="color:Red">Note </span> You have the option of being very specific, by choosing say a rock climbing gym, e.g. "Planet Granite San Francisco"
+            or you can be more general and specify a whole city e.g. "San Francisco".</p>
+            <p style="color:Gray">Also if the place you want doesn't exist, please <a href="/rock-climbing-database/add-climbing-location" target="_blank">add it to Climbfind</a> (though make sure you save first before you leave this page).</p>
+            <p style="color:Gray">Lastly, you can change these settings anytime, by clicking edit "info" on your profile page.</p>
+        </div>
+
+    </fieldset>
+    
+    <script type="text/javascript">
+        /* Climbfind functions */
+        $(document).ready(function () {
+            attachAutocompleteAndSet("#PlaceHomeName", "#PlaceHome");
+            attachAutocompleteAndSet("#PlaceFavorite1Name", "#PlaceFavorite1");
+            attachAutocompleteAndSet("#PlaceFavorite2Name", "#PlaceFavorite2");
+            attachAutocompleteAndSet("#PlaceFavorite3Name", "#PlaceFavorite3");
+            attachAutocompleteAndSet("#PlaceFavorite4Name", "#PlaceFavorite4");
+            attachAutocompleteAndSet("#PlaceFavorite5Name", "#PlaceFavorite5");
+        });
+
+        function attachAutocompleteAndSet(textBoxID, hiddenID) {
+            var textBox = $(textBoxID), hidden = $(hiddenID);
+            textBox.change(function () {
+                textBox.removeClass('ui-autocomplete-set'); textBox.addClass('ui-autocomplete-unset'); hidden.val("");
+            });
+
+            placeAllTypesAutocomplete(textBox, function (item) {
+                if (item.id == null) { hidden.val(""); textBox.val(""); alert(textBox.val()); }
+                else { hidden.val(item.id); textBox.val(item.title); textBox.removeClass('ui-autocomplete-unset'); textBox.addClass('ui-autocomplete-set'); }
+            });
+
+            if (textBox.val() == "") { textBox.addClass('ui-autocomplete-unset'); } else { textBox.addClass('ui-autocomplete-set'); }
+        }
+
+    </script>
+   
+    
+    <hr />      
+}

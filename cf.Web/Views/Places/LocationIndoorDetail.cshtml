@@ -1,0 +1,90 @@
+﻿@{  LocationIndoor location = current as LocationIndoor; 
+    List<PostRendered> feedPosts = ViewBag.Posts;
+    List<Climb> climbs = ViewBag.Climbs;
+    Bing7MapWithLocationViewModel mapView = ViewBag.MapView;
+    CfPageTitleMaster.Set("Indoor climbing at {0}", current.Name);
+    List<Opinion> latestOpinions = ViewBag.LatestOpinions;
+    
+    var addClimbAreaAction = Html.ActionLink<PlacesController>(c => c.AreaNew(country.NameUrlPart, "ClimbingArea"), "Add outdoor climbing area");
+       if (HasProvinceContext) { addClimbAreaAction =
+        Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, parentProvince.NameUrlPart), "Add outdoor climbing area");} 
+        }
+
+
+@if (!location.HasAvatar) {    
+    <div class="takeaction">
+        <p>We've got no idea what the climbing at @location.Name looks like!
+            @(Html.ActionCssLink<ModerateController>(c=>c.LocationIndoorEdit(location.ID), "Upload a pic", "jBtn")) </p>
+    </div>
+}
+
+<div id="col2-left">
+    <div class="location-content">
+        <h1>@if (@location.Name.Length < 30) {<text>Indoor climbing, </text>} @location.Name</h1>
+        
+       <h6>@Html.Partial("Partials/MainOpinionSummary", location)</h6>
+
+            <div id="info-details">
+                <div style="float:left;width:240px">
+                    @if (location.HasLogo) { <img src="@(Stgs.ImgsRt+location.LogoRelativeUrl)" alt="Logo" class="logo" /> } else
+                    { <p style="border:dotted 1px gray;margin-right:5px;padding:5px;text-align:center">We're missing a logo for<br />@current.Name<br />
+                        <a href="@Url.Action("Edit", "Moderate", new { id = new Guid(current.IDstring) })">
+                            <img src="@Stgs.StaticRt/ui/addlogo.jpg" /><br /><b>Add logo</b></a></p>}
+                    @if (location.HasAvatar) {<img src="@(Stgs.ImgsRt+location.AvatarRelativeUrl)" alt="Rock Climbing @location.Name" class="avatar" />} 
+                    <div class="climbing-types">
+                        @if (location.HasTopRope) {<div><span>Top rope</span><img src="@Stgs.StaticRt/ui/cf/TopRope.bmp" alt="Top rope" /></div>}
+                        @if (location.HasLead) {<div><span>Lead</span><img src="@Stgs.StaticRt/ui/cf/Lead.bmp" alt="Lead" /></div>} 
+                        @if (location.HasBoulder) {<div><span>Boulder</span><img src="@Stgs.StaticRt/ui/cf/Boulder.bmp" alt="Boulder" /></div>}
+                    </div>
+                </div>
+                <div style="float:left;width:480px">
+                                        
+                    <div>@Html.Partial("Maps/Bing7LocationMap", mapView)</div>
+                    
+                    <p><label>Address: </label>@location.Address</p>
+                    <p><label>Phone: </label>@location.ContactPhone</p>
+                    <p><label>Website: </label><a href="@location.WebsiteLink" target="_blank">@location.Website</a></p>
+                    @if (!String.IsNullOrWhiteSpace(location.ContactEmail)) {<p><label>Email: </label>@location.ContactEmail</p>}
+                    @if (!String.IsNullOrWhiteSpace(location.BlogRssUrl)) {<p><label>Blog: </label>@location.BlogRssUrl</p>}
+                    @if (location.FloorspaceInSqMeters != 0) {<p><label>Floor space in meters: </label>@location.FloorspaceInSqMeters</p>}
+                    @if (location.HeightInMeters != 0) {<p><label>Height in meters: </label>@location.HeightInMeters</p>}
+                    @if (location.NumberOfLines != 0) {<p><label># of Lines: </label>@location.NumberOfLines</p>}
+                    @if (!String.IsNullOrWhiteSpace(location.Prices)) {<p><label>Prices: </label>@location.Prices</p>}
+                    @if (!String.IsNullOrWhiteSpace(location.Description)) {<p>@location.Description</p>}
+                </div>
+
+                <hr />
+        
+            </div>
+
+            @Html.Partial("Partials/MainMediaRoll", current.SlugUrl)
+
+            <hr />
+
+            @Html.Partial("Partials/MainClimbsSummary", climbs)
+
+            <hr />
+
+            @if (feedPosts.Count > 0) {
+             <div id="activity">
+                <div class="post-bottom-section" style="border-bottom:none">
+                    <h4>@location.Name activity</h4>
+
+                    <div class="right">
+                        @Html.Partial("Partials/FeedPostList", new FeedPostListViewData() { FeedPosts = feedPosts, UserHasDeletePostRights = CfPrincipal.IsGod() })
+                    </div>
+                </div>
+            </div>
+            }
+     
+        </div>
+
+    
+</div>
+<div id="col2-right">
+
+    @Html.Partial("Partials/SideMenuOptions")
+
+    @Html.Partial("Partials/SideOpinionsList", new SideOpinionsListModel(location, latestOpinions))
+    
+</div>

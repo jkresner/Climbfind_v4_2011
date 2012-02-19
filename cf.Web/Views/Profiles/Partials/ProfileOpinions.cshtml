@@ -1,0 +1,21 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage<List<Opinion>>
+
+<fieldset id="profile-opinions">
+    <legend>Latest thoughts <i>-</i> @(Html.ActionLink<OpinionsController>(c => c.ListUser(user.ID), "All opinions"))   
+    </legend>
+
+    @if (Model.Count == 0) { <p>@user.DisplayName isn't very opinionated yet :(</p> }
+    else
+    {
+        <ul>
+        @foreach (var o in Model)
+        {
+            var obj = AppLookups.GetCacheIndexEntry(o.ObjectID);
+            //We need need to check if null incase the object that has an opinion was deleted (08.10 The Edge Gym eg.)
+            if (obj != null) 
+            { <li>@Html.StarImage(o.Rating) @AppLookups.GetCacheIndexEntry(o.ObjectID).Name</li> }
+        }   
+        </ul> 
+    }
+    
+</fieldset>

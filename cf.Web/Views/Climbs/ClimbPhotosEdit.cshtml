@@ -1,0 +1,76 @@
+﻿@{ Climb climb = ViewBag.Climb;
+   CfPageTitleMaster.Set("Add climb photos");
+   bool HasClimbingImage = ViewBag.ClimbingImageToDisplayUrl != Stgs.DefaultMapInfoImage;
+   List<Media> climbPhotos = ViewBag.ClimbPhotos;
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".SubmitBtn").click(function () {
+            document.location = "@climb.SlugUrl";
+            return false;
+        });
+
+        attachStartHoldSelect();
+    });
+
+    function setMultiImgResult(results) {
+        alert('upload successful');
+        document.location = document.location;
+    }
+
+    function attachStartHoldSelect() {
+        $(".starthold").click(function () {
+            var id = $(this).val();
+            $.post(
+                "/Climbs/SaveMediaAsClimbAvatar/@climb.ID?mediaID=" + id,
+                function (data) { alert("Start hold updated."); }
+            );
+        });   
+    }
+    
+</script>
+
+<style type="text/css">
+    #dialog-upload-image form { background:none;border:none }
+    #photos input { margin:-10px 50px 0 50px }
+</style>
+
+<div id="ClimbFormDiv">
+
+@using (Html.BeginForm())
+{
+    <h1>Add photos to <a href="@climb.SlugUrl">@climb.Name</a></h1> 
+        
+    <fieldset id="upload" style="margin:20px 20px 0 0;width:300px;float:left"><legend>Climb photos</legend>
+           @Html.Partial("Partials/DiskMultiImageUpload", new DiskMultiImageUploadModel()
+            {
+                PostActionUrl = "/Upload/SaveClimbImages/"+climb.ID,
+                ObjID = climb.ID.ToString(),
+                JavascriptSuccessCallback = "setMultiImgResult"
+            })
+    </fieldset>
+    
+    
+    <fieldset id="photos" style="margin:20px 0 0 0;width:600px;float:left"><legend>Climb photos</legend>
+        
+        @if (climbPhotos.Count == 0) { <p>No photos yet, please add some!</p> }
+        else {
+        <b>Start hold photo</b>
+        <br /><br />
+        <ul>
+            @foreach (var m in climbPhotos)
+            { <li><input class="starthold" name="starthold" type="radio" @if(Path.GetFileName(m.ThumbUrl()) == climb.Avatar) {<text>checked="checked"</text>} value="@m.ID" />
+                 
+             @Html.Raw(m.RenderThumb())</li> }
+        </ul>
+        }
+    </fieldset>
+    
+    <hr />   
+      
+    @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = climb.SlugUrl, CancelText = "Cancel" })
+}
+
+</div>

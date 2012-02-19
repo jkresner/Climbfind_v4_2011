@@ -1,0 +1,62 @@
+﻿@model cf.Entities.PartnerCallNotificationWorkItem
+@{ Layout = null; }
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Processed PC Work Item</title>
+</head>
+<body>
+    <div>
+        <h2>ProcessWorkItem</h2>
+
+        <fieldset>
+            <legend>PartnerCallNotificationWorkItem</legend>
+
+            <div class="display-label">PartnerCallID</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.PartnerCallID)
+            </div>
+
+            <div class="display-label">CountryID</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.CountryID)
+            </div>
+
+            <div class="display-label">PlaceID</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.PlaceID)
+            </div>
+
+            <div class="display-label">OnBehalfOfUserID</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.OnBehalfOfUserID)
+            </div>
+
+            <div class="display-label">CreatedUtc</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.CreatedUtc)
+            </div>
+
+            <div class="display-label">ProcessedUtc</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ProcessedUtc)
+            </div>
+
+            <div class="display-label">NotificationsSent</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.NotificationsSent)
+            </div>
+
+            <div class="display-label">ReplyCount</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ReplyCount)
+            </div>
+        </fieldset>
+        
+    </div>
+</body>
+</html>
+
+
+

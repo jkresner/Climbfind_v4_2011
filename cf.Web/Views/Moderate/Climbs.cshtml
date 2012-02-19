@@ -1,0 +1,51 @@
+﻿@{  Layout = "~/Views/Moderate/_LayoutModerate.cshtml";
+   ViewBag.Title = "My Climbs";
+   List<PlaceWithModDetails> modsClimbs = ViewBag.ModeratorClimbs;
+   List<ModAction> modsActions = ViewBag.ModeratorActions; 
+   }
+
+<style type="text/css"> 
+    td { line-height:14px }
+</style>
+
+
+<div class="listContent">
+
+<div style="width:65%;float:left">
+
+    <fieldset style="padding:6px"><legend>Climbs I moderate</legend>
+
+    <h1>Climbs mod page coming soon.</h1>
+
+        @Html.Partial("Partials/ModeratorsClaims", modsClimbs)
+
+    </fieldset>
+
+    <fieldset><legend>Latest edits to my climbs</legend>
+    
+        <ul style="padding:0;margin:0">
+            @foreach (var p in modsActions)
+            { <li>
+                @Html.UserProfileLink(p.UserID)
+                @((ModActionType)p.TypeID)
+                @Html.PlaceLink(p.OnObjectID)
+                @p.Utc.GetAgoString() 
+                </li> }
+        </ul>
+
+    </fieldset>
+
+</div>
+
+<div style="width:30%;float:right">
+
+    <fieldset><legend>Climbs that need to be claimed</legend>
+            <p>When we get around to setting a home location on your profile and see where you're actively climbing, 
+                we'll use that information to suggest climbs that need ownership.</p>
+
+    </fieldset>
+
+</div>
+
+
+</div>

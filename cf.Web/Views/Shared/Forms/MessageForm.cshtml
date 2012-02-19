@@ -1,0 +1,19 @@
+﻿@model cf.Web.Models.NewMessageViewModel
+
+@using (Html.BeginForm(Model.Action, Model.Controller, FormMethod.Post, new { id = "message-form" }))
+{        
+    @Html.HiddenFor(m => m.ForID)
+    
+    @*<div class="editor-label">@Html.LabelFor(m => m.Content, "Message")</div>*@
+    <div style="float:left;width:410px">
+    <div>@Html.ValidationMessageFor(m => m.Content, "Message required")</div>
+    <div class="editor-field">
+        @Html.TextAreaFor(m => m.Content, 1, 94, new { style = "overflow:auto!important;width:400px;height:50px" })        
+    </div>
+    </div>
+    
+    <div style="margin:0px 5px 0 0;float:right;width:60px">
+        <input type="submit" value="Send" class="jBtn" style="padding:6px 14px" />    
+    </div>
+    <hr />
+}

@@ -1,0 +1,11 @@
+#postslist .comments { background:#FFFCE6;clear:both;margin:0 20px 0 50px }
+#postslist .comments div { width:434px!important }
+#postslist .comments i { font-size:9px }
+#postslist .comments p { font-size:10px;color:#777777 }
+
+.v1post-ci .media { padding-top:5px }
+.v1post-ci .media li { float:left;border:solid 1px #F1F1F1!important;max-width:76px;clear:none!important;padding:3px 3px 0 3px!important;margin-right:5px }
+.v1post-ci .climbs { clear:both;padding-top:8px }
+.v1post-ci .climbs li { border:none!important;margin-bottom:5px }
+.v1post-ci .climbs li img { float:left;margin-right:4px }
+.v1post-ci .climbs li b { display:block;float:left;margin:4px 0 0 5px }

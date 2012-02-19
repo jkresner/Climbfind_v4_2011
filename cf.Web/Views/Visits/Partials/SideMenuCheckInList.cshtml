@@ -1,0 +1,20 @@
+﻿@model List<CheckIn>
+
+<style type="text/css">
+ .side-checkins li { padding:0;margin:0;clear:both;list-style:none }
+ .side-checkins li img { float:left;margin-right:10px;padding-top:5px }
+ .side-checkins li div { float:left;width:180px}
+ .side-checkins p { padding-left:0;margin-left:0 }
+</style>
+
+<ul class="side-checkins">
+@foreach (var ci in Model)
+{
+    <li>@Html.UserPicThumb(ci.UserID)
+    
+        <div><a href="/visit/@ci.ID">@ci.Utc.ToString("dd MMM") @CfPerfCache.GetClimber(ci.UserID).DisplayName</a>
+        <p>@ci.Comment</p></div>
+        <hr />
+    </li>
+}
+</ul>

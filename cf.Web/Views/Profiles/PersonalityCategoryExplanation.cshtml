@@ -1,0 +1,20 @@
+﻿@model PersonalityCategory
+
+<p>
+    @if (Model == PersonalityCategory.Avatar) {
+    <text>The <b>Avatar</b> image represents you to other climbers when you do things like send messages & leave comments. 
+    We have no guidelines for the Avatar image except express yourself & be creative! Please don't choose anything rude or offensive.</text> }
+    else if (Model == PersonalityCategory.Headshot) {
+    <text>The <b>Headshot</b> image is used by other climbers to recognize you so that meeting in real life is easy. Make your face clear and easy to see.</text> }
+    else if (Model == PersonalityCategory.Daredevil) {
+    <text><b>Daredevil</b> is a photo or movie of you climbing. Climbfind is not about being elite! Climbfind's about connecting with other climbers,
+    so that you can push your personal limits in climbing and the rest of your life. We're proud of you no matter your level and you should be too :). Show us what you look like living on your edge!</text> }
+    else if (Model == PersonalityCategory.Scenic) { <text><b>Scenic</b> is a photo or movie of you in the environment you love. 
+    It doesn't have to be of you climbing. It should express your thrill of being out in nature or immersed in the the buzz of the climbing gym!</text> }                                                                                                                                                             
+    else if (Model == PersonalityCategory.Ready2Rock) { <text><b>Ready to "Rock"</b> is a photo or movie of you exciting to go climbing or pumped about a climbing 
+    experience you just had. Share you passion!!!</text> }                                                                                                                                                             
+    else if (Model == PersonalityCategory.Funny) { <text><b>Funny</b> is a photo or movie of you "taking the piss" (as the Brit's say) or being the center of a good laugh.</text> }                                                                                                                                                                          
+    else if (Model == PersonalityCategory.BestShot) { <text><b>Best Shot</b> is a photo or movie that you took or produced & are most proud of. It doesn't even have to do with climbing! As long
+    as travel, adventure or nature are involved we want to see it!</text> }                                                                                                                                                                          
+    else if (Model == PersonalityCategory.PartnerShot) { <text><b>Partner Shot</b> is a photo or movie of a special moment with one or more of your climbing partners.</text> } 
+</p>

@@ -1,0 +1,394 @@
+﻿@model AreaNewViewModel
+@{  IArea parentArea = ViewBag.ParentArea;
+    List<Area> existingAreas = ViewBag.ExistingAreas;
+    string areaTypeLower = ViewBag.AreaType.ToLower();
+    CfPageTitleMaster.Set("Add a new {0}", ViewBag.AreaType.ToLower());
+}
+
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+<script type="text/javascript" src="@Stgs.StaticRt/js/cf.maps-v1.js"></script>
+
+<script type="text/javascript">
+
+    var step1, existing, search, thanks;
+    var jsonResult;
+    var currentResult;
+    var currentResultBox;
+    var boundingBoxLayer;
+ //   var isFirstNameTry = true;
+
+    $(document).ready(function () {
+                
+        existing = $("#Existing");
+        search = $("#Search");
+        thanks = $("#ThanksForTrying");
+        step1 = $("#Step1");
+               
+        if (@existingAreas.Count == 0) { search.show(); existing.hide(); }
+
+        $('#ajaxSearch input:radio').change(function () {
+
+            var existingArea = $("input[name='IsExistingArea']:checked").val();
+
+            if (existingArea == 'false') { existing.hide(); search.show(); thanks.hide(); }
+            else { existing.hide(); search.hide(); thanks.show(); }
+        });
+    
+        if ($("#locality").val() == "DuplicateRetry") { goStraightToMapWithPrompt(); }
+
+//        $("#drawManually").click(function() { 
+//            if (isFirstNameTry) { alert('Before you choose to draw area manually, try at least once to locate it using the name. The first approach is usually (but not always) more accurate.'); }
+//            else { createAreaWithoutSearch(); }
+//         });
+         
+        //existing.hide(); search.show(); thanks.hide(); 
+    });
+
+    function goStraightToMapWithPrompt()
+    {
+        //-- Incase this came from a failed attempt to save the area
+        $("#locality").val($("#Name").val());
+        displayMapStep();
+        $("#ajaxSearch").submit(); 
+ //       isFirstNameTry = false;
+    }
+
+    function testingSkipSteps()
+    {
+        $("#locality").val("The hidden cliffs");
+        displayMapStep();
+        $("#ajaxSearch").submit();
+    }
+
+    function backToExisting()
+    {
+        existing.show();
+        thanks.hide();
+    }
+
+    function backToChooseAreaCreateType()
+    {
+        step1.show();
+        $("#AreaFormDiv").hide();
+    } 
+
+    function TrySearchAgain()
+    {
+        if ($('#Name').val() == $('#locality').val())
+        {
+            alert('Change the name before searching again. Sometimes adding the city or the province (state) at the end search locate the area you are after. E.g. - "Boulder, Colorado" instead of just "Boulder".');
+        }
+        else
+        {
+            searchLocalityAgain();
+            $("#locality").val($('#Name').val());
+            $("#ajaxSearch").submit();
+        }
+    }
+
+    function searchLocalityAgain()
+    {
+        $("#AreaFormDiv").hide();
+        $("#locality").val("");
+        step1.show();
+        search.show();
+        existing.hide();
+    }
+
+    function ShowGeocodeResult(obj)
+    {   
+        jsonResult = JSON.parse(obj.responseText);
+
+        if (jsonResult.Success != true) { 
+            alert('Your search for '+ $("#locality").val() + ' in @country.Name failed. Please try again. Sometimes adding the State e.g. "Yosemite, California" helps the search to locate the place you want. If that does not work, try draw the area manually.');
+             $('.processFeedback').hide(); $('.SubmitBtn').show(); isFirstNameTry = false; }
+        else
+        {
+            $('#MultipleResults').hide();
+            $('#MultipleResultsDetails').html("");
+
+            if (jsonResult.Results.length > 1)
+            {
+                $('#MultipleResults').show();
+                
+                var detailsHtml = '<ul>';
+
+                for (var i=1;i<=jsonResult.Results.length;i++)
+                {
+                    var r = jsonResult.Results[i-1]
+                    var func = 'javascript:SetCurrentResult('+(i-1)+')';
+                    detailsHtml += '<li>'+ i+') <a href="'+func+'">'+r.Name+'</a>'+ 
+                        ' <span>(' + r.Lat + ', ' + r.Lon + ')</span></li>';   
+                } 
+                detailsHtml += '</ul>';
+                $('#MultipleResultsDetails').html(detailsHtml);
+            }
+        
+            displayMapStep();
+            
+            SetCurrentResult(0);   
+        }
+
+        
+    }
+
+    function displayMapStep()
+    {
+        //isFirstNameTry = false;
+        step1.hide();
+        $('.processFeedback').hide();
+        $('.SubmitBtn').show();
+        $("#AreaFormDiv").show();
+        $('#CountryID').val("@country.ID");
+        $('#TypeID').val("@ViewBag.PlaceTypeID");
+        $('#Name').val($("#locality").val());
+              
+        if (map == null)
+        {
+            map = RenderDefaultCfBing7Map('myMap', 'ArIOaOmY-BqIbbf1Ueo_9McVfA9iTm_WdfX9-Boyeyg_ZuSN1dCeNQ5d1bvxsdgt');
+            boundingBoxLayer = new Microsoft.Maps.EntityCollection();
+            map.entities.push(boundingBoxLayer);
+        }
+    }
+   
+
+    function SetCurrentResult(index)
+    {
+        currentResult = jsonResult.Results[index];
+        var b = currentResult.Box;
+        var bb = Microsoft.Maps.LocationRect.fromString(b.NorthLat+','+b.WestLon+','+b.SouthLat+','+b.EastLon);
+        
+        var areaCenter = new Microsoft.Maps.Location(currentResult.Lat, currentResult.Lon);
+ 
+        SetCurrentBox(bb, areaCenter);
+    }
+
+    function SetCurrentBox(bb, center)
+    {
+        currentResultBox = bb;
+        
+        boundingBoxLayer.clear();
+                                
+        var polygonPoints = GetPolygonPointsFromLocationRect(bb);
+
+        boundingBoxLayer.push(new Microsoft.Maps.Polygon(polygonPoints, EditPolygonViewOptions));
+       
+        AddResizeCornersToBoundingBox(map, boundingBoxLayer, $('#WKT'), bb, center);
+
+        var wkt = BuildWKTFromLocationRect(bb);
+
+        $('#WKT').val(wkt);
+
+        if (center != null) {
+            $('#Latitude').val(center.latitude);
+            $('#Longitude').val(center.longitude); 
+
+            //-- Hack to make sure the map re-zooms properly
+            setTimeout('map.setView({ bounds : currentResultBox });', 300);
+            setTimeout('map.setView({ bounds : currentResultBox });', 900);
+            setTimeout('map.setView({ bounds : currentResultBox });', 1500);
+        } else {
+            $('#Latitude').val('0');
+            $('#Longitude').val('0'); 
+        }
+    }
+
+    var map = null;
+    var boundingBoxLayer;
+    var parentBox;
+    var infoBoxContents = [];
+
+    function createAreaWithoutSearch()
+    {
+        displayMapStep();
+        var polygonCoordinates = parse2dPolygonCoords('@ViewBag.ParentAreaCoordinates');
+        var parentBox = GetPolygonBoundingLocationRect(polygonCoordinates);
+
+        var parentLayer = new Microsoft.Maps.EntityCollection();
+        parentLayer.push(new Microsoft.Maps.Polygon(polygonCoordinates, { strokeColor: new Microsoft.Maps.Color(0, 0, 255, 0), fillColor : new Microsoft.Maps.Color(30, 255, 165, 0) }));
+        map.entities.push(parentLayer);
+
+        var newHeight = parentBox.height / 4;
+        var newWidth = parentBox.width / 4;
+
+        var childBox = new Microsoft.Maps.LocationRect();
+        childBox.center = parentBox.center;
+        childBox.height = newHeight;
+        childBox.width = newWidth;
+
+        SetCurrentBox(childBox, null);
+
+        //-- Hack to make sure the map re-zooms properly
+        map.setView({ bounds : parentBox });
+    }
+
+    function continueToExisting()
+    {
+        $("#existingAcknowledgeDuplicates").hide();
+        $("#existingList").show();
+
+    }
+
+</script>
+
+<div id="AreaFormDiv" style="display:none">
+
+@using (Html.BeginForm("AreaNewCreate", "Places", new { countryUrlPart = country.NameUrlPart }, FormMethod.Post, null))
+{
+    <h1>Add @ViewBag.AreaType to @parentArea.Name</h1>   
+    
+    @Html.ValidationSummary()
+    
+    <div class="editor-label">@Html.LabelFor(m => m.Name, "Name")</div>
+    
+    <div class="editor-label">@Html.TextBoxFor(model => model.Name, new { style = "float:left" }) </div>
+    <hr />
+    <div class="editor-label">
+        @Html.LabelFor(m => m.WKT) @Html.ValidationMessageFor(m => m.WKT) 
+        <p id="MultipleResults" style="display:none"><b>Your search returned multiple results:</b> 
+        <span id="MultipleResultsDetails"></span></p>
+    </div>
+    <div class="editor-field">
+        <div id="myMap" style="position:relative; width:100%; height:500px;"></div>
+    </div>
+        
+    @Html.HiddenFor(m => m.WKT)
+    @Html.HiddenFor(m => m.CountryID)
+    @Html.HiddenFor(m => m.TypeID)
+    @Html.HiddenFor(m => m.Latitude)
+    @Html.HiddenFor(m => m.Longitude)
+    
+    @Html.Partial("Partials/FormOptions", new FormOptionsViewModel { CancelUrl = "javascript:backToChooseAreaCreateType()", CancelText = "Back" })
+    
+    <hr />
+}
+
+</div>
+
+<div id="Step1">
+@using (Ajax.BeginForm("SearchAreaForNewArea", "Places", new AjaxOptions() { HttpMethod = "Post", OnComplete = "ShowGeocodeResult" }, new { id = "ajaxSearch", style = "min-height:400px" }))
+{
+    @Html.Hidden("countryUrlPart", country.NameUrlPart)
+    @Html.Hidden("parentAreaID", parentArea.IDstring)
+    
+    <h1>Add @ViewBag.AreaType.ToLower() to <a href="@parentArea.SlugUrl">@parentArea.Name</a></h1>    
+    
+    if (existingAreas.Count != 0)
+    {
+        <div id="Existing">
+            <div style="float:left;width:700px">
+                    
+                <div id="existingAcknowledgeDuplicates">
+                   <p class="seriousAttention"><b>It's important our database doesn't contain duplicates!</b><br />
+                       You're new to adding places to Climbfind, welcome aboard! Please read the tips & instructions as you go. 
+                       <i>This message will go away after you've added a few places.</i></p> 
+                   
+                    <a href="javascript:continueToExisting();" class="jBtn">kk, I got it!</a>
+                </div>
+    
+                <div id="existingList" style="display:none">
+                    <p>We have the following @ViewBag.AreaTypePluralName already listed in @parentArea.Name:</p>
+                    
+                    @if (areaTypeLower != "city")
+                    {
+                        if (existingAreas.Count > 10) {
+                        <p style="color:Green;width:500px;margin-bottom:15px"><b><i>Tip:</i></b> If this list is long & hard to read, it's much easier to add your area to one of these sub-areas instead of to @parentArea.Name.</p>} }
+                        
+                    <ol style="margin-left:10px">@foreach (var a in existingAreas)
+                        {<li><b>@a.VerboseDisplayName</b> <a href="@a.SlugUrl" target="_blank">view</a>
+                                                
+                        @if (areaTypeLower != "city")
+                        {
+                            <text>[add area @(Html.ActionLink<PlacesController>(c => c.AreaNewSubAreaToArea(country.NameUrlPart, a.NameUrlPart), "to " + a.Name)) instead]</text>
+                        }
+                            
+                        </li>}</ol>
+                    <div style="font-size:14px;border-top:solid 1px #d3d3d3;margin:30px 0 0 0">
+                    <p><b>Is the place you want to add already in the list?</b></p>
+                    <p><input value="true" type="radio" name="IsExistingArea" /> Yes it's in the list</p>
+                    <p><input value="false" type="radio" name="IsExistingArea" /> No it is not in the list</p></div>
+                </div>
+    
+            </div>
+
+            <hr />
+        </div>
+
+        @Html.Partial("Partials/ThanksForInterestInAddingContent")
+    }
+    
+    <style type="text/css">
+        #MultipleResultsDetails ul { margin:7px 7px 12px 7px;padding:0 }
+        #MultipleResultsDetails span { font-size:9px }
+        .watermark { top:12px!important }
+        h6 { margin:20px 0 30px 0 }
+        .createoption { float:left;width:480px }
+        .createoption img { float:left }
+        .createoption h4 { float:left;padding:10px 0 0px 15px }
+        .createoption p { clear:both;color:Green }
+    </style>
+  
+    <div id="Search" style="display:none">
+        
+        @if (areaTypeLower == "city")
+        {
+            <div class="editor-label" style="margin:20px 0 10px 0">
+                <label>Enter the city name & we'll find it on the map</label>
+            </div>
+            <div class="editor-field">
+                @Html.ValidationMessageFor(m => m.locality)
+                @Html.TextBoxFor(m => m.locality, new { @class = "long jq_watermark", title = "Enter name of the city" })              
+            </div>  
+            <hr />
+            <input type="submit" value="Find" class="SubmitBtn jBtn" />
+        }
+        else
+        {
+
+        <h6>There are two ways to create areas</h6>
+        
+        <div class="createoption" style="width:430px;padding-right:30px;margin-right:30px;border-right:solid 1px #d3d3d3">
+            <img src="@Stgs.StaticRt/ui/search48.png" />
+            <h4>1) Search</h4>
+            
+            <p><b><i>Tip: </i></b>Search is more accurate & faster when the area's name
+                is well known to the general public.</p>
+            <hr />
+            <div style="height:79px">
+                <div class="editor-label" style="margin:20px 0 10px 0">
+                    @*<input id="enterName" type="radio" checked="checked" name="createOption" />*@
+                    > <label>Enter the name & we'll try find it</label>
+                </div>
+                <div class="editor-field">
+                    @Html.ValidationMessageFor(m => m.locality)
+                    @Html.TextBoxFor(m => m.locality, new { @class = "long jq_watermark", title = "Enter name of area" })              
+                </div>  
+            </div>
+            <hr />
+            <input type="submit" value="Find automatically" class="SubmitBtn jBtn" />
+        </div>
+
+        <div class="createoption">
+            <img src="@Stgs.StaticRt/ui/draw.png" />
+            <h4>2) Draw</h4>
+            <p><b><i>Tip:</i></b> Drawing gives you full control & best when search is incorrect or unable to produce results
+             because the area is not well known to non-climbers.</p>
+            <hr />
+            <div style="height:90px">
+                <div class="editor-label" style="margin:20px 0 10px 0">
+                    @*<input id="drawManually" type="radio" name="createOption" />*@
+                    > <label>Take full control & draw the area yourself</label>
+                </div>
+                <div class="editor-field"></div>
+            </div>
+            <hr />
+            <a href="javascript:createAreaWithoutSearch();" class="jBtn SubmitBtn">Draw manually</a>
+        </div>
+        
+        <hr />
+        
+        }
+    </div>
+}
+</div>
+

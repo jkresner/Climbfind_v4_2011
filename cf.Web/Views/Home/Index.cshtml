@@ -1,0 +1,101 @@
+﻿@{ ViewBag.Title = "Indoor Rock Climbing";
+   List<string> thumbs = ViewBag.Thumbs as List<string>;
+   int i = 0;
+}
+
+<style type="text/css">
+    .homeleft { border-right:1px solid white;float:left;margin:0;padding: 0 17px 0 15px;width:724px;min-height:400px }
+    .homeleft h1 { padding-top:15px;font-size:34px }
+    .homeright { padding:0px!important;margin:0px!important }
+    .homeright #login { height:60px;margin:100px 0px 0px 5px }
+    .homeright #login a { padding:20px 44px 20px 44px;font-size:34px } 
+    .homeright #why img { float:left;margin:0px 2px 0px 14px } 
+    .homeright #why h3 { float:left;margin:13px 0px 10px 8px } 
+    .homeright #why p { width:210px;text-align:justify;font-size:12px;margin:10px 0px 0 18px } 
+    .homeright #features { margin:39px 0px 10px 18px  } 
+    #members { width:780px } 
+    #members img { float:left;margin:3px 3px 0px 0px }
+</style>
+
+<div class="homeleft">
+    
+    <div style="height:210px;border:solid 1px white">
+
+    <h1>Find & Share Rock Climbing</h1>
+        
+    <div style="font-size:10px">Site tags: 
+        <a href="/rock-climbing-social-network" title="The Climbfind Global, Rock Climbing Community, Climbers Network, Bouldering Social Network">Rock Climbing Social Network</a>, 
+        <a href="/world-rock-climbing-database" title="Rock Climbing Destinations, Indoor Rock Climbing Gyms, Climbing Walls, Topos, Climbs">World Rock Climbing Database</a>, 
+        <a href="/search-for-rock-climbing-partners" title="Indoor Climbing Partners, Rock Climbing Partner Search, Belay Buddies">Climbing Partner Finder</a>, 
+        <a href="/rock-climbing-travel" title="Rock Climbing Road Trips, World Climbing Travel, Rock Climbing Aventure">Climbing Travel Resources</a>,
+        <a href="/rock-climbing-search-engine#indoor-climbing-gym-search" title="Indoor Climbing Wall Database, Climbing Gyms, Rock Walls, Indoor Rock Gyms, Bouldering Gym">Search Indoor Climbing</a>
+    </div>    
+
+    <p style="font-size:16px;text-align:justify;padding:20px 0px 0px 0px"><b>Climbfind introduces you to climbers in your local climbing community & around the world.</b>
+    It makes it easy to become familiar with and follow other climbers who climb where you climb. Use Climbfind
+    to explore new climbing around you and find climbing partners to team up with.</p>
+
+    </div>
+
+    <div style="padding:0px 0px 20px 0px;width:720px;overflow:hidden;clear:both">
+        
+        @Html.Partial("Partials/HomePostList", new FeedPostListViewData() { FeedPosts = ViewBag.Posts, UserHasDeletePostRights = false })
+
+    </div>
+
+    <hr />
+        
+</div>
+<!-- sidebar -->
+<div id="col2-right" class="homeright">
+     
+    <div style="height:202px;border:solid 1px white">
+        <div id="login"><a href="/login" class="jBtn" title="Sign into the Climbfind Platform">Join/login</a></div>
+        @*<b style="display:block;margin-left:94px">or <a href="/login">Login</a></b>*@
+     </div>
+     
+    <fieldset><legend>Check out our blog!</legend>
+        <a href="http://heroes.climbfind.com/" target="_blank"><img src="http://static.climbfind.com/other/CF_Heroes.png" style="width:230px" /></a>
+    </fieldset>
+
+   <fieldset><legend>Get Climbfind for iPhone</legend>   
+        <a target="_blank" href="http://itunes.apple.com/us/app/climbfind/id489668971?mt=8"><b>Available from App Store</b>
+            <img src="http://a4.mzstatic.com/us/r1000/074/Purple/4c/c0/37/mzl.rnwgvglr.320x480-75.jpg" style="width:220px;margin:10px 5px" alt="Find Partner Climbfind iPhone" />
+        </a>
+    </fieldset>
+
+
+    <fieldset><legend>Get Climbfind for Android</legend>   
+        <a target="_blank" href="https://market.android.com/details?id=com.climbfindinc.climbfind"><b>Available from Android Market</b>
+            <img src="https://lh6.ggpht.com/5qbDVoLKd3g2QhbbOD8vdKR9JI0349RvqCvlD38gzwuhjoX0P-ppYI9Taioe-DgFVg" style="width:220px;margin:10px 5px" alt="Find Partner Climbfind Android" />
+        </a>
+    </fieldset>
+
+@*    <div id="why">
+        <img src="@Stgs.StaticRt/ui/cfembl.jpg" />
+        <h3>Why Climbfind?</h3>
+        <hr />
+        <p>Climbing isn’t just fun! Its experiences help us become stronger, smarter, healthier & happier human beings.</p>
+        
+        <p>
+            <b>WE</b> are a network of climbers whose purpose is to make positive climbing experiences more accessible to everyone 
+            so we can all become better people while we connect with one another through our passion for climbing... 
+            <a href="/vision" title="The Climbfind Vision - Find someone to climb with anywhere in the world on ANY given day."><b>read more</b></a>
+        </p>
+    </div>*@
+
+@*    <div id="features"> 
+    <h3>CLIMBING features</h3>
+    <p>Built by climbers, for climbers:</p>
+    <ul>
+        <li><a href="/rock-climbing-social-network#see-whos-rock-climbing">See who's climbing</a></li>
+        <li><a href="/search-for-rock-climbing-partners">Find climbing partners</a></li>
+        <li><a href="/opinions">Share beta & opinions</a></li>
+        <li><a href="/rock-climbing-search-engine">Rock climbing search engine</a></li>
+        <li><a href="/new-rock-climbing-media">Share rock climbing media</a></li>
+        <li><a href="/world-rock-climbing-database">Explore rock climbing places</a></li>
+        <li><a href="/mobile">Log climbs & progress</a></li>
+        @*<li><a href="/about">Chat with other climbers</a></li>
+    </ul>
+    </div>*@
+</div>

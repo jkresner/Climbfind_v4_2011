@@ -1,0 +1,554 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D349A201-6B88-4534-A749-4437071D9D0F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>cf</RootNamespace>
+    <AssemblyName>cf</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AWSSDK">
+      <HintPath>..\lib\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\lib\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Omu.ValueInjecter">
+      <HintPath>..\lib\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\lib\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Caching\CfCacheIndex.cs" />
+    <Compile Include="Caching\CfPerfCache.cs" />
+    <Compile Include="Caching\Level2MemoryCfPerfCache.cs" />
+    <Compile Include="Caching\Level1MemoryCfPerfCache.cs" />
+    <Compile Include="Caching\CountriesAndProvincesCache.cs" />
+    <Compile Include="Caching\IRemoteCache.cs" />
+    <Compile Include="Caching\Level1MemoryCfCacheIndex.cs" />
+    <Compile Include="Caching\Level2MemoryCfCacheIndex.cs" />
+    <Compile Include="Caching\MemoryLookupsCache.cs" />
+    <Compile Include="Caching\AppLookups.Countries.cs" />
+    <Compile Include="Caching\AppLookups.cs" />
+    <Compile Include="Content\CfUrlProvider.cs" />
+    <Compile Include="Content\Feed\AbstractPostManager.cs" />
+    <Compile Include="Content\Feed\PostTemplateLibrary.cs" />
+    <Compile Include="Content\Feed\IPostManager.cs" />
+    <Compile Include="Content\Feed\V0\CheckInPostManager.cs" />
+    <Compile Include="Content\Feed\V0\ContentAddPostManager.cs" />
+    <Compile Include="Content\Feed\V0\OpinionPostManager.cs" />
+    <Compile Include="Content\Feed\V0\TalkPostManager.cs" />
+    <Compile Include="Content\Feed\V0\PartnerCallPostManager.cs" />
+    <Compile Include="Content\Feed\V1\CheckInPostManager.cs" />
+    <Compile Include="Content\Images\AbstractImagePersister.cs" />
+    <Compile Include="Content\Images\AwsS3ImagePersister.cs" />
+    <Compile Include="Content\Images\IImagePersister.cs" />
+    <Compile Include="Content\Images\ImageCompressor.cs" />
+    <Compile Include="Content\Images\ImageConstants.cs" />
+    <Compile Include="Content\Images\ImageCrompressOpts.cs" />
+    <Compile Include="Content\Images\ImageCropOpts.cs" />
+    <Compile Include="Content\Images\ImageCropper.cs" />
+    <Compile Include="Content\Images\ImageManager.cs" />
+    <Compile Include="Content\Images\ImageResizeOpts.cs" />
+    <Compile Include="Content\Images\ImageResizer.cs" />
+    <Compile Include="Content\Search\CfLuceneIndexBuilder.cs" />
+    <Compile Include="Content\Search\CfLuceneIndexSearcher.cs" />
+    <Compile Include="Content\Search\FullTextSearchEngineSettings.cs" />
+    <Compile Include="Content\Search\ILuceneSearchEngineEntry.cs" />
+    <Compile Include="Content\Search\IndexingError.cs" />
+    <Compile Include="Content\Search\ISearchResultContent.cs" />
+    <Compile Include="Content\Search\SearchEngineEntry.cs" />
+    <Compile Include="Content\Search\SearchEngineEntryPlace.cs" />
+    <Compile Include="Content\Search\SearchEngineResult.cs" />
+    <Compile Include="Content\Search\SearchManager.cs" />
+    <Compile Include="DataAccess\AdoNet2\AbstractStoredProcedureDA.cs" />
+    <Compile Include="DataAccess\Azure\BlobRepository.cs" />
+    <Compile Include="DataAccess\Azure\QueueRepository.cs" />
+    <Compile Include="DataAccess\cf3\AbstractLinqToSqlDA.cs" />
+    <Compile Include="DataAccess\cf3\ClimberProfileDA.cs" />
+    <Compile Include="DataAccess\cf3\ClimbfindLinqModel.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClimbfindLinqModel.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\cf3\ClimbfindLinqModel.Extensions.cs" />
+    <Compile Include="DataAccess\EntityFramework\AbstractCfEntitiesEf4DA.cs" />
+    <Compile Include="DataAccess\EntityFramework\AbstractCfLocationEf4DA.cs" />
+    <Compile Include="DataAccess\EntityFramework\CfEntitiesModel.Context.cs" />
+    <Compile Include="DataAccess\Interfaces\IKeyEntityAccessor.cs" />
+    <Compile Include="DataAccess\Interfaces\IKeyEntityWriter.cs" />
+    <Compile Include="DataAccess\Repositories\AreaRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CFCacheIndexEntryRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CheckInRepository.cs" />
+    <Compile Include="DataAccess\Repositories\ClimbRepository.cs" />
+    <Compile Include="DataAccess\Repositories\ConversationRepository.cs" />
+    <Compile Include="DataAccess\Repositories\AlertRepository.cs" />
+    <Compile Include="DataAccess\Repositories\UserSiteSettingsRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LogEventRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LocationSectionRepository.cs" />
+    <Compile Include="DataAccess\Repositories\SetterRepository.cs" />
+    <Compile Include="DataAccess\Repositories\MessageRepository.cs" />
+    <Compile Include="DataAccess\Repositories\PartnerCallNotificationWorkItemRepository.cs" />
+    <Compile Include="DataAccess\Repositories\PartnerCallSubscriptionRepository.cs" />
+    <Compile Include="DataAccess\Repositories\PartnerCallRepository.cs" />
+    <Compile Include="DataAccess\Repositories\RatingRepository.cs" />
+    <Compile Include="DataAccess\Repositories\MobileSvcRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LoggedClimbsRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CountryRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CountrySummaryRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LocationBingViewRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LocationIndoorRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LocationOutdoorRepository.cs" />
+    <Compile Include="DataAccess\Repositories\LocationRepository.cs" />
+    <Compile Include="DataAccess\Repositories\MediaRatingRepository.cs" />
+    <Compile Include="DataAccess\Repositories\MediaRepository.cs" />
+    <Compile Include="DataAccess\Repositories\ModActionRepository.cs" />
+    <Compile Include="DataAccess\Repositories\ObjectModMetaRepository.cs" />
+    <Compile Include="DataAccess\Repositories\ModProfileRepository.cs" />
+    <Compile Include="DataAccess\Repositories\PersonalityMediaRepository.cs" />
+    <Compile Include="DataAccess\Repositories\PostRepository.cs" />
+    <Compile Include="DataAccess\Repositories\ProfileRepository.cs" />
+    <Compile Include="Content\Feed\ContentRenderer.cs" />
+    <Compile Include="Dtos\Cloud\CommentAlertWorkItem.cs" />
+    <Compile Include="Dtos\Cloud\PartnerCallAlertWorkItem.cs" />
+    <Compile Include="Dtos\Cloud\MessageAlertWorkItem.cs" />
+    <Compile Include="Dtos\Mobile\V0\CheckInDto.cs" />
+    <Compile Include="Dtos\Mobile\V0\MediaDto.cs" />
+    <Compile Include="Dtos\Mobile\V0\LatLon.cs" />
+    <Compile Include="Dtos\Mobile\V1\ClimbDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\ConversationListDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\ConversationDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\AreaDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\PartnerCallDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\PartnerCallSubscriptionDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\ProfileDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\LocationOutdoorDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\LocationDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\LocationIndoorDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\LoggedClimbDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\VisitDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\ClimbListItemDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\ClimbIndoorDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\ClimbOutdoorDetailDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\OpinionDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\PostDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\LatLon.cs" />
+    <Compile Include="Dtos\Mobile\V1\LocationResultDto.cs" />
+    <Compile Include="Dtos\Mobile\V1\MediaDto.cs" />
+    <Compile Include="Dtos\Satellite\ClimbEntrySettings.cs" />
+    <Compile Include="Dtos\Web\CfCacheIndexEntry.cs" />
+    <Compile Include="Dtos\Web\CachedProfileDetails.cs" />
+    <Compile Include="Dtos\Cache\CachedLocationDetails.cs" />
+    <Compile Include="Dtos\Web\VimeoMediaData.cs" />
+    <Compile Include="Dtos\External\VimeoApiResults.cs" />
+    <Compile Include="Dtos\Web\YouTubeMediaData.cs" />
+    <Compile Include="Dtos\External\YouTubeApiResults.cs" />
+    <Compile Include="Dtos\Web\CountrySummary.cs" />
+    <Compile Include="Dtos\Web\FeedTemplate.cs" />
+    <Compile Include="Dtos\External\GeoBoundingBox.cs" />
+    <Compile Include="Dtos\External\GeocodeResults.cs" />
+    <Compile Include="Dtos\Web\PlaceBingMapView.cs" />
+    <Compile Include="Dtos\Web\PlaceWithModDetails.cs" />
+    <Compile Include="Dtos\Web\UsersPersonalityMediaCollection.cs" />
+    <Compile Include="Entities\Alert.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Alerts\Alert.cs" />
+    <Compile Include="Entities\Alerts\UserSiteSettings.cs" />
+    <Compile Include="Entities\CfEntitiesModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CheckIn.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Climb.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ClimbIndoor.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ClimbOutdoor.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ClimbTag.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Conversation.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ConversationView.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Enum\CfEnumExtensions.cs" />
+    <Compile Include="Entities\Enum\CfType.cs" />
+    <Compile Include="Entities\Enum\ClientType.cs" />
+    <Compile Include="Entities\Enum\ClimbType.cs" />
+    <Compile Include="Entities\Enum\ClimbExperience.cs" />
+    <Compile Include="Entities\Enum\ClimbOutcome.cs" />
+    <Compile Include="Entities\Enum\ClimbGradeOpinion.cs" />
+    <Compile Include="Entities\Enum\ClimbingLevelGeneral.cs" />
+    <Compile Include="Entities\Enum\ConversationStatus.cs" />
+    <Compile Include="Entities\Enum\ClimbCategories.cs" />
+    <Compile Include="Entities\Enum\ClimbGradeType.cs" />
+    <Compile Include="Entities\Enum\ClimbTerrainType.cs" />
+    <Compile Include="Entities\Enum\AlertType.cs" />
+    <Compile Include="Entities\Enum\PartnerCallReplyType.cs" />
+    <Compile Include="Entities\Enum\MessageStatus.cs" />
+    <Compile Include="Entities\Enum\ModFlagReason.cs" />
+    <Compile Include="Entities\Enum\MediaType.cs" />
+    <Compile Include="Entities\Enum\ModActionType.cs" />
+    <Compile Include="Entities\Enum\PersonalityCategory.cs" />
+    <Compile Include="Entities\Enum\PlaceCategory.cs" />
+    <Compile Include="Entities\Enum\PostType.cs" />
+    <Compile Include="Entities\Extensions\CfEntityExtensions.cs" />
+    <Compile Include="Entities\Extensions\CfMediaExtensions.cs" />
+    <Compile Include="Entities\Extensions\CfModExtensions.cs" />
+    <Compile Include="Entities\Extensions\CloneInjection.cs" />
+    <Compile Include="Entities\Extensions\SimpleTypeCloneInjection.cs" />
+    <Compile Include="Entities\Extensions\CfGeographyExtensions.cs" />
+    <Compile Include="Entities\Geography\Area.cs" />
+    <Compile Include="Entities\Geography\Climb.cs" />
+    <Compile Include="Entities\Geography\ClimbTag.cs" />
+    <Compile Include="Entities\Geography\ClimbIndoor.cs" />
+    <Compile Include="Entities\Geography\ClimbOutdoor.cs" />
+    <Compile Include="Entities\Geography\LocationSection.cs" />
+    <Compile Include="Entities\Geography\Setter.cs" />
+    <Compile Include="Entities\Geography\Country.cs" />
+    <Compile Include="Entities\Geography\Location.cs" />
+    <Compile Include="Entities\Geography\LocationIndoor.cs" />
+    <Compile Include="Entities\Geography\LocationOutdoor.cs" />
+    <Compile Include="Entities\Geography\Locations.cs" />
+    <Compile Include="Entities\Geography\Place.cs" />
+    <Compile Include="Entities\Interfaces\IOpinion.cs" />
+    <Compile Include="Entities\Interfaces\IRatable.cs" />
+    <Compile Include="Entities\Interfaces\IArea.cs" />
+    <Compile Include="Entities\Interfaces\IHasCfSlugUrl.cs" />
+    <Compile Include="Entities\Interfaces\IHasCfType.cs" />
+    <Compile Include="Entities\Interfaces\IHasClimbSlugBits.cs" />
+    <Compile Include="Entities\Interfaces\IHasCountry.cs" />
+    <Compile Include="Entities\Interfaces\IHasPlaceSlugBits.cs" />
+    <Compile Include="Entities\Interfaces\IKeyObject.cs" />
+    <Compile Include="Entities\Interfaces\ILocation.cs" />
+    <Compile Include="Entities\Interfaces\IOOObject.cs" />
+    <Compile Include="Entities\Interfaces\IPlaceSearchable.cs" />
+    <Compile Include="Entities\Interfaces\IPlaceWithGeo.cs" />
+    <Compile Include="Entities\Interfaces\ISearchable.cs" />
+    <Compile Include="Entities\Interfaces\IUserBasicDetail.cs" />
+    <Compile Include="Entities\LocationEF.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\LocationIndoor.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\LocationOutdoor.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\LocationSection.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\LoggedClimb.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Mapping\MapItem.cs" />
+    <Compile Include="Entities\Mapping\MapItemCollection.cs" />
+    <Compile Include="Entities\Mapping\MapItemLine.cs" />
+    <Compile Include="Entities\Mapping\MapItemPoint.cs" />
+    <Compile Include="Entities\Mapping\MapItemPolygon.cs" />
+    <Compile Include="Entities\Mapping\Point.cs" />
+    <Compile Include="Entities\Media.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\MediaOpinion.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Logs\Event.cs" />
+    <Compile Include="Entities\Media\Media.cs" />
+    <Compile Include="Entities\Media\MediaOpinion.cs" />
+    <Compile Include="Entities\Media\UserPersonalityMedia.cs" />
+    <Compile Include="Entities\Message.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\MessagePartyStatus.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ModAction.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ModClaim.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Moderation\ModAction.cs" />
+    <Compile Include="Entities\Moderation\ModClaim.cs" />
+    <Compile Include="Entities\Moderation\ModProfile.cs" />
+    <Compile Include="Entities\Moderation\ObjectModMeta.cs" />
+    <Compile Include="Dtos\Web\FeedResultSet.cs" />
+    <Compile Include="Entities\ModProfile.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ObjectMedia.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ObjectModMeta.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Opinion.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\PartnerCall.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\PartnerCallNotificationWorkItem.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\PartnerCallReply.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\PartnerCallSubscription.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\PlaceBingMapView.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Post.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\PostComment.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dtos\Web\PostRendered.cs" />
+    <Compile Include="Entities\Posts\Post.cs" />
+    <Compile Include="Entities\Profile.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Reporting\PartnerCallNotificationWorkItem.cs" />
+    <Compile Include="Entities\Setter.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dtos\Mobile\V0\LocationResult.cs" />
+    <Compile Include="Entities\UserPersonalityMedia.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\UserSiteSettings.cs">
+      <DependentUpon>CfEntitiesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Users\Cf3Profile.cs" />
+    <Compile Include="Entities\Users\CheckIn.cs" />
+    <Compile Include="Entities\Users\Conversation.cs" />
+    <Compile Include="Entities\Users\ConversationView.cs" />
+    <Compile Include="Entities\Users\PartnerReply.cs" />
+    <Compile Include="Entities\Users\Message.cs" />
+    <Compile Include="Entities\Users\MessagePartyStatus.cs" />
+    <Compile Include="Entities\Alerts\PartnerCallSubscription.cs" />
+    <Compile Include="Entities\Users\PartnerCall.cs" />
+    <Compile Include="Entities\Users\Opinion.cs" />
+    <Compile Include="Entities\Users\LoggedClimb.cs" />
+    <Compile Include="Entities\Users\Profile.cs" />
+    <Compile Include="Entities\Validation\Area_Validation.cs" />
+    <Compile Include="Entities\Validation\LocationIndoor_Validation.cs" />
+    <Compile Include="Entities\Validation\LocationOutdoor_Validation.cs" />
+    <Compile Include="Entities\Validation\PlaceEdit_Validation.cs" />
+    <Compile Include="Entities\Validation\Place_Validation.cs" />
+    <Compile Include="Identity\CfClaims.cs" />
+    <Compile Include="Identity\CfClaimsAuthenticationManager.cs" />
+    <Compile Include="Identity\CfIdentity.cs" />
+    <Compile Include="Identity\CfIdentityInflater.cs" />
+    <Compile Include="Identity\CfPrincipal.cs" />
+    <Compile Include="Identity\CfClaimsAuthorizationManager.cs" />
+    <Compile Include="Identity\DHDRSA.cs" />
+    <Compile Include="Identity\LocalDiskCertConfigurationOverride.cs" />
+    <Compile Include="Identity\RsaServerfarmSessionCookieTransform.cs" />
+    <Compile Include="Instrumentation\CfTrace.cs" />
+    <Compile Include="Instrumentation\CfTraceSource.cs" />
+    <Compile Include="Instrumentation\ExceptionFilter.cs" />
+    <Compile Include="Instrumentation\Exceptions\IllegalCheckInException.cs" />
+    <Compile Include="Instrumentation\IHasTraceSource.cs" />
+    <Compile Include="Instrumentation\InstrumentationRequestHttpModule.cs" />
+    <Compile Include="Instrumentation\PerformanceCapture.cs" />
+    <Compile Include="Instrumentation\TraceCode.cs" />
+    <Compile Include="Instrumentation\TraceListenerConfigurationHelper.cs" />
+    <Compile Include="Instrumentation\TraceListeners\DatabaseLoggingTraceListener.cs" />
+    <Compile Include="Instrumentation\TraceListeners\DevelopmentTextFileTraceListener.cs" />
+    <Compile Include="Instrumentation\TraceListeners\ExceptionEmailAndLoggingTraceListener.cs" />
+    <Compile Include="Instrumentation\TraceListeners\TraceListenerConfigurationReader.cs" />
+    <Compile Include="Mail\cfEmail.cs" />
+    <Compile Include="Mail\HtmlBodyGenerator.cs" />
+    <Compile Include="Mail\MailMan.cs" />
+    <Compile Include="Mail\SMTP.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AlertsService.cs" />
+    <Compile Include="Services\AlertsService.Urbanairship.cs" />
+    <Compile Include="Services\UserService.Accounts.cs" />
+    <Compile Include="Services\VisitsService.cs" />
+    <Compile Include="Services\ContentService.cs" />
+    <Compile Include="Services\ConversationService.cs" />
+    <Compile Include="Services\PartnerCallService.cs" />
+    <Compile Include="Services\MobileService.cs" />
+    <Compile Include="Services\VisistsService.Authorization.cs" />
+    <Compile Include="Services\GeoService.Areas.Authorization.cs" />
+    <Compile Include="Services\GeoService.Areas.cs" />
+    <Compile Include="Services\GeoService.Climbs.Authorization.cs" />
+    <Compile Include="Services\GeoService.Climbs.cs" />
+    <Compile Include="Services\GeoService.cs" />
+    <Compile Include="Services\GeocodeService.cs" />
+    <Compile Include="Services\GeoService.Locations.Authorization.cs" />
+    <Compile Include="Services\GeoService.Locations.cs" />
+    <Compile Include="Services\GeoService.Moderation.cs" />
+    <Compile Include="Services\MappingService.cs" />
+    <Compile Include="Services\MediaService.cs" />
+    <Compile Include="Services\PostService.cs" />
+    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\_AbstractCfService.cs" />
+    <Compile Include="Settings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataAccess\cf3\ClimbfindLinqModel.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>ClimbfindLinqModel.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataAccess\EntityFramework\CfEntitiesModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CfEntitiesModel.Context1.cs</LastGenOutput>
+    </None>
+    <EntityDeploy Include="DataAccess\EntityFramework\CfEntitiesModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CfEntitiesModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Entities\CfEntitiesModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CfEntitiesModel1.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataAccess\cf3\ClimbfindLinqModel.dbml.layout">
+      <DependentUpon>ClimbfindLinqModel.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Entities\_AboutEntities.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetFrameworkExtensions\NetFrameworkExtensions.csproj">
+      <Project>{71ED7755-9BD3-4331-91D3-D7C0911423C7}</Project>
+      <Name>NetFrameworkExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

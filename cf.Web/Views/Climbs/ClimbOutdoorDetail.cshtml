@@ -1,0 +1,67 @@
+﻿@inherits cf.Web.Views.Places.PlacesWebViewPage
+@{  Location location = ViewBag.Current;
+    ClimbOutdoor climb = ViewBag.Climb;
+    List<Climb> climbs = ViewBag.OtherClimbs;
+    List<Climb> climbsSimilar = ViewBag.OtherClimbsSimilar;
+    List<LoggedClimb> recentSends = ViewBag.RecentSends;
+    List<Opinion> latestOpinions = ViewBag.LatestOpinions;
+    CfPageTitleMaster.Set("Climb {0} at {0}", current.Name); }
+    
+<div id="col2-left">
+    <h1>@climb.Name</h1>
+    <h6>On <a href="@location.SlugUrl">@location.Name</a>, @Html.Partial("Partials/MainOpinionSummary", climb)</h6>
+        
+    <hr />
+    @Html.Partial("Partials/MainMediaRoll", climb.SlugUrl)
+    <hr />
+
+    <div class="climb-content">
+        <label>Type: </label><span>@((ClimbType)climb.ClimbTypeID)</span>
+        <label>Terrain: </label><span>@((ClimbTerrainType)climb.ClimbTerrainID)</span>
+        <label>Pitches: </label><span> @if (climb.NumberOfPitches == 1) { <i>single</i>} else {@climb.NumberOfPitches}</span>
+        <label>Grade: </label><span>@climb.GradeLocal (level @climb.GradeCfNormalize)</span>
+        <label>Tags: </label><span>@climb.ClimbTags.GetCategoriesString()</span>
+        <label>Description: </label><span>@if (!string.IsNullOrWhiteSpace(climb.Description)) { @Html.Raw(climb.Description.GetHtmlParagraph()) } else { <i>None given</i> }</span>    
+        @if (!string.IsNullOrWhiteSpace(climb.DescriptionWhere)) { <label>Where: </label><span>@climb.DescriptionWhere</span> }
+        @if (!string.IsNullOrWhiteSpace(climb.DescriptionStart)) {<label>Start: </label><span>@climb.DescriptionStart</span>}
+        @if (!string.IsNullOrWhiteSpace(climb.DescriptionGear)) { <label>Gear: </label><span>@climb.DescriptionGear</span>}
+        @if (!string.IsNullOrWhiteSpace(climb.SafetyRating) || !string.IsNullOrWhiteSpace(climb.DescriptionSafety) ) {
+            <label>Safety: </label><span><b>@climb.SafetyRating</b> @climb.DescriptionSafety</span>}
+        @if (climb.HeightInMeters.HasValue) {<label>Height: </label><span>@climb.HeightInMeters</span>}
+    </div>
+        
+    <div class="climb-avatar">
+        @if (climb.HasAvatar) { <img src="@(Stgs.ImgsRt + @climb.AvatarRelativeUrl)" />}
+        else { <div><p>No pic for this climb yet.<br /></p><a href="/rock-climbing-database/edit-climb/@climb.ID"><img src="@Stgs.StaticRt/ui/AddMedia.png" /></a></div> }
+    </div>
+    
+    <hr /> 
+    <div style="width:33%;float:left">
+        <h3>Latest sends</h3>
+        <h6>(climbers who finished this climb)</h6>
+        @Html.Partial("Partials/MainColumnSendsList", recentSends)
+        <hr />
+    </div>              
+    <div style="width:33%;float:left"><h3>More nearby</h3>
+        <h6>other climbs on '@location.Name'</h6>
+        @Html.Partial("Partials/MainColumnClimbsList", climbs)
+            <hr />
+    </div>              
+    <div style="width:33%;float:left"><h3>Similar level</h3> 
+        @*    <h6>@((ClimbType)climb.ClimbTypeID) climbs @@ @location.ShortDisplayName</h6>
+        @Html.Partial("Partials/MainColumnClimbsList", climbsSimilar)*@
+    </div>
+    <hr />
+
+
+</div>
+
+<div id="col2-right">
+
+    @Html.Partial("Partials/SideMenuClimbOptions")
+    
+    @Html.Partial("Partials/SideOpinionsList", new SideOpinionsListModel(climb, latestOpinions))
+
+</div>
+
+

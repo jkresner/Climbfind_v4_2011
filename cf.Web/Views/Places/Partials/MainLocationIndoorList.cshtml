@@ -1,0 +1,26 @@
+﻿@inherits PlacesWebViewPage<List<Location>> 
+@{ int i=0; }
+
+<h2>Indoor climbing walls in @current.Name</h2>
+
+@if (Model.Count > 0) 
+{ 
+    <ul class="places-list">@foreach (var a in Model) { 
+        if (i++ % 6 == 0) { <hr /> }
+      <li><a href="@a.SlugUrl" title="Indoor rock climbing in @a.Name"><b>@a.ShortDisplayName</b>
+        <i>@if (a.Rating.HasValue) { @Html.StarImage(a.Rating) } else { <text>Not yet rated</text> }</i>
+        @if (a.HasAvatar) { <img src="@Stgs.ImgsRt/places/id/@a.Avatar" /> } else { <div class="no-img">No image</div> }                                                                           
+           </a>   
+      </li>}
+    </ul> 
+}
+else 
+{ 
+    <div class="mainAddData">
+        <p>Climbfind does not know about any indoor climbing walls in @current.Name.</p>
+        <label>Help make our <a href="/world-rock-climbing-database" title="Rock climbing database">rock climbing database</a> better:</label>
+        @(Html.ActionCssLink<PlacesController>(c => c.LocationIndoorNew(country.NameUrlPart, current.NameUrlPart), "Add indoor climbing to " +current.Name, "jBtn"))
+    </div>
+}
+<hr />
+<br />

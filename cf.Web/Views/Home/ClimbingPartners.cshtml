@@ -1,0 +1,48 @@
+﻿@{ ViewBag.Title = "Find Rock Climbing Partners"; }
+
+<style type="text/css">  #col1 p {font-size:13px } </style>
+
+<div id="col1">
+
+<div id="col1-content">
+
+<h1>Search for Rock Climbing Partners</h1>
+   
+<p>Climbfind was born in 2008 with one (and only one) feature called the PartnerCall&trade; which helps you search for and find rock climbing partners
+as late as a few hours before you decide you want to climb. It is a great help if your partner bails on your last minute,
+if you're looking to make new climbing buddies or you want to hit the road a meet climbers while you travel.
+In fact, we did such a good job specializing in helping thousands of climbers find a climbing partner, with just this feature, in a few short years we grew 
+into one of the world's largest rock climbing communities.
+</p>
+
+<img src="@Stgs.StaticRt/screenshots/traffic/cf3-growth.png" />
+<hr />
+
+<h2>PartnerCalls&trade; & PartnerCall Subscriptions&trade; for finding a Climbing Partner</h2>
+<p>The <a href="/vision" target="_blank">Climbfind vision</a> is to help you "Find someone to climb with 
+<a href="/world-rock-climbing-database" target="_blank">anywhere in the world</a> on any given day". 
+By sticking to our guns and staying focused on our primary partner matching aim, we're getting pretty close! Through the use of <b>PartnerCall&trade; Subscriptions</b>
+each time you post you're on the search for a climbing partner, 10's or even 100's of other climbers receive an email that you want to climb
+at the same place they are looking for climbing partners.</p>
+
+<hr /><br />
+<h2>Indoor Climbing Partners</h2>
+
+<p>With the release of <a href="/mobile" target="_blank">Climbfind Mobile</a> finding indoor rock climbing partners goes to a whole new level.
+You can post "In gym" PartnerCalls&trade; which are picked up by other members that are checked in to the same gym and have push notifications
+enabled.</p>
+
+
+
+@if (!User.Identity.IsAuthenticated)
+{
+<p>At this point, if you know why you're here, you probably should just:</p>
+
+<div style="height:228px;height:60px;margin:80px 0px 0px 255px">
+    <div id="login"><a href="/login" class="jBtn" style="padding:20px 44px 20px 44px;font-size:34px">Sign in</a></div>
+</div>
+}
+
+</div>
+
+</div>

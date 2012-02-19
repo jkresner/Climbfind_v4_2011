@@ -1,0 +1,15 @@
+﻿@{ ViewBag.Title = "Performance tune map";
+    Layout = "~/Views/Moderate/_LayoutModerate.cshtml"; }
+
+
+<div style="margin-top:20px">
+
+<h1>Admin Menu</h1>
+
+<ul>
+    <li>@(Html.ActionLink<ModerateController>(c => c.RefreshSearchIndex(), "Refresh search"))</li>
+    <li>@(Html.ActionLink<ModerateController>(c => c.PerformanceTuneMap(), "Performance tune map"))</li>
+    <li>@if (CfPrincipal.IsGod()) { <a href="javascript:alert('coming soon')">Manage Admin Users</a> }</li>
+</ul>
+
+</div>

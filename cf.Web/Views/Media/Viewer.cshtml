@@ -1,0 +1,218 @@
+﻿@model cf.Web.Views.Media.ViewerViewModel
+@{ ViewBag.Title = string.Format("{0} rock climbing photos & movies", Model.Name);
+   IEnumerable<Media> mediaList = Model.MediaList;
+   var addIconCount = 19 - mediaList.Count();
+   var addNewMediaUrl = Url.Action("Add", "Media", new { id = Model.ObjectID });
+}
+
+@*This page is weird... Here's how it works: The "caption" actually contains all the content and rating form and comments *@
+
+<div class="mediaPage">
+
+@if (Model.MediaList.Count() == 0) { <h1>Climbing photos & movies <span>@Html.Raw(Model.PageTitle)</span></h1><p>No media yet @Html.Raw(Model.PageTitle).</p>
+    if (Model.ShowAddMedia) { <br />@(Html.ActionCssLink<MediaController>(c => c.Add(Model.ObjectID), "Add media to " + Model.Name, "jBtn")) }
+    }
+else
+{                                           
+<script type="text/javascript" src="@Stgs.StaticRt/js/jquery.galleriffic.js"></script>
+
+<div id="gallery">
+	<div class="slideshow-container">
+		<div id="loading" class="loader"></div>
+		<div id="slideshow" class="slideshow"></div>
+	</div>
+	<div id="caption" class="caption-container"></div>
+</div>
+
+<h1>Climbing photos & movies <span>@Html.Raw(Model.PageTitle)</span></h1>
+if (CfIdentity.IsAuthenticated && Model.PageTitle == "Most recently submitted")
+{
+    <p style="margin:-20px 0px 20px 0px">Media of <a href="/climber/personality/@CfIdentity.UserID"><b>your climbing personality</b></a> appears here.</p>
+}
+    
+<div id="thumbs" class="navigation">
+
+    <ul class="thumbs noscript">	
+        @if (Model.ShowAddMedia)
+        {
+            <li>
+			    <a class="thumb add" href="@Stgs.BlankPNG" title="Add media">
+				    <i>click to add</i>
+                    <img src="@Stgs.StaticRt/ui/AddMediaThumb.jpg" alt="Add media" />
+			    </a>
+                <div class="caption addMedia">
+                    <fieldset><legend align="center">Add new photo or movie</legend>
+                        <a href="@addNewMediaUrl"><img src="@Stgs.StaticRt/ui/AddMedia.png" /></a>
+                        <hr />
+                        @(Html.ActionCssLink<MediaController>(c => c.Add(Model.ObjectID), "Add media", "jBtn"))
+                        <hr /><hr />
+                    </fieldset>
+                </div>
+            </li>
+        }
+        		
+        @foreach (var m in Model.MediaList)
+        { <li>@Html.RenderThumbForCfGallerific(m)
+
+		    <div class="caption">
+                <fieldset>
+                    <legend align="center">
+                        <span class="rated">@if (!m.Rating.HasValue)
+                                            {<i>Not yet rated</i>}
+                                            else
+                                            {@Html.StarImage(m.Rating)}</span>
+                        @m.Title 
+                        @if (CfIdentity.UserID == @m.AddedByUserID || CfPrincipal.IsGod())
+                        { <span>[@(Html.DeleteLink<MediaController>(c => c.Delete(m.ID, this.Request.RawUrl), "Delete"))
+                                        | @(Html.ActionLink<MediaController>(c => c.Edit(m.ID), "Edit"))]</span> }
+                    </legend>
+
+                    <div class="media-meta">
+                        <label>Added</label><span> @m.AddedUtc.GetAgoString()</span>
+                        <label>by </label><span>@Html.UserProfileLink(m.AddedByUserID)</span>
+                        @if (!string.IsNullOrEmpty(m.Author))
+                        {<label>credit </label><span> @Html.Raw(m.Author) </span>}
+                        @if (m.TakenDate.HasValue)
+                        { <label>taken </label><span>@m.TakenDate.Value.ToString("dd MMM yyyy") </span> } 
+                        
+                        <span class="tags">tags:@foreach (var om in m.ObjectMedias)
+                                                {  @Html.CfLink(@om.OnOjectID) }</span>
+                    </div>    
+                
+                    @Html.RenderForCfGallerific(m)
+                    <p>@m.Description</p>
+                    
+                    <hr />
+                    @*@if (CfIdentity.IsAuthenticated)
+                    {
+                        <form action="#" method="post" class="ratingForm"><input name="MediaID" type="hidden" value="@m.ID" /></form>
+                    }
+                    else
+                    {
+                        <p>Please log in to rate media</p>
+                    }
+
+                    <hr />
+                    <div class="ratings">
+                        <ul>@foreach (var r in m.MediaOpinions)
+                            {<li>@Html.Partial("MediaRatingComment", r)</li> }</ul>
+                    </div>
+                    <hr />*@
+
+                </fieldset>
+                <hr />        
+            </div>
+                
+		</li> }	
+        @if (Model.ShowAddMedia)
+        {
+            for (int i = 0; i < addIconCount; i++)
+            { 
+        	<li><a class="thumb add tm" href="@Stgs.BlankPNG"><i>click to add</i><img src="@Stgs.StaticRt/ui/AddMediaThumb.jpg" alt="Add media" /></a><div class="caption addMedia"></div></li>
+            }
+        }   
+	</ul>
+    <hr />
+</div>
+<hr />
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        opacityRollover(".add", 0.67);
+        $(".add").click(function() { document.location = '@addNewMediaUrl'; });
+        
+        $('div.navigation').css({ 'width': '336', 'float': 'left' });
+        $('div#gallery').css('display', 'block');
+        
+        var gallery = $('#thumbs').galleriffic({
+            delay: 0,
+            numThumbs: 20,
+            preloadAhead: 5,
+            enableTopPager: true,
+            enableBottomPager: false,
+            maxPagesToShow: 7,
+            imageContainerSel: '#slideshow',
+            controlsContainerSel: '#controls',
+            captionContainerSel: '#caption',
+            loadingContainerSel: '#loading',
+            enableKeyboardNavigation: false,
+            renderSSControls: false,
+            renderNavControls: false,
+            enableHistory: false,
+            autoStart: false,
+            syncTransitions: true,
+            onSlideChange: function (prevIndex, nextIndex) {
+                this.find('ul.thumbs').children()
+							.eq(prevIndex).fadeTo('fast', 0.67).end()
+							.eq(nextIndex).fadeTo('fast', 1.0, loadRatingForm(nextIndex));
+            },
+            onPageTransitionOut: function (callback) { this.fadeTo('fast', 0.0, callback); },
+            onPageTransitionIn: function () { this.fadeTo('fast', 1.0); }
+        });
+
+        setTimeout('adjustPageHeight();', 1000);
+        setTimeout('adjustPageHeight();', 2000);
+    });
+
+
+    var currentSlideIndex;
+    function loadRatingForm(current) {
+        currentSlideIndex = current;
+        @if (Model.ShowAddMedia)
+        { <text>if (current != 0) { setTimeout('loadRatingFormDelayed();', 800); }</text> }
+        else
+        { <text>setTimeout('loadRatingFormDelayed();', 800); </text> }
+    }
+
+    function loadRatingFormDelayed() {
+        adjustPageHeight();
+        
+        var form = $("#caption .current").find("form")[0];
+        if (form.length > 0 )
+        {
+            var starswrap = $(form).find(".stars-wrapper");
+
+            if (starswrap.length == 0) {
+                $(form).append("<span class='stars-cap'></span><label>Rate & comment:</label><br /><span class='stars-wrapper'><select name='Rating'><option value='1'>Very poor</option><option value='2'>Not that bad</option><option value='3'>Average</option><option value='4'>Good</option><option value='5'>Perfect</option></select></span><hr /><textarea name='comment'></textarea><br /><a href='#' class='ratingpost SubmitBtn jBtn'>Post</a><hr />");
+
+                $('.ratingpost').click(function () {
+                    var form = $(this).parents('.ratingForm').eq(0);
+                    ajaxPostRating(form);
+                });
+     
+                var ratingSelect = $(form).find(".stars-wrapper").first();
+                ratingSelect.stars({ inputType: "select", captionEl: $(".stars-cap") });
+            }
+        }
+
+        $(".tags a").button();
+    }
+
+    function ajaxPostRating(form) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("OpinionNew", "Media")',
+            data: form.serialize(),
+            success: function (data) {
+                var form = $("#caption .current").find("form").hide();
+                $("#caption .current fieldset ul").prepend("<li>"+data+"</li>");
+                return false;
+            }
+        });
+
+    }
+
+    function adjustPageHeight()
+    {
+        var fieldSetHeight = $("#caption .current fieldset").height();
+        $(".mediaPage").css("height", fieldSetHeight + 220);
+        $(".tags a").button();
+    }
+</script>
+
+    
+}
+
+
+</div>
+<hr />

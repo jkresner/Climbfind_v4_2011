@@ -1,0 +1,19 @@
+﻿@inherits cf.Web.Views.Profiles.ProfileWebViewPage<UsersPersonalityMediaCollection>
+
+<fieldset id="profile-personality">
+<legend>Climbing personality <i>-</i> @(Html.ActionLink<ProfilesController>(c => c.Personality(Model.UserID), "View media")) </legend>
+
+@if (!Model.HasPersonality) { <p>No personality media yet...</p> }
+else {
+    <a href="/climber/personality/@user.ID">    
+        @if (Model.HasAvatar) { <div>@Html.Raw(Model.Avatar.Media.RenderThumb())</div> }
+        @if (Model.HasHeadshot) { <div>@Html.Raw(Model.Headshot.Media.RenderThumb())</div> }
+        @if (Model.HasDaredevil) { <div>@Html.Raw(Model.Daredevil.Media.RenderThumb())</div> }
+        @if (Model.HasScenic) { <div>@Html.Raw(Model.Scenic.Media.RenderThumb())</div> }
+        @if (Model.HasPartnerShot) {<div> @Html.Raw(Model.PartnerShot.Media.RenderThumb())</div> }
+        @if (Model.HasBestShot) {<div> @Html.Raw(Model.BestShot.Media.RenderThumb())</div> }
+        @if (Model.HasReady2Rock) { <div>@Html.Raw(Model.Ready2Rock.Media.RenderThumb())</div> }                                                                                       
+        @if (Model.HasFunny) { <div>@Html.Raw(Model.Funny.Media.RenderThumb())</div> }                                                                                       
+    </a>
+}
+</fieldset>

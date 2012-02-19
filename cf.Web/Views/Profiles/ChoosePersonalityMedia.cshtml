@@ -1,0 +1,23 @@
+﻿@model cf.Web.Views.Profiles.PersonalityMediaNewViewModel
+@{ ViewBag.Title = "Express your climber personality"; }
+
+
+@using (Html.BeginForm("SavePersonalityMedia", "Profiles", FormMethod.Post, new { id="saveMedia" })) {
+
+    <h1>Express your @(Html.ActionLink<ProfilesController>(c => c.Personality(CfIdentity.UserID), "climber personality"))</h1>    
+    
+    @Html.HiddenFor(m => m.Category)
+    
+    <div style="min-height:350px">
+        
+        <div style="margin:0px 0px 15px 0px">@Html.Partial("PersonalityCategoryExplanation", Model.Category)</div>
+
+        @Html.Partial("Partials/MediaChooser", Model)
+    </div>
+}
+    
+
+ 
+            
+
+
